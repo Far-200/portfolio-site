@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import aboutPhoto from "../assets/about-photo.jpeg";
+import aboutPhoto from "../assets/about-photo.jpg";
 
 function About() {
   return (
