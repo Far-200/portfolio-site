@@ -417,7 +417,7 @@ a {
   display: grid;
   grid-template-columns: 1.4fr 0.9fr;
   gap: 2rem;
-  align-items: stretch;
+  align-items: start;
 }
 
 .about-layout-single {
