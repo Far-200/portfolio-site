@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import aboutPhoto from "../assets/about-photo.jpg";
 
-function About() {
+function About({ showPhoto = true }) {
   return (
     <section className="section">
       <motion.div
-        className="about-layout"
+        className={`about-layout ${!showPhoto ? "about-layout-single" : ""}`}
         initial={{ opacity: 0, y: 35 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -68,13 +68,15 @@ function About() {
           </div>
         </div>
 
-        <div className="about-photo-card">
-          <img
-            src={aboutPhoto}
-            alt="Farhaan Khan casual portrait"
-            className="about-photo"
-          />
-        </div>
+        {showPhoto && (
+          <div className="about-photo-card">
+            <img
+              src={aboutPhoto}
+              alt="Farhaan Khan casual portrait"
+              className="about-photo"
+            />
+          </div>
+        )}
       </motion.div>
     </section>
   );

@@ -13,7 +13,6 @@ function HomePage() {
       <Skills />
       <Projects />
       <Contact />
-      <Footer />
     </>
   );
 }

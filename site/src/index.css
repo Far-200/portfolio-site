@@ -14,6 +14,8 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(192, 132, 252, 0.75) rgba(15, 23, 42, 0.55);
 }
 
 body {
@@ -27,6 +29,7 @@ body {
     #020617;
   color: white;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -36,6 +39,35 @@ a {
 
 .app-shell {
   min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(8, 15, 30, 0.95);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(216, 180, 254, 0.9),
+    rgba(168, 85, 247, 0.9)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(8, 15, 30, 0.95);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(232, 213, 255, 0.95),
+    rgba(192, 132, 252, 0.95)
+  );
+  box-shadow: 0 0 16px rgba(192, 132, 252, 0.35);
 }
 
 /* NAVBAR */
@@ -213,7 +245,7 @@ a {
 .hero-stats {
   margin-top: 0.8rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -238,6 +270,13 @@ a {
 }
 
 /* HERO PHOTO */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 .hero-photo-card {
   position: relative;
   width: 100%;
@@ -296,6 +335,31 @@ a {
     0 0 12px rgba(168, 85, 247, 0.2);
 }
 
+.resume-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.4rem;
+  min-width: 200px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #111827;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.resume-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+}
+
+.resume-cta:active {
+  transform: translateY(0);
+}
+
 /* CARDS */
 .glass-card,
 .project-card,
@@ -305,7 +369,8 @@ a {
 .journey-card,
 .project-detail-main,
 .project-detail-side,
-.project-section-block {
+.project-section-block,
+.skill-card {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(16px);
@@ -348,6 +413,24 @@ a {
 }
 
 /* ABOUT */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr;
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.about-layout-single {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 1268px;
+  margin: 0 auto;
+}
+
+.about-layout-single .content-section {
+  width: 100%;
+}
+
 .about-expanded p {
   color: #cbd5e1;
   line-height: 1.9;
@@ -363,8 +446,8 @@ a {
 .about-highlights {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 1.6rem;
+  gap: 1.2rem;
+  margin-top: 2rem;
 }
 
 .about-highlight-card {
@@ -372,6 +455,7 @@ a {
   background: rgba(15, 23, 42, 0.45);
   border-radius: 20px;
   padding: 1.1rem;
+  min-width: 0;
 }
 
 .about-highlight-card h3 {
@@ -384,6 +468,31 @@ a {
   margin-top: 0;
   font-size: 0.95rem;
   line-height: 1.7;
+}
+
+.about-photo-card {
+  position: sticky;
+  top: 100px;
+  padding: 6px;
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    rgba(192, 132, 252, 0.35),
+    rgba(168, 85, 247, 0.15),
+    rgba(139, 92, 246, 0.28)
+  );
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.28),
+    0 0 32px rgba(168, 85, 247, 0.14);
+}
+
+.about-photo {
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* CURRENTLY BUILDING */
@@ -471,6 +580,7 @@ a {
   padding: 1.3rem;
   overflow: hidden;
   border-radius: 28px;
+  min-width: 0;
 }
 
 .skill-card h3 {
@@ -495,6 +605,7 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.07);
   color: #e2e8f0;
   transition: 0.25s ease;
+  min-width: 0;
 }
 
 .skill-logo-item:hover {
@@ -528,6 +639,7 @@ a {
 .project-card {
   border-radius: 28px;
   padding: 1.5rem;
+  min-width: 0;
 }
 
 .project-card h3 {
@@ -882,6 +994,16 @@ a {
   .skills-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .about-layout,
+  .about-layout-single {
+    grid-template-columns: 1fr;
+  }
+
+  .about-photo-card {
+    position: static;
+    max-width: 420px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -988,6 +1110,11 @@ a {
     border-radius: 18px;
   }
 
+  .resume-cta {
+    width: 100%;
+    min-width: 0;
+  }
+
   .content-section,
   .contact-section {
     padding: 1.5rem;
@@ -1017,90 +1144,15 @@ a {
     font-size: 1.45rem;
   }
 
-  .footer-bottom {
-    padding-bottom: 1.4rem;
-  }
-}
-
-.about-layout {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 1.4rem;
-  align-items: start;
-}
-
-.about-photo-card {
-  position: sticky;
-  top: 100px;
-  padding: 6px;
-  border-radius: 26px;
-  background: linear-gradient(
-    135deg,
-    rgba(192, 132, 252, 0.35),
-    rgba(168, 85, 247, 0.15),
-    rgba(139, 92, 246, 0.28)
-  );
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.28),
-    0 0 32px rgba(168, 85, 247, 0.14);
-}
-
-.about-photo {
-  width: 100%;
-  display: block;
-  border-radius: 20px;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: center;
-}
-
-@media (max-width: 1000px) {
-  .about-layout {
+  .about-highlights {
     grid-template-columns: 1fr;
   }
 
   .about-photo-card {
-    position: static;
-    max-width: 420px;
-  }
-}
-
-@media (max-width: 700px) {
-  .about-photo-card {
     max-width: 100%;
   }
-}
 
-/* Custom Scrollbar */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(192, 132, 252, 0.75) rgba(15, 23, 42, 0.55);
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(8, 15, 30, 0.95);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    rgba(216, 180, 254, 0.9),
-    rgba(168, 85, 247, 0.9)
-  );
-  border-radius: 999px;
-  border: 2px solid rgba(8, 15, 30, 0.95);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(232, 213, 255, 0.95),
-    rgba(192, 132, 252, 0.95)
-  );
-  box-shadow: 0 0 16px rgba(192, 132, 252, 0.35);
+  .footer-bottom {
+    padding-bottom: 1.4rem;
+  }
 }

@@ -41,10 +41,6 @@ function Hero() {
           >
             GitHub
           </a>
-
-          <a href="/resume.pdf" className="btn btn-secondary">
-            Resume
-          </a>
         </div>
 
         <div className="hero-stats">
@@ -64,18 +60,28 @@ function Hero() {
       </motion.div>
 
       <motion.div
-        className="hero-photo-card"
+        className="hero-right"
         initial={{ opacity: 0, x: 60, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        whileHover={{ y: -6 }}
       >
-        <img
-          src={profileImage}
-          alt="Farhaan Khan portrait"
-          className="hero-photo"
-        />
-        <div className="hero-status">Open to Internships</div>
+        <motion.div className="hero-photo-card" whileHover={{ y: -6 }}>
+          <img
+            src={profileImage}
+            alt="Farhaan Khan portrait"
+            className="hero-photo"
+          />
+          <div className="hero-status">Open to Internships</div>
+        </motion.div>
+
+        <a
+          href="/resume/Farhaan_Khan_Resume.pdf"
+          target="_blank"
+          rel="noreferrer"
+          className="resume-cta"
+        >
+          View Resume
+        </a>
       </motion.div>
     </section>
   );
