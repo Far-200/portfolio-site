@@ -11,7 +11,7 @@ function NavBar() {
     <nav className="navbar">
       <div className="nav-container">
         <NavLink to="/" className="logo" onClick={closeMenu}>
-          Farhaan.dev
+          FK
         </NavLink>
 
         <button

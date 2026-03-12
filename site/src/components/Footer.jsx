@@ -13,7 +13,7 @@ function Footer() {
     >
       <div className="footer-container">
         <div className="footer-brand">
-          <h3>Farhaan.dev</h3>
+          <h3>FK</h3>
           <p>Building practical projects and clean web experiences.</p>
         </div>
 
