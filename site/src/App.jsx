@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -13,8 +14,27 @@ import DevJTool from "./pages/project-pages/DevJTool";
 import DLPPage from "./pages/project-pages/DLPPage";
 
 function App() {
+  const glowRef = useRef(null);
+
+  useEffect(() => {
+    const moveGlow = (e) => {
+      if (!glowRef.current) return;
+
+      glowRef.current.style.left = `${e.clientX}px`;
+      glowRef.current.style.top = `${e.clientY}px`;
+    };
+
+    window.addEventListener("mousemove", moveGlow);
+
+    return () => {
+      window.removeEventListener("mousemove", moveGlow);
+    };
+  }, []);
+
   return (
     <div className="app-shell">
+      <div ref={glowRef} className="cursor-glow" />
+
       <NavBar />
       <ScrollToTop />
 

@@ -1156,3 +1156,61 @@ a {
     padding-bottom: 1.4rem;
   }
 }
+
+.app-shell {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.22) 0%,
+    rgba(168, 85, 247, 0.12) 35%,
+    rgba(168, 85, 247, 0.06) 55%,
+    transparent 75%
+  );
+  filter: blur(45px);
+  z-index: 0;
+}
+
+.app-shell > *:not(.cursor-glow) {
+  position: relative;
+  z-index: 1;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(168, 85, 247, 0.08);
+  color: #c084fc;
+  transition: all 0.25s ease;
+}
+
+.github-link:hover {
+  transform: translateY(-2px) scale(1.06);
+  background: rgba(168, 85, 247, 0.16);
+  border-color: rgba(192, 132, 252, 0.5);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  color: #e9d5ff;
+}

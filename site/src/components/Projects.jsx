@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Github } from "lucide-react";
 
 function Projects() {
   const projects = [
@@ -69,7 +70,10 @@ function Projects() {
               ))}
             </div>
 
-            <div className="hero-buttons" style={{ marginTop: "1rem" }}>
+            <div
+              className="hero-buttons project-actions"
+              style={{ marginTop: "1rem" }}
+            >
               {project.route && (
                 <Link to={project.route} className="project-link">
                   View Project →
@@ -80,9 +84,10 @@ function Projects() {
                 href={project.github}
                 target="_blank"
                 rel="noreferrer"
-                className="project-link"
+                className="project-link github-link"
+                aria-label={`View ${project.title} on GitHub`}
               >
-                View on GitHub →
+                <Github size={18} strokeWidth={2.2} />
               </a>
             </div>
           </motion.div>
