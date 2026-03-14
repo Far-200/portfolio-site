@@ -72,7 +72,7 @@ function Projects() {
 
             <div
               className="hero-buttons project-actions"
-              style={{ marginTop: "1rem" }}
+              style={{ marginTop: "1rem", gap: "0.75rem", flexWrap: "wrap" }}
             >
               {project.route && (
                 <Link to={project.route} className="project-link">

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { FaGithub, FaReact, FaShieldAlt, FaCopy } from "react-icons/fa";
 import { SiVite, SiTailwindcss, SiJavascript } from "react-icons/si";
 import { Link } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 function PasswordCrackEsti() {
   const features = [
@@ -52,6 +53,16 @@ function PasswordCrackEsti() {
           >
             <FaGithub />
             <span>View Repository</span>
+          </a>
+
+          <a
+            href="https://password.farhaankhan.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-secondary"
+          >
+            <FaExternalLinkAlt />
+            <span>Live Demo ↗</span>
           </a>
 
           <Link to="/projects" className="btn btn-secondary">

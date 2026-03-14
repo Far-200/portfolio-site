@@ -1428,3 +1428,19 @@ a {
     display: none;
   }
 }
+
+/*Live Demo Button for password strength checker project
+.project-link-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.project-link.demo-inline {
+  padding-left: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+*/
