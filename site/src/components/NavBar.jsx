@@ -1,33 +1,18 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
 function NavBar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeMenu = () => setMenuOpen(false);
-
   return (
     <nav className="navbar">
-      <div className="nav-container">
-        <NavLink to="/" className="logo" onClick={closeMenu}>
+      <div className="nav-container nav-simple">
+        <NavLink to="/" className="logo">
           FK
         </NavLink>
 
-        <button
-          className="menu-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation menu"
-        >
-          {menuOpen ? <HiOutlineX size={24} /> : <HiOutlineMenu size={24} />}
-        </button>
-
-        <div className={`nav-links ${menuOpen ? "nav-open" : ""}`}>
+        <div className="nav-links-inline">
           <NavLink
             to="/"
             end
             className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={closeMenu}
           >
             Home
           </NavLink>
@@ -35,7 +20,6 @@ function NavBar() {
           <NavLink
             to="/about"
             className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={closeMenu}
           >
             About
           </NavLink>
@@ -43,7 +27,6 @@ function NavBar() {
           <NavLink
             to="/skills"
             className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={closeMenu}
           >
             Skills
           </NavLink>
@@ -51,7 +34,6 @@ function NavBar() {
           <NavLink
             to="/projects"
             className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={closeMenu}
           >
             Projects
           </NavLink>
@@ -59,7 +41,6 @@ function NavBar() {
           <NavLink
             to="/contact"
             className={({ isActive }) => (isActive ? "active-link" : "")}
-            onClick={closeMenu}
           >
             Contact
           </NavLink>
