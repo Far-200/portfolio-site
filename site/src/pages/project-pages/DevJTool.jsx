@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { FaGithub, FaReact, FaCode, FaExchangeAlt } from "react-icons/fa";
 import { SiVite, SiJavascript, SiJson } from "react-icons/si";
 import { Link } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 function DevJTool() {
   const features = [
@@ -53,6 +54,16 @@ function DevJTool() {
           >
             <FaGithub />
             <span>View Repository</span>
+          </a>
+
+          <a
+            href="https://devtool.farhaankhan.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-secondary"
+          >
+            <FaExternalLinkAlt />
+            <span>Live Demo ↗</span>
           </a>
 
           <Link to="/projects" className="btn btn-secondary">
