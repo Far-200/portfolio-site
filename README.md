@@ -14,7 +14,7 @@ A modern developer portfolio built to showcase my projects, skills, and journey 
 
 # 📸 Preview
 
-<img width="100%" alt="Portfolio Preview" src="https://raw.githubusercontent.com/Far-200/portfolio-site/main/public/preview.png"/>
+![Portfolio Preview](./site/public/preview.png)
 
 ---
 
