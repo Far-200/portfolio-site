@@ -14,14 +14,14 @@ function Hero() {
         <p className="badge">CSE Student • Full-Stack Builder • AI Explorer</p>
 
         <h1>
-          Building projects
-          <span>that feel real</span>
+          Building tools
+          <span>developers actually use</span>
         </h1>
 
         <p className="hero-text">
-          Hi, I'm Farhaan Khan. I build clean web apps, developer tools, and
-          AI-flavored systems while surviving engineering like it’s a boss fight
-          with zero save points.
+          Hi, I'm Farhaan Khan — I build developer tools, full-stack apps, and
+          AI-driven systems. Focused on solving real problems, not just making
+          projects that look good on GitHub.
         </p>
 
         <div className="hero-buttons">
@@ -46,15 +46,15 @@ function Hero() {
         <div className="hero-stats">
           <div className="hero-stat-card">
             <h3>4+</h3>
-            <p>Featured Projects</p>
+            <p>Deployed Projects</p>
           </div>
           <div className="hero-stat-card">
             <h3>Full-Stack</h3>
-            <p>React • FastAPI • UI</p>
+            <p>React • Node • APIs</p>
           </div>
           <div className="hero-stat-card">
-            <h3>AI + Security</h3>
-            <p>Builder mindset</p>
+            <h3>AI + Tools</h3>
+            <p>Practical systems</p>
           </div>
         </div>
       </motion.div>

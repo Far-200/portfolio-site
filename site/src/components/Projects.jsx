@@ -5,11 +5,11 @@ import { Github } from "lucide-react";
 function Projects() {
   const projects = [
     {
-      title: "Cortex AI Assistant",
-      desc: "A full-stack AI chatbot built with React and Express, featuring markdown rendering, code-friendly responses, and smart follow-up interactions.",
-      tech: ["React", "Express", "Node.js", "Gemini API"],
+      title: "Folder Structure Visualizer",
+      desc: "A developer utility that converts typed or pasted folder layouts into a clean visual tree and allows export as a ZIP-ready project structure.",
+      tech: ["React", "JavaScript", "Vite", "ZIP Export"],
       route: "/projects/cortex-ai",
-      github: "https://github.com/Far-200/cortex-ai-assistant",
+      github: "https://github.com/Far-200/folder-structure-visualizer",
     },
     {
       title: "Password Strength & Crack Time Estimator",

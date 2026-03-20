@@ -8,7 +8,7 @@ import AboutPage from "./pages/AboutPage";
 import SkillsPage from "./pages/SkillsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
-import CortexAIPage from "./pages/project-pages/CortexAIPage";
+import CortexAIPage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
 import DLPPage from "./pages/project-pages/DLPPage";

@@ -1,32 +1,39 @@
 import { motion } from "framer-motion";
-import { FaGithub, FaReact, FaNodeJs } from "react-icons/fa";
-import { SiExpress, SiTailwindcss, SiGooglegemini } from "react-icons/si";
+import {
+  FaGithub,
+  FaReact,
+  FaJsSquare,
+  FaFileArchive,
+  FaFolderOpen,
+} from "react-icons/fa";
+import { SiVite } from "react-icons/si";
 import { Link } from "react-router-dom";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 function CortexAIPage() {
   const features = [
-    "AI responses powered by Google Gemini",
-    "Smart follow-up questions based on selected text",
-    "Markdown rendering for readable responses",
-    "Formatted code block support",
-    "Copy response button for quick reuse",
-    "Smooth chat UI with auto-scroll",
-    "Send messages using Enter key",
+    "Paste or type folder structures manually with indentation support",
+    "Generate clean project trees for different stack templates",
+    "Supports common starter structures like React, Vite, Node, Express, and Tailwind setups",
+    "Parses user input into structured folder and file hierarchies",
+    "Exports the generated structure as a ZIP file",
+    "Skips unnecessary folders like node_modules, dist, build, and coverage during export",
+    "Simple visual workflow for planning projects before writing actual code",
   ];
 
   const stack = [
     { name: "React", icon: <FaReact /> },
-    { name: "Tailwind CSS", icon: <SiTailwindcss /> },
-    { name: "Node.js", icon: <FaNodeJs /> },
-    { name: "Express.js", icon: <SiExpress /> },
-    { name: "Gemini API", icon: <SiGooglegemini /> },
+    { name: "JavaScript", icon: <FaJsSquare /> },
+    { name: "Vite", icon: <SiVite /> },
+    { name: "ZIP Export", icon: <FaFileArchive /> },
+    { name: "Folder Parsing Logic", icon: <FaFolderOpen /> },
   ];
 
   const learnings = [
-    "Building a clean full-stack structure with separate client and server folders",
-    "Handling AI requests through an Express backend instead of exposing secrets on the frontend",
-    "Designing a chat UI that feels smooth, readable, and developer-friendly",
-    "Rendering markdown and code responses in a more useful way for technical users",
+    "Building logic that converts plain text indentation into a structured folder tree",
+    "Handling dynamic nested data and recursive rendering in a clean way",
+    "Exporting folder structures as downloadable ZIP files for real-world usability",
+    "Designing a tool that solves an actual developer planning problem instead of being just another flashy UI",
   ];
 
   return (
@@ -38,22 +45,32 @@ function CortexAIPage() {
         transition={{ duration: 0.6 }}
       >
         <p className="section-tag">Project Spotlight</p>
-        <h1>Cortex AI Assistant</h1>
+        <h1>Folder Structure Visualizer</h1>
         <p className="project-detail-subtext">
-          A clean full-stack AI chatbot built with React and Express, designed
-          for developer-friendly conversations, formatted responses, and smart
-          follow-up interactions.
+          A developer tool that turns typed or pasted folder layouts into a
+          clean visual structure and lets users export the result as a ZIP-ready
+          project scaffold.
         </p>
 
         <div className="hero-buttons project-detail-actions">
           <a
-            href="https://github.com/Far-200/cortex-ai-assistant"
+            href="https://github.com/Far-200/folder-structure-visualizer"
             target="_blank"
             rel="noreferrer"
             className="btn btn-primary"
           >
             <FaGithub />
             <span>View Repository</span>
+          </a>
+
+          <a
+            href="https://foldervisualiser.farhaankhan.dev"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-secondary"
+          >
+            <FaExternalLinkAlt />
+            <span>Live Demo ↗</span>
           </a>
 
           <Link to="/projects" className="btn btn-secondary">
@@ -72,17 +89,17 @@ function CortexAIPage() {
         >
           <h2>Overview</h2>
           <p>
-            Cortex AI focuses on giving users a cleaner AI chat experience with
-            readable markdown output, code-friendly responses, and contextual
-            follow-up prompts. The frontend is built with React and Tailwind,
-            while the backend uses Node.js and Express to connect securely with
-            the Gemini API.
+            Folder Structure Visualizer helps developers quickly plan project
+            layouts without manually creating every folder and file from
+            scratch. Users can type a structure themselves or work from a basic
+            scaffold idea, and the app turns that into a readable visual tree.
           </p>
 
           <p>
-            The project is structured as a full-stack app with separate
-            <strong> client</strong> and <strong>server</strong> folders, which
-            makes it easier to manage UI and backend logic independently.
+            The project focuses on developer workflow speed. Instead of wasting
+            time making folders one by one like a sleep-deprived file clerk, the
+            tool helps users sketch a project structure fast and export it in a
+            way that is actually useful.
           </p>
         </motion.div>
 
@@ -147,9 +164,9 @@ function CortexAIPage() {
       >
         <h2>Next Improvements</h2>
         <p>
-          This project has plenty of room to grow. Strong next upgrades would be
-          conversation memory, chat history persistence, streaming responses,
-          syntax highlighting, and deployment for real public use.
+          Strong future upgrades would include live tree editing, more preset
+          templates, drag-and-drop node management, custom starter kits, and a
+          downloadable config system for different frameworks and languages.
         </p>
       </motion.div>
     </section>
