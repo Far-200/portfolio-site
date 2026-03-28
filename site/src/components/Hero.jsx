@@ -71,7 +71,7 @@ function Hero() {
             alt="Farhaan Khan portrait"
             className="hero-photo"
           />
-          <div className="hero-status">Open to Internships</div>
+          <div className="hero-status">Open to Internships & Roles </div>
         </motion.div>
 
         <a

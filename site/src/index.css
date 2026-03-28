@@ -432,7 +432,7 @@ a {
   font-weight: 600;
   color: #e9d5ff;
   background: rgba(15, 23, 42, 0.82);
-  border: 1px solid rgba(192, 132, 252, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   backdrop-filter: blur(6px);
   box-shadow:

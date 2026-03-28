@@ -11,7 +11,7 @@ function Contact() {
         viewport={{ once: true }}
       >
         <p className="contact-tag">
-          Open to internships • collaborations • cool ideas
+          Open to internships & roles • collaborations • cool ideas
         </p>
         <h2>Let’s Connect</h2>
 
