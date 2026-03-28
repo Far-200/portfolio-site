@@ -417,7 +417,7 @@ a {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 25%;
   border-radius: 20px;
   display: block;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -427,7 +427,7 @@ a {
   position: absolute;
   bottom: 14px;
   left: 14px;
-  padding: 6px 12px;
+  padding: 4px 10px;
   font-size: 0.8rem;
   font-weight: 600;
   color: #e9d5ff;
@@ -453,7 +453,7 @@ a {
   background: #111827;
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
 }
 
 .resume-cta:hover {

@@ -3,7 +3,7 @@ import About from "../components/About";
 function AboutPage() {
   return (
     <main className="page">
-      <About />
+      <About showPhoto={false} />
     </main>
   );
 }
