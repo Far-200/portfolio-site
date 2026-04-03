@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaGithub,
   FaReact,
@@ -9,8 +10,11 @@ import {
 import { SiVite } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import folderVisualizerPreview from "../../assets/folder-visualiser-preview.png";
+import folderVisualizerSearch from "../../assets/folder-visualiser-search.png";
+import folderVisualizerPlacement from "../../assets/folder-visualiser-placement.png";
 
-function CortexAIPage() {
+function FolderStructurePage() {
   const features = [
     "Paste or type folder structures manually with indentation support",
     "Generate clean project trees for different stack templates",
@@ -35,6 +39,29 @@ function CortexAIPage() {
     "Exporting folder structures as downloadable ZIP files for real-world usability",
     "Designing a tool that solves an actual developer planning problem instead of being just another flashy UI",
   ];
+
+  const screenshots = [
+    {
+      image: folderVisualizerPreview,
+      title: "Main Interface",
+      description:
+        "The primary workspace for building and previewing folder structures.",
+    },
+    {
+      image: folderVisualizerSearch,
+      title: "Smart Search & Highlight",
+      description:
+        "Search across deeply nested files and highlight matching results instantly.",
+    },
+    {
+      image: folderVisualizerPlacement,
+      title: "Scaffold Presets & Placement",
+      description:
+        "Generate starter structures and place them exactly where you want.",
+    },
+  ];
+
+  const [selectedShot, setSelectedShot] = useState(null);
 
   return (
     <section className="section project-detail-page">
@@ -78,6 +105,86 @@ function CortexAIPage() {
           </Link>
         </div>
       </motion.div>
+
+      <motion.div
+        className="project-section-block glass-card project-gallery-block"
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55 }}
+        viewport={{ once: true }}
+      >
+        <h2>Project Gallery</h2>
+        <p className="project-gallery-subtext">
+          A closer look at the tool in action.
+        </p>
+
+        <div className="project-gallery-tiles">
+          {screenshots.map((shot, index) => (
+            <motion.button
+              key={shot.title}
+              type="button"
+              className="project-gallery-tile"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              onClick={() => setSelectedShot(shot)}
+            >
+              <div className="project-gallery-tile-image-wrap">
+                <img
+                  src={shot.image}
+                  alt={shot.title}
+                  className="project-gallery-tile-image"
+                />
+                <h3 className="tile-title">{shot.title}</h3>
+              </div>
+            </motion.button>
+          ))}
+        </div>
+      </motion.div>
+
+      <AnimatePresence>
+        {selectedShot && (
+          <motion.div
+            className="project-gallery-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedShot(null)}
+          >
+            <motion.div
+              className="project-gallery-modal"
+              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 20 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="project-gallery-modal-close"
+                onClick={() => setSelectedShot(null)}
+                aria-label="Close preview"
+              >
+                ×
+              </button>
+
+              <div className="project-gallery-modal-image-wrap">
+                <img
+                  src={selectedShot.image}
+                  alt={selectedShot.title}
+                  className="project-gallery-modal-image"
+                />
+              </div>
+
+              <div className="project-gallery-modal-content">
+                <h3>{selectedShot.title}</h3>
+                <p>{selectedShot.description}</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="project-detail-grid">
         <motion.div
@@ -173,4 +280,4 @@ function CortexAIPage() {
   );
 }
 
-export default CortexAIPage;
+export default FolderStructurePage;
