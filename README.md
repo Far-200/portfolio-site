@@ -135,8 +135,9 @@ Currently grinding **DSA, React, Python, and AI projects** while preparing for s
 
 <div align="center">
 
-⭐ If you like the project, consider giving it a star! (P.S. Thinking to add a new project to the site.)
+⭐ If you like the project, consider giving it a star!
 
+(P.S. Thinking to add a new project to the site.)
 Decided, will add FlowTrace to the projects instead of DLP...
 
 </div>
