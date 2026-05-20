@@ -2,6 +2,20 @@ import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 
+const SiDevfolio = () => (
+  <svg
+    viewBox="0 0 24 24"
+    width="1em"
+    height="1em"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth="0"
+    style={{ display: "inline-block", verticalAlign: "middle" }}
+  >
+    <path d="M11.91 0l7.39 4.265v8.528l-7.39 4.266-7.39-4.266V4.265L11.91 0zm0 2.274L6.684 5.291v6.033l5.226 3.016 5.226-3.016V5.291L11.91 2.274zM11.91 18.066l5.226-3.016v1.944l-5.226 3.017-5.226-3.017v-1.944l5.226 3.016z" />
+  </svg>
+);
+
 function Footer() {
   return (
     <motion.footer
@@ -31,7 +45,7 @@ function Footer() {
         <div className="footer-links-block">
           <h4>Connect</h4>
           <div className="footer-socials">
-            <a href="mailto:yourmail@example.com" aria-label="Email">
+            <a href="mailto:farhaabkhanff@gmail.com" aria-label="Email">
               <FaEnvelope />
             </a>
             <a
@@ -49,6 +63,14 @@ function Footer() {
               aria-label="LinkedIn"
             >
               <FaLinkedin />
+            </a>
+            <a
+              href="https://devfolio.co/@Farhaan_2k5"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Devfolio"
+            >
+              <SiDevfolio />
             </a>
           </div>
         </div>
