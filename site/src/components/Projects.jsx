@@ -27,11 +27,11 @@ function Projects() {
       github: "https://github.com/Far-200/DevTool",
     },
     {
-      title: "Data Leak Prevention System",
-      desc: "A security-focused system designed to detect and prevent sensitive information leaks using monitoring and rule-based detection logic.",
-      tech: ["Python", "Security", "Monitoring"],
-      route: "/projects/dlp",
-      github: "https://github.com/Far-200/DLP",
+      title: "PromptRouter",
+      desc: "A privacy-first Chrome extension that recommends the right AI model for your prompt in real time.",
+      tech: ["JavaScript", "Chrome Extension", "Manifest V3", "AI UX"],
+      route: "/projects/prompt-router",
+      github: "https://github.com/Far-200/prompt-model-suggester",
     },
   ];
 

@@ -65,6 +65,15 @@ function Contact() {
           >
             LinkedIn
           </a>
+
+          <a
+            href="https://devfolio.co/@Farhaan_2k5"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-secondary"
+          >
+            Devfolio
+          </a>
         </div>
       </motion.div>
     </section>

@@ -1,30 +1,30 @@
 import { motion } from "framer-motion";
-import { FaGithub, FaShieldAlt, FaLock, FaBug } from "react-icons/fa";
-import { SiPython, SiFastapi, SiReact } from "react-icons/si";
+import { FaGithub, FaRobot, FaLock, FaBolt, FaChrome } from "react-icons/fa";
+import { SiJavascript, SiGooglechrome } from "react-icons/si";
 import { Link } from "react-router-dom";
 
-function DLPPage() {
+function PromptRouterPage() {
   const features = [
-    "Sensitive data monitoring workflow",
-    "Leak detection logic for protected information",
-    "Security-focused project structure",
-    "Alert-oriented prevention mindset",
-    "Clean project flow for future upgrades",
-    "Foundation for larger enterprise-style security systems",
+    "Real-time AI model recommendation while typing",
+    "Works on Claude, ChatGPT, and Gemini",
+    "Rule-based prompt classification engine",
+    "Detects selected model and warns about overkill",
+    "Attachment-aware suggestions without reading files",
+    "100% local privacy-first Chrome extension",
   ];
 
   const stack = [
-    { name: "Python", icon: <SiPython /> },
-    { name: "FastAPI / Backend", icon: <SiFastapi /> },
-    { name: "React / Frontend", icon: <SiReact /> },
-    { name: "Security Logic", icon: <FaShieldAlt /> },
+    { name: "Vanilla JavaScript", icon: <SiJavascript /> },
+    { name: "Chrome Extension", icon: <FaChrome /> },
+    { name: "Manifest V3", icon: <SiGooglechrome /> },
+    { name: "Local Rule Engine", icon: <FaRobot /> },
   ];
 
   const learnings = [
-    "Thinking about security projects beyond just UI and focusing on protection workflows",
-    "Structuring a project around detection, prevention, and monitoring ideas",
-    "Designing a system with future scope for stronger enterprise-style features",
-    "Building a portfolio project that connects well with larger cybersecurity and AI security ideas",
+    "Building browser extensions using Manifest V3 and content scripts",
+    "Observing dynamic AI chat UIs using MutationObserver",
+    "Designing a local prompt classifier without APIs or backend calls",
+    "Handling privacy-sensitive workflows where user prompts never leave the browser",
   ];
 
   return (
@@ -36,16 +36,16 @@ function DLPPage() {
         transition={{ duration: 0.6 }}
       >
         <p className="section-tag">Project Spotlight</p>
-        <h1>Data Leak Prevention System</h1>
+        <h1>PromptRouter</h1>
         <p className="project-detail-subtext">
-          A security-focused project built around the idea of detecting,
-          monitoring, and preventing sensitive information leaks through a more
-          protection-first workflow.
+          A privacy-first Chrome extension that recommends the right AI model
+          for your prompt in real time, so you stop burning premium models on
+          tiny tasks.
         </p>
 
         <div className="hero-buttons project-detail-actions">
           <a
-            href="https://github.com/Far-200/DLP"
+            href="https://github.com/Far-200/prompt-model-suggester"
             target="_blank"
             rel="noreferrer"
             className="btn btn-primary"
@@ -70,15 +70,16 @@ function DLPPage() {
         >
           <h2>Overview</h2>
           <p>
-            This project explores the core idea of data leak prevention by
-            focusing on how sensitive information can be identified, monitored,
-            and protected inside a software workflow.
+            PromptRouter watches the prompt box on supported AI platforms and
+            suggests whether a lightweight, balanced, or premium model is the
+            better fit for the task.
           </p>
 
           <p>
-            It acts as a strong security-themed project in my portfolio and also
-            reflects my growing interest in building practical systems around
-            cybersecurity, monitoring, and enterprise-inspired protection logic.
+            The extension runs completely inside the browser. It analyzes text
+            locally, detects visible attachment hints, reads the currently
+            selected model from the page UI, and shows a floating recommendation
+            widget without sending prompts anywhere.
           </p>
         </motion.div>
 
@@ -129,12 +130,12 @@ function DLPPage() {
         <h2>Project Focus</h2>
         <div className="project-feature-grid">
           <div className="project-feature-card">
-            <FaLock style={{ marginRight: "0.5rem" }} />
-            Preventing sensitive information exposure
+            <FaBolt style={{ marginRight: "0.5rem" }} />
+            Routing prompts to the right model tier
           </div>
           <div className="project-feature-card">
-            <FaBug style={{ marginRight: "0.5rem" }} />
-            Detecting risky behavior and suspicious data flow
+            <FaLock style={{ marginRight: "0.5rem" }} />
+            Keeping prompt analysis fully local and private
           </div>
         </div>
       </motion.div>
@@ -163,14 +164,14 @@ function DLPPage() {
       >
         <h2>Next Improvements</h2>
         <p>
-          Strong next upgrades would include deeper monitoring logic, better
-          alerting, clearer dashboards, stronger rules for sensitive-data
-          detection, and expansion toward a more enterprise-grade leak
-          prevention workflow.
+          Next upgrades would include stronger prompt classification rules,
+          better model detection across UI changes, improved provider support,
+          cleaner onboarding, and a more polished Chrome Web Store-ready
+          experience.
         </p>
       </motion.div>
     </section>
   );
 }
 
-export default DLPPage;
+export default PromptRouterPage;

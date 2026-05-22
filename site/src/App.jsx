@@ -11,7 +11,7 @@ import ContactPage from "./pages/ContactPage";
 import CortexAIPage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
-import DLPPage from "./pages/project-pages/DLPPage";
+import PromptRouterPage from "./pages/project-pages/PromptRouterPage";
 
 function App() {
   const glowRef = useRef(null);
@@ -50,7 +50,7 @@ function App() {
           element={<PasswordCrackEsti />}
         />
         <Route path="/projects/devtool" element={<DevJTool />} />
-        <Route path="/projects/dlp" element={<DLPPage />} />
+        <Route path="/projects/prompt-router" element={<PromptRouterPage />} />
       </Routes>
 
       <Footer />
