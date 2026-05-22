@@ -137,7 +137,4 @@ Currently grinding **DSA, React, Python, and AI projects** while preparing for s
 
 ⭐ If you like the project, consider giving it a star!
 
-(P.S. Thinking to add a new project to the site. NVM, added a video demo to the FSV Project)
-Decided, will add FlowTrace to the projects instead of DLP...
-
 </div>
