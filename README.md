@@ -135,6 +135,6 @@ Currently grinding **DSA, React, Python, and AI projects** while preparing for s
 
 <div align="center">
 
-⭐ If you like the project, consider giving it a star!
+⭐ If you like the project, consider giving it a star🫠!
 
 </div>
