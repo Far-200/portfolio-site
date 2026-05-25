@@ -2,16 +2,17 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import profileImage from "../assets/profile.jpg";
 
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 22 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] },
+});
+
 function Hero() {
   return (
     <section className="hero section">
-      <motion.div
-        className="hero-left"
-        initial={{ opacity: 0, x: -60 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <p className="badge">CSE Student • Full-Stack Builder • AI Explorer</p>
+      <motion.div className="hero-left" {...fadeUp(0)}>
+        <p className="badge">Building wierdly useful softwares since 2023</p>
 
         <h1>
           Building tools
@@ -19,20 +20,18 @@ function Hero() {
         </h1>
 
         <p className="hero-text">
-          Hi, I'm Farhaan Khan — I build developer tools, full-stack apps, and
-          AI-driven systems. Focused on solving real problems, not just making
-          projects that look good on GitHub.
+          Building developer tools, full-stack apps, and AI-assisted systems
+          that people might actually use instead of abandoning after the GitHub
+          push.
         </p>
 
         <div className="hero-buttons">
           <Link to="/projects" className="btn btn-primary">
             View Projects
           </Link>
-
           <Link to="/skills" className="btn btn-secondary">
             Skills
           </Link>
-
           <a
             href="https://github.com/Far-200"
             target="_blank"
@@ -50,7 +49,7 @@ function Hero() {
           </div>
           <div className="hero-stat-card">
             <h3>Full-Stack</h3>
-            <p>React • Node • APIs</p>
+            <p>React · Node · APIs</p>
           </div>
           <div className="hero-stat-card">
             <h3>AI + Tools</h3>
@@ -59,20 +58,15 @@ function Hero() {
         </div>
       </motion.div>
 
-      <motion.div
-        className="hero-right"
-        initial={{ opacity: 0, x: 60, scale: 0.95 }}
-        animate={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-      >
-        <motion.div className="hero-photo-card" whileHover={{ y: -6 }}>
+      <motion.div className="hero-right" {...fadeUp(0.14)}>
+        <div className="hero-photo-card">
           <img
             src={profileImage}
             alt="Farhaan Khan portrait"
             className="hero-photo"
           />
-          <div className="hero-status">Open to Internships & Roles </div>
-        </motion.div>
+          <div className="hero-status">Open to Internships &amp; Roles</div>
+        </div>
 
         <a
           href="/resume/Farhaan_Khan_Resume.pdf"
@@ -80,8 +74,27 @@ function Hero() {
           rel="noreferrer"
           className="resume-cta"
         >
-          View Resume
+          View Resume ↗
         </a>
+
+        <div className="github-card">
+          <div className="github-card-top">
+            <span>GitHub Activity</span>
+            <a
+              href="https://github.com/Far-200"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Far-200 ↗
+            </a>
+          </div>
+          <img
+            src="https://ghchart.rshah.org/10b981/Far-200"
+            alt="Farhaan Khan GitHub contributions"
+            className="github-heatmap"
+            loading="lazy"
+          />
+        </div>
       </motion.div>
     </section>
   );

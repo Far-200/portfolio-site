@@ -5,19 +5,18 @@ function Contact() {
     <section className="section contact-wrap">
       <motion.div
         className="contact-section"
-        initial={{ opacity: 0, y: 35 }}
+        initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
         viewport={{ once: true }}
       >
         <p className="contact-tag">
-          Open to internships & roles • collaborations • cool ideas
+          Open to internships & roles · collaborations · cool ideas
         </p>
-        <h2>Let’s Connect</h2>
-
+        <h2>Let's Connect</h2>
         <p>
-          Whether it’s internships, collaborations, interesting ideas, or simply
-          talking about web development, UI, AI, or project-building, I’m always
+          Whether it's internships, collaborations, interesting ideas, or simply
+          talking about web development, UI, AI, or project-building, I'm always
           happy to connect.
         </p>
 
@@ -31,7 +30,6 @@ function Contact() {
               <li>Developer tool and AI project ideas</li>
             </ul>
           </div>
-
           <div className="contact-info-card">
             <h3>Currently looking for</h3>
             <ul>
@@ -43,35 +41,17 @@ function Contact() {
           </div>
         </div>
 
-        <div className="hero-buttons contact-buttons">
+        <div className="contact-buttons">
           <a href="mailto:farhaabkhanff@gmail.com" className="btn btn-primary">
             Email Me
           </a>
-
-          <a
-            href="https://github.com/Far-200"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
-          >
+          <a href="https://github.com/Far-200" target="_blank" rel="noreferrer" className="btn btn-secondary">
             GitHub
           </a>
-
-          <a
-            href="https://www.linkedin.com/in/farhaan-khan-dev"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
-          >
+          <a href="https://www.linkedin.com/in/farhaan-khan-dev" target="_blank" rel="noreferrer" className="btn btn-secondary">
             LinkedIn
           </a>
-
-          <a
-            href="https://devfolio.co/@Farhaan_2k5"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
-          >
+          <a href="https://devfolio.co/@Farhaan_2k5" target="_blank" rel="noreferrer" className="btn btn-secondary">
             Devfolio
           </a>
         </div>
