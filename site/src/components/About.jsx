@@ -1,17 +1,30 @@
 import { motion } from "framer-motion";
 import aboutPhoto from "../assets/about-photo.jpg";
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+};
+const row = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 function About({ showPhoto = true }) {
   return (
     <section className="section">
       <motion.div
         className={`about-layout ${!showPhoto ? "about-layout-single" : ""}`}
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        viewport={{ once: true }}
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.1 }}
       >
-        <div className="content-section about-expanded">
+        <motion.div className="content-section about-expanded" variants={row}>
           <p className="section-tag">Who I am</p>
           <h2>About Me</h2>
 
@@ -39,29 +52,47 @@ function About({ showPhoto = true }) {
           </p>
 
           <div className="about-highlights">
-            <div className="about-highlight-card">
-              <h3>What I build</h3>
-              <p>Web apps, dev tools, portfolio projects, and AI-flavored systems.</p>
-            </div>
-            <div className="about-highlight-card">
-              <h3>What I value</h3>
-              <p>Clean UI, practical features, modular code, and growth through shipping.</p>
-            </div>
-            <div className="about-highlight-card">
-              <h3>Current goal</h3>
-              <p>Becoming internship-ready with a stronger portfolio and real project depth.</p>
-            </div>
+            {[
+              {
+                title: "What I build",
+                text: "Web apps, dev tools, portfolio projects, and AI-flavored systems.",
+              },
+              {
+                title: "What I value",
+                text: "Clean UI, practical features, modular code, and growth through shipping.",
+              },
+              {
+                title: "Current goal",
+                text: "Becoming internship-ready with a stronger portfolio and real project depth.",
+              },
+            ].map((card, i) => (
+              <motion.div
+                key={card.title}
+                className="about-highlight-card"
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.45,
+                  delay: i * 0.07,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                viewport={{ once: true }}
+              >
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.div>
 
         {showPhoto && (
-          <div className="about-photo-card">
+          <motion.div className="about-photo-card" variants={row}>
             <img
               src={aboutPhoto}
               alt="Farhaan Khan casual portrait"
               className="about-photo"
             />
-          </div>
+          </motion.div>
         )}
       </motion.div>
     </section>

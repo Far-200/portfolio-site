@@ -152,7 +152,7 @@ a {
   height: 600px;
   border-radius: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%);
+  /* transform is set via JS rAF loop — smooth lerp */
   background: radial-gradient(
     circle,
     rgba(16, 185, 129, 0.05) 0%,
@@ -161,10 +161,10 @@ a {
   );
   filter: blur(40px);
   z-index: 0;
-  will-change: left, top;
+  will-change: transform;
 }
 
-.app-shell > *:not(.cursor-glow) {
+.app-shell > *:not(.cursor-glow):not(.bg-grid) {
   position: relative;
   z-index: 1;
 }
@@ -1640,5 +1640,666 @@ a {
   }
   .cursor-glow {
     display: none;
+  }
+}
+
+/* ============================================================
+   ENHANCEMENTS — v4 "Alive" layer
+   All new/upgraded rules below. Nothing above was removed.
+   ============================================================ */
+
+/* ── Animated dot-grid background ─────────────────────────── */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.13) 1px,
+    transparent 1px
+  );
+  background-size: 32px 32px;
+  /* subtle fade at edges so grid doesn't fight content */
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  opacity: 0.38;
+  animation: grid-drift 28s linear infinite;
+}
+
+@keyframes grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 32px 32px;
+  }
+}
+
+/* ── Cursor glow — upgraded ────────────────────────────────── */
+/* (transform-based now; left/top removed from inline style) */
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.065) 0%,
+    rgba(16, 185, 129, 0.025) 40%,
+    transparent 68%
+  );
+  filter: blur(48px);
+  z-index: 0;
+  will-change: transform;
+}
+
+/* ── Navbar — scrolled state ───────────────────────────────── */
+.navbar--scrolled {
+  background: rgba(3, 10, 5, 0.88) !important;
+  border-bottom-color: rgba(16, 185, 129, 0.1) !important;
+  box-shadow: 0 1px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Nav link — relative position needed for active dot */
+.nav-link {
+  position: relative;
+  padding: 0.42rem 0.85rem;
+  border-radius: var(--r-sm);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Animated active dot — rendered by framer layoutId */
+.nav-active-dot {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  translate: -50% 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+/* Logo dot accent */
+.logo {
+  position: relative;
+}
+.logo-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  position: absolute;
+  bottom: 1px;
+  right: -7px;
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+/* ── Typewriter hero line ──────────────────────────────────── */
+.hero-typewriter {
+  margin-bottom: 1.1rem;
+  margin-top: -0.35rem;
+  min-height: 1.5em;
+}
+
+.typewriter-text {
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-size: 0.88rem;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+  opacity: 0.85;
+}
+
+.typewriter-prefix {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  font-weight: 300;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── Hero stat cards — subtle glow on hover ────────────────── */
+.hero-stat-card {
+  transition:
+    background 0.22s ease,
+    box-shadow 0.22s ease;
+}
+.hero-stat-card:hover {
+  background: rgba(16, 185, 129, 0.07) !important;
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.04);
+}
+.hero-stat-card h3 {
+  transition: color 0.22s ease;
+}
+.hero-stat-card:hover h3 {
+  color: var(--accent-light);
+}
+
+/* ── Project cards — enhanced hover ───────────────────────── */
+.project-card--enhanced {
+  overflow: hidden;
+  transition:
+    background 0.28s ease,
+    transform 0.28s var(--ease-out),
+    box-shadow 0.28s ease;
+}
+
+.project-card--enhanced:hover {
+  background: rgba(16, 185, 129, 0.045) !important;
+  transform: translateY(-3px);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(16, 185, 129, 0.18);
+}
+
+/* Glow overlay — top-edge ambient light on hover */
+.project-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(16, 185, 129, 0.55),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.project-card--enhanced:hover .project-card-glow {
+  opacity: 1;
+}
+
+/* "Built Because" line */
+.project-built-because {
+  margin-top: 0.7rem !important;
+  font-size: 0.8rem !important;
+  color: var(--text-muted) !important;
+  font-style: italic;
+  line-height: 1.55 !important;
+}
+
+.project-built-label {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.75;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+}
+
+/* Chip interactive */
+.chip--interactive {
+  cursor: default;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.chip--interactive:hover {
+  background: rgba(16, 185, 129, 0.14) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: var(--accent-light) !important;
+}
+
+/* Project link — premium feel */
+.project-link--premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.42rem 0.9rem;
+  border-radius: var(--r-sm);
+  background: rgba(16, 185, 129, 0.07);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  color: var(--accent) !important;
+  font-weight: 600;
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    gap 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.project-link--premium:hover {
+  background: rgba(16, 185, 129, 0.14) !important;
+  border-color: rgba(16, 185, 129, 0.38) !important;
+  gap: 0.5rem !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.12);
+}
+
+.project-link-arrow {
+  transition: transform 0.2s ease;
+}
+
+.project-link--premium:hover .project-link-arrow {
+  transform: translateX(2px);
+}
+
+/* ── Button premium upgrades ───────────────────────────────── */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep on hover */
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+/* ── Section reveal — utility classes ─────────────────────── */
+/* These are used by framer-motion, no extra CSS needed,       */
+/* but we add a subtle section separator for visual rhythm     */
+
+.section + .section {
+  position: relative;
+}
+
+.section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: min(320px, 70%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(16, 185, 129, 0.12),
+    transparent
+  );
+}
+
+/* ── ScrollToTop button — subtle glow ─────────────────────── */
+/* (if it uses a button with class, add glow) */
+[class*="scroll-top"]:hover,
+[class*="scrolltop"]:hover {
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* ── Journey & skill cards — lift consistency ──────────────── */
+.journey-card:hover,
+.skill-card:hover {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(16, 185, 129, 0.12);
+}
+
+/* ── Easter egg: footer console line ──────────────────────── */
+.footer-console {
+  font-family: ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.55;
+  margin-top: 0.4rem;
+}
+
+.footer-console::before {
+  content: "> ";
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+/* ── Noise texture overlay (very subtle) ──────────────────── */
+/* Applied via pseudo-element on app-shell                    */
+.app-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ── Reduced motion overrides ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid,
+  .cursor-glow,
+  .app-shell::after {
+    display: none !important;
+  }
+  .btn-primary::after {
+    display: none;
+  }
+}
+
+/* ============================================================
+   DEVELOPER TERMINAL CARD
+   ============================================================ */
+.dev-terminal {
+  width: 100%;
+  max-width: 296px;
+  border-radius: var(--r-lg);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(3, 10, 5, 0.82);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(16, 185, 129, 0.06);
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.dev-terminal:hover {
+  border-color: rgba(16, 185, 129, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.1),
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 0 52px rgba(16, 185, 129, 0.09);
+}
+
+/* Title bar — macOS-style dots */
+.dev-terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.dev-terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dev-terminal-dot--red {
+  background: #ff5f57;
+  opacity: 0.7;
+}
+.dev-terminal-dot--yellow {
+  background: #febc2e;
+  opacity: 0.7;
+}
+.dev-terminal-dot--green {
+  background: #28c840;
+  opacity: 0.7;
+}
+
+.dev-terminal-title {
+  margin-left: 0.3rem;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  flex: 1;
+  text-align: center;
+}
+
+/* Body */
+.dev-terminal-body {
+  padding: 0.9rem 1rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.dev-terminal-cmd {
+  font-size: 0.78rem;
+  color: var(--accent-light);
+  margin-bottom: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+.dev-terminal-prompt {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.dev-terminal-blink {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  font-size: 0.82rem;
+}
+
+.dev-terminal-section {
+  margin-bottom: 0.75rem;
+}
+
+.dev-terminal-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.dev-terminal-item {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.dev-terminal-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dev-terminal-item--success {
+  color: #4ade80;
+}
+
+.dev-terminal-check {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+.dev-terminal-item--mood {
+  color: var(--accent-light);
+  font-style: italic;
+}
+
+.dev-terminal-divider {
+  height: 1px;
+  background: rgba(16, 185, 129, 0.1);
+  margin: 0.55rem 0;
+}
+
+/* Rotating footer */
+.dev-terminal-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  min-height: 1.4em;
+  overflow: hidden;
+}
+
+.dev-terminal-footer .dev-terminal-prompt {
+  font-size: 0.74rem;
+  flex-shrink: 0;
+}
+
+.dev-terminal-footer-text {
+  display: inline-block;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .dev-terminal {
+    max-width: 268px;
+  }
+}
+@media (max-width: 700px) {
+  .dev-terminal {
+    max-width: 100%;
+  }
+}
+
+/* ============================================================
+   BOOT TERMINAL OVERLAY
+   ============================================================ */
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: #030a05;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  /* subtle grid echo behind boot screen */
+  background-image: radial-gradient(
+    circle,
+    rgba(16, 185, 129, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 28px 28px;
+}
+
+.boot-overlay--exit {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot-terminal {
+  width: min(560px, 88vw);
+  padding: 2rem 0;
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+}
+
+.boot-line {
+  font-size: clamp(0.78rem, 2.2vw, 0.88rem);
+  line-height: 1.9;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* First line (the command) gets accent color */
+.boot-line:first-child {
+  color: var(--accent-light);
+}
+
+.boot-line--success {
+  color: #4ade80;
+}
+
+.boot-line--muted {
+  color: var(--text-muted);
+}
+
+.boot-cursor {
+  display: inline-block;
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+/* Skip button — bottom-right, unobtrusive */
+.boot-skip {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.38rem 0.9rem;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.06);
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.boot-skip:hover {
+  color: var(--accent);
+  border-color: rgba(16, 185, 129, 0.38);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Reduced motion — handled in JS (BootTerminal calls onDone immediately),
+   but this hides the overlay instantly as a CSS fallback too */
+@media (prefers-reduced-motion: reduce) {
+  .boot-overlay {
+    display: none !important;
   }
 }

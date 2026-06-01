@@ -78,6 +78,7 @@ function Footer() {
 
       <div className="footer-bottom">
         <p>© 2026 Farhaan Khan</p>
+        <p className="footer-console">console.log(portfolio.isLive)</p>
       </div>
     </motion.footer>
   );
