@@ -1,42 +1,56 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-// Boot sequence lines — each has the text and delay (ms) before it appears
+// First line is typed character-by-character.
+// Remaining lines slide in sequentially.
+const FIRST_LINE = "farhaan@portfolio:~$ sudo apt install weirdly-useful-tools";
+
 const BOOT_LINES = [
-  {
-    text: "farhaan@portfolio:~$ sudo apt install weirdly-useful-tools",
-    delay: 0,
-  },
-  { text: "[sudo] password accepted", delay: 420 },
-  { text: "installing devtools...", delay: 780 },
-  { text: "building portfolio-v3...", delay: 1100 },
-  { text: "running npm run build", delay: 1380 },
-  { text: "✓ build complete", delay: 1820 },
-  { text: "opening /home/farhaan/portfolio", delay: 2100 },
-  { text: "launching interface...", delay: 2420 },
+  { text: "[sudo] password accepted", delay: 520, style: "muted" },
+  { text: "installing devtools...", delay: 900, style: "muted" },
+  { text: "building portfolio-v3...", delay: 1200, style: "muted" },
+  { text: "running npm run build", delay: 1480, style: "muted" },
+  { text: "✓ build complete", delay: 1900, style: "success" },
+  { text: "opening /home/farhaan/portfolio", delay: 2180, style: "muted" },
+  { text: "launching interface...", delay: 2460, style: "muted" },
 ];
 
-// Total duration before fade-out begins (ms)
-const DONE_AT = 2900;
-// Fade-out duration matches CSS transition
-const FADE_MS = 400;
+const DONE_AT = 2950; // ms before fade starts
+const FADE_MS = 380; // matches CSS transition
+
+// Typing speed for the first command line
+const TYPE_INTERVAL = 38; // ms per character
 
 function BootTerminal({ onDone }) {
-  const [visibleCount, setVisibleCount] = useState(0);
+  const [typed, setTyped] = useState(""); // first line typed chars
+  const [typingDone, setTypingDone] = useState(false); // first line finished
+  const [visibleCount, setVisibleCount] = useState(0); // how many BOOT_LINES shown
   const [exiting, setExiting] = useState(false);
   const timersRef = useRef([]);
 
   useEffect(() => {
     // Respect prefers-reduced-motion — skip immediately
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReduced) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       onDone();
       return;
     }
 
-    // Schedule each line appearance
+    // ── Phase 1: type the first command character by character ──
+    let charIndex = 0;
+    const typeNext = () => {
+      charIndex += 1;
+      setTyped(FIRST_LINE.slice(0, charIndex));
+      if (charIndex < FIRST_LINE.length) {
+        const t = setTimeout(typeNext, TYPE_INTERVAL);
+        timersRef.current.push(t);
+      } else {
+        setTypingDone(true);
+      }
+    };
+    const startType = setTimeout(typeNext, 120);
+    timersRef.current.push(startType);
+
+    // ── Phase 2: reveal remaining lines on schedule ──
     BOOT_LINES.forEach((line, i) => {
       const t = setTimeout(() => {
         setVisibleCount(i + 1);
@@ -44,47 +58,71 @@ function BootTerminal({ onDone }) {
       timersRef.current.push(t);
     });
 
-    // Schedule fade-out
-    const exitTimer = setTimeout(() => setExiting(true), DONE_AT);
-    timersRef.current.push(exitTimer);
+    // ── Phase 3: fade out, then unmount ──
+    const exitT = setTimeout(() => setExiting(true), DONE_AT);
+    const doneT = setTimeout(() => onDone(), DONE_AT + FADE_MS);
+    timersRef.current.push(exitT, doneT);
 
-    // After fade completes, call onDone
-    const doneTimer = setTimeout(() => onDone(), DONE_AT + FADE_MS);
-    timersRef.current.push(doneTimer);
-
-    return () => {
-      timersRef.current.forEach(clearTimeout);
-    };
+    return () => timersRef.current.forEach(clearTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Cursor shows on last active line
+  const showCursorOnCmd = !typingDone;
+  const showCursorOnLast =
+    typingDone && visibleCount < BOOT_LINES.length && !exiting;
+  const lastVisible = visibleCount - 1;
+
   return (
-    <motion.div
+    <div
       className={`boot-overlay${exiting ? " boot-overlay--exit" : ""}`}
       aria-hidden="true"
     >
-      <div className="boot-terminal">
-        {/* Lines revealed one-by-one */}
-        {BOOT_LINES.slice(0, visibleCount).map((line, i) => (
-          <motion.p
-            key={i}
-            className={`boot-line${line.text.startsWith("✓") ? " boot-line--success" : ""}${line.text.startsWith("[sudo]") || line.text.startsWith("installing") || line.text.startsWith("building") || line.text.startsWith("running") || line.text.startsWith("opening") || line.text.startsWith("launching") ? " boot-line--muted" : ""}`}
-            initial={{ opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {line.text}
-            {/* Show blinking cursor only on the last visible line */}
-            {i === visibleCount - 1 && !exiting && (
+      {/* Terminal window card — visually matches DeveloperTerminal */}
+      <div className="boot-window">
+        {/* Title bar */}
+        <div className="boot-window-bar">
+          <span className="dev-terminal-dot dev-terminal-dot--red" />
+          <span className="dev-terminal-dot dev-terminal-dot--yellow" />
+          <span className="dev-terminal-dot dev-terminal-dot--green" />
+          <span className="boot-window-title">farhaan@portfolio — boot</span>
+        </div>
+
+        {/* Output body */}
+        <div className="boot-window-body">
+          {/* First line — typewriter */}
+          <p className="boot-line boot-line--cmd">
+            {typed}
+            {showCursorOnCmd && (
               <span className="boot-cursor" aria-hidden="true">
                 ▋
               </span>
             )}
-          </motion.p>
-        ))}
+          </p>
+
+          {/* Remaining lines — slide in one by one */}
+          {BOOT_LINES.slice(0, visibleCount).map((line, i) => (
+            <motion.p
+              key={i}
+              className={`boot-line${
+                line.style === "success" ? " boot-line--success" : ""
+              }${line.style === "muted" ? " boot-line--muted" : ""}`}
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {line.text}
+              {showCursorOnLast && i === lastVisible && (
+                <span className="boot-cursor" aria-hidden="true">
+                  ▋
+                </span>
+              )}
+            </motion.p>
+          ))}
+        </div>
       </div>
 
-      {/* Skip button */}
+      {/* Skip button — bottom-right, always on top */}
       <button
         className="boot-skip"
         onClick={() => {
@@ -94,7 +132,7 @@ function BootTerminal({ onDone }) {
       >
         skip
       </button>
-    </motion.div>
+    </div>
   );
 }
 

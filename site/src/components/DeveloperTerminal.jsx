@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Rotating footer quips — cycles every 3.5s
 const FOOTER_LINES = [
   "turning caffeine into commits",
   "debugging life choices",
@@ -27,10 +26,10 @@ function RotatingFooter() {
         <motion.span
           key={index}
           className="dev-terminal-footer-text"
-          initial={{ opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          exit={{ opacity: 0, y: -5 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
         >
           {FOOTER_LINES[index]}
         </motion.span>
@@ -57,6 +56,7 @@ function DeveloperTerminal() {
 
       {/* Body */}
       <div className="dev-terminal-body">
+        {/* Command line — no margin below, content follows immediately */}
         <p className="dev-terminal-cmd">
           <span className="dev-terminal-prompt">farhaan@portfolio:~$</span>
           {" status"}
@@ -88,7 +88,7 @@ function DeveloperTerminal() {
           </p>
         </div>
 
-        <div className="dev-terminal-section">
+        <div className="dev-terminal-section dev-terminal-section--last">
           <p className="dev-terminal-label">System Mood:</p>
           <p className="dev-terminal-item dev-terminal-item--mood">
             stable-ish
