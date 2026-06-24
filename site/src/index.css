@@ -68,7 +68,9 @@ html,
 body,
 #root {
   width: 100%;
+  max-width: 100%;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -140,6 +142,7 @@ a {
   position: relative;
   min-height: 100vh;
   width: 100%;
+  max-width: 100vw;
   overflow-x: clip;
 }
 
@@ -884,6 +887,9 @@ a {
   font-weight: 500;
   font-size: 0.875rem;
   color: var(--text-secondary);
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* ============================================================
@@ -1510,6 +1516,12 @@ a {
   .content-section,
   .contact-section {
     padding: 1.6rem;
+  }
+
+  /* Single column on phones — the 1100px breakpoint only got us to 2,
+     which is still too cramped at ~360–412px viewports */
+  .skills-grid {
+    grid-template-columns: 1fr;
   }
 }
 
