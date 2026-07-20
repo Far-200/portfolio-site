@@ -2231,15 +2231,12 @@ a {
    BOOT TERMINAL OVERLAY
    ============================================================ */
 
-/* Full-screen backdrop — fixed, above everything */
+/* Full-screen backdrop — fixed, above everything. inset:0 + dvh avoids
+   the scrollbar overflow that 100vw/100vh can introduce. */
 .boot-overlay {
   position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw;
-  height: 100vh;
+  inset: 0 !important;
+  height: 100dvh;
   z-index: 99999 !important;
   background-color: #030a05;
   background-image: radial-gradient(
@@ -2248,31 +2245,77 @@ a {
     transparent 1px
   );
   background-size: 28px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  padding: 20px 16px;
   opacity: 1;
-  transition: opacity 0.38s ease;
+  transition:
+    opacity 0.42s ease,
+    transform 0.42s ease,
+    filter 0.42s ease;
   overflow: hidden;
+}
+
+/* Intentional emptiness: soft radial emerald glow + faint vignette */
+.boot-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      60% 50% at 50% 46%,
+      rgba(16, 185, 129, 0.1) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      120% 100% at 50% 50%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  pointer-events: none;
 }
 
 .boot-overlay--exit {
   opacity: 0;
+  transform: scale(0.97);
+  filter: blur(2px);
   pointer-events: none;
+}
+
+/* Decorative watermark — near bottom-centre, behind the terminal */
+.boot-watermark {
+  position: absolute;
+  bottom: clamp(1.2rem, 5vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+  letter-spacing: 0.55em;
+  color: rgba(16, 185, 129, 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Terminal window card — visually matches the Hero DeveloperTerminal */
 .boot-window {
-  width: min(520px, 88vw);
+  position: relative;
+  z-index: 1;
+  width: min(1060px, calc(100% - 48px));
+  height: clamp(520px, 64dvh, 620px);
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
   border-radius: var(--r-lg);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  background: rgba(3, 10, 5, 0.92);
-  backdrop-filter: blur(18px);
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  background: rgba(3, 10, 5, 0.86);
+  backdrop-filter: blur(20px);
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(16, 185, 129, 0.07),
-    0 24px 64px rgba(0, 0, 0, 0.65),
-    0 0 60px rgba(16, 185, 129, 0.08);
+    inset 0 1px 0 rgba(52, 211, 153, 0.16),
+    0 0 0 1px rgba(16, 185, 129, 0.08),
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    0 0 90px rgba(16, 185, 129, 0.12);
   font-family:
     "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
 }
@@ -2282,33 +2325,43 @@ a {
   display: flex;
   align-items: center;
   gap: 0.42rem;
-  padding: 0.55rem 0.9rem;
+  padding: 0.6rem 1rem;
   border-bottom: 1px solid rgba(16, 185, 129, 0.1);
   background: rgba(16, 185, 129, 0.03);
+  flex-shrink: 0;
 }
 
 .boot-window-title {
   margin-left: 0.3rem;
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   letter-spacing: 0.03em;
   flex: 1;
   text-align: center;
 }
 
-/* Output body */
+/* Two-column body: console + system rail. Only this scrolls if forced. */
 .boot-window-body {
-  padding: 1rem 1.2rem 1.1rem;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+  overflow: hidden;
+}
+
+/* Left console — command, manifest, status, progress */
+.boot-console {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  min-height: 11rem; /* prevents card from collapsing while typing */
+  padding: 1.6rem 1.9rem 1.5rem;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Individual output lines */
 .boot-line {
-  font-size: clamp(0.76rem, 2vw, 0.84rem);
-  line-height: 1.85;
+  font-size: clamp(0.84rem, 1.05vw, 0.95rem);
+  line-height: 1.75;
   color: var(--text-secondary);
   white-space: pre-wrap;
   word-break: break-word;
@@ -2317,13 +2370,85 @@ a {
 /* The typed command line */
 .boot-line--cmd {
   color: var(--accent-light);
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.9rem;
 }
 
-.boot-line--success {
-  color: #4ade80;
+/* Boot manifest — all rows rendered; only state styling changes */
+.boot-manifest {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
-.boot-line--muted {
+
+.boot-manifest-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.14rem 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: var(--r-sm);
+  border-left: 2px solid transparent;
+  font-size: clamp(0.82rem, 1vw, 0.92rem);
+  line-height: 1.7;
+  transition:
+    color 0.25s ease,
+    opacity 0.25s ease,
+    background 0.25s ease;
+}
+
+.boot-marker {
+  flex-shrink: 0;
+  white-space: pre;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.boot-manifest-label {
+  word-break: break-word;
+}
+
+/* Completed */
+.boot-manifest-row--completed {
+  color: var(--text-secondary);
+}
+.boot-manifest-row--completed .boot-marker {
+  color: var(--accent);
+}
+
+/* Current — brighter, subtle left-edge emphasis */
+.boot-manifest-row--current {
+  color: var(--accent-light);
+  background: rgba(16, 185, 129, 0.06);
+  border-left-color: var(--accent);
+}
+.boot-manifest-row--current .boot-marker {
+  color: var(--accent-light);
+}
+
+/* Pending — muted, low opacity, still legible, no animation */
+.boot-manifest-row--pending {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+.boot-manifest-row--pending .boot-marker {
+  color: var(--text-muted);
+}
+
+/* Reserved status area — fixed height so ready/launch don't shift layout */
+.boot-status-area {
+  min-height: 2.6rem;
+  margin-top: 0.9rem;
+}
+
+.boot-line--ready {
+  color: var(--accent-light);
+  font-weight: 600;
+}
+
+.boot-line--launch {
   color: var(--text-muted);
 }
 
@@ -2335,20 +2460,138 @@ a {
   margin-left: 1px;
 }
 
-/* Skip button — bottom-right corner, inside the overlay */
+/* Progress bar — pinned to console bottom */
+.boot-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: auto;
+  padding-top: 1.1rem;
+}
+
+.boot-progress-track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  overflow: hidden;
+}
+
+.boot-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  transition: width 0.32s ease;
+}
+
+.boot-progress-pct {
+  min-width: 2.6em;
+  text-align: right;
+  font-size: 0.74rem;
+  color: var(--accent-light);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Right system rail — quiet dark-green surface */
+.boot-system-panel {
+  border-left: 1px solid rgba(16, 185, 129, 0.12);
+  background: rgba(16, 185, 129, 0.02);
+  padding: 1.6rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  overflow-y: auto;
+}
+
+.boot-system-heading {
+  font-size: 0.66rem;
+  letter-spacing: 0.28em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.boot-system-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.boot-system-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.boot-system-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.boot-system-value {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.boot-system-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--accent-light);
+  letter-spacing: 0.06em;
+}
+
+.boot-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.boot-status-dot--ready {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.7);
+}
+
+/* Footer / status strip — holds the skip control */
+.boot-window-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  border-top: 1px solid rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.03);
+  flex-shrink: 0;
+}
+
+.boot-footer-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Skip button — real accessible control inside the terminal */
 .boot-skip {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 100000;
-  padding: 0.35rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.7rem;
   border-radius: var(--r-sm);
   border: 1px solid rgba(16, 185, 129, 0.2);
   background: rgba(16, 185, 129, 0.06);
   color: var(--text-muted);
-  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-family: inherit;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition:
     color 0.18s ease,
@@ -2356,10 +2599,92 @@ a {
     background 0.18s ease;
 }
 
+.boot-skip-key {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.boot-skip-short {
+  display: none;
+}
+
 .boot-skip:hover {
   color: var(--accent);
-  border-color: rgba(16, 185, 129, 0.38);
-  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.boot-skip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Visually hidden but available to assistive tech */
+.boot-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Tablet — tighten the rail column ratio */
+@media (max-width: 900px) {
+  .boot-window {
+    height: clamp(480px, 62dvh, 600px);
+  }
+  .boot-window-body {
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 0.4fr);
+  }
+  .boot-console {
+    padding: 1.4rem 1.5rem 1.3rem;
+  }
+  .boot-system-panel {
+    padding: 1.4rem 1.2rem;
+  }
+}
+
+/* Mobile — single column, rail hidden, content-driven height */
+@media (max-width: 700px) {
+  .boot-window {
+    width: calc(100% - 24px);
+    height: auto;
+    max-height: calc(100dvh - 32px);
+  }
+  .boot-window-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .boot-system-panel {
+    display: none;
+  }
+  .boot-console {
+    padding: 1.25rem 1.25rem 1.2rem;
+    overflow-y: visible;
+  }
+  .boot-watermark {
+    display: none;
+  }
+}
+
+/* Narrow mobile — compact footer wording, tighter type */
+@media (max-width: 480px) {
+  .boot-skip-full {
+    display: none;
+  }
+  .boot-skip-short {
+    display: inline;
+  }
+  .boot-footer-tag {
+    font-size: 0.62rem;
+  }
+  .boot-console {
+    padding: 1.1rem 1rem 1rem;
+  }
 }
 
 /* CSS fallback for prefers-reduced-motion (JS also handles this) */
