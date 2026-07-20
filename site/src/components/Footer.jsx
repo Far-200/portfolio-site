@@ -1,6 +1,21 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
+import SocialProfileLink from "./SocialProfileLink";
+import githubProfile from "../assets/github_profile.gif";
+import twitterProfile from "../assets/twitter_profile.jpg";
+
+const XIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    width="1em"
+    height="1em"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+  </svg>
+);
 
 const SiDevfolio = () => (
   <svg
@@ -48,22 +63,35 @@ function Footer() {
             <a href="mailto:farhaabkhanff@gmail.com" aria-label="Email">
               <FaEnvelope />
             </a>
-            <a
+            <SocialProfileLink
               href="https://github.com/Far-200"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
+              label="GitHub"
+              handle="@Far-200"
+              profileName="Far-200"
+              profileImage={githubProfile}
+              ariaLabel="GitHub"
             >
               <FaGithub />
-            </a>
-            <a
+            </SocialProfileLink>
+            <SocialProfileLink
               href="https://www.linkedin.com/in/farhaan-khan-dev/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
+              label="LinkedIn"
+              handle="farhaan-khan-dev"
+              profileName="Farhaan Khan"
+              ariaLabel="LinkedIn"
             >
               <FaLinkedin />
-            </a>
+            </SocialProfileLink>
+            <SocialProfileLink
+              href="https://x.com/PotatoBuiltThis"
+              label="X / Twitter"
+              handle="@PotatoBuiltThis"
+              profileName="SaucyPotato"
+              profileImage={twitterProfile}
+              ariaLabel="X / Twitter"
+            >
+              <XIcon />
+            </SocialProfileLink>
             <a
               href="https://devfolio.co/@Farhaan_2k5"
               target="_blank"

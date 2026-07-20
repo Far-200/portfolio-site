@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import SocialProfileLink from "./SocialProfileLink";
+import githubProfile from "../assets/github_profile.gif";
+import twitterProfile from "../assets/twitter_profile.jpg";
 
 const container = {
   hidden: {},
@@ -58,22 +61,35 @@ function Contact() {
           <a href="mailto:farhaabkhanff@gmail.com" className="btn btn-primary">
             Email Me
           </a>
-          <a
+          <SocialProfileLink
             href="https://github.com/Far-200"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
+            label="GitHub"
+            handle="@Far-200"
+            profileName="Far-200"
+            profileImage={githubProfile}
+            className="contact-social-link"
           >
-            GitHub
-          </a>
-          <a
-            href="https://www.linkedin.com/in/farhaan-khan-dev"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
+            <span className="btn btn-secondary">GitHub</span>
+          </SocialProfileLink>
+          <SocialProfileLink
+            href="https://www.linkedin.com/in/farhaan-khan-dev/"
+            label="LinkedIn"
+            handle="farhaan-khan-dev"
+            profileName="Farhaan Khan"
+            className="contact-social-link"
           >
-            LinkedIn
-          </a>
+            <span className="btn btn-secondary">LinkedIn</span>
+          </SocialProfileLink>
+          <SocialProfileLink
+            href="https://x.com/PotatoBuiltThis"
+            label="X / Twitter"
+            handle="@PotatoBuiltThis"
+            profileName="SaucyPotato"
+            profileImage={twitterProfile}
+            className="contact-social-link"
+          >
+            <span className="btn btn-secondary">X / Twitter</span>
+          </SocialProfileLink>
           <a
             href="https://devfolio.co/@Farhaan_2k5"
             target="_blank"

@@ -2368,3 +2368,145 @@ a {
     display: none !important;
   }
 }
+/* ============================================================
+   SOCIAL PROFILE HOVER PREVIEW
+   ============================================================ */
+.social-profile-link {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.social-profile-link > a {
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.social-profile-preview {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  z-index: 80;
+  width: max-content;
+  min-width: 245px;
+  max-width: min(285px, 88vw);
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  border-radius: var(--r-md);
+  background: rgba(3, 10, 5, 0.96);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.48),
+    0 0 28px rgba(16, 185, 129, 0.08);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 8px) scale(0.96);
+  transform-origin: bottom center;
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease,
+    transform 0.22s var(--ease-out);
+}
+
+.social-profile-preview::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
+  border-right: 1px solid rgba(16, 185, 129, 0.28);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.28);
+  background: rgba(3, 10, 5, 0.96);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.social-profile-preview img {
+  display: block;
+  width: auto;
+  height: 78px;
+  max-width: 92px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  border: 2px solid rgba(52, 211, 153, 0.7);
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.18);
+}
+
+.social-profile-preview-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  line-height: 1.25;
+}
+
+.social-profile-preview-copy strong {
+  color: var(--text-primary);
+  font-size: 0.86rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.social-profile-preview-copy span {
+  color: var(--text-accent);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.social-profile-preview-copy small {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.social-profile-link:hover .social-profile-preview,
+.social-profile-link:focus-within .social-profile-preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0) scale(1);
+}
+
+/* Keep the footer card inside the viewport near the right edge. */
+.footer-socials .social-profile-preview {
+  left: auto;
+  right: 0;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: bottom right;
+}
+
+.footer-socials .social-profile-preview::after {
+  left: auto;
+  right: 12px;
+  transform: rotate(45deg);
+}
+
+.footer-socials .social-profile-link:hover .social-profile-preview,
+.footer-socials .social-profile-link:focus-within .social-profile-preview {
+  transform: translateY(0) scale(1);
+}
+
+@media (max-width: 700px) {
+  .hero-buttons .hero-social-link,
+  .contact-buttons .contact-social-link,
+  .hero-buttons .hero-social-link > a,
+  .contact-buttons .contact-social-link > a {
+    width: 100%;
+  }
+
+  .social-profile-preview {
+    min-width: 225px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-profile-preview {
+    transition: opacity 0.01ms linear;
+  }
+}

@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import profileImage from "../assets/profile.jpg";
+import githubProfile from "../assets/github_profile.gif";
 import DeveloperTerminal from "./DeveloperTerminal";
+import SocialProfileLink from "./SocialProfileLink";
 
 // Typewriter cycling status lines — the personality layer
 const STATUS_LINES = [
@@ -127,14 +129,16 @@ function Hero() {
           <Link to="/skills" className="btn btn-secondary">
             Skills
           </Link>
-          <a
+          <SocialProfileLink
             href="https://github.com/Far-200"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-secondary"
+            label="GitHub"
+            handle="@Far-200"
+            profileName="Far-200"
+            profileImage={githubProfile}
+            className="hero-social-link"
           >
-            GitHub
-          </a>
+            <span className="btn btn-secondary">GitHub</span>
+          </SocialProfileLink>
         </motion.div>
 
         <motion.div className="hero-stats" variants={item}>
