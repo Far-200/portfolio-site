@@ -39,6 +39,7 @@ function BootTerminal({ onDone }) {
   const timersRef = useRef([]);
   const finishedRef = useRef(false); // guards onDone to fire exactly once
   const mountedRef = useRef(true);
+  const unlockScrollRef = useRef(() => {});
 
   // Cancellable delay that registers its timer for cleanup.
   const delay = useCallback(
@@ -56,8 +57,15 @@ function BootTerminal({ onDone }) {
     finishedRef.current = true;
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
+
+    // Release the page as soon as the exit animation starts. Waiting for
+    // unmount leaves a short window where the page is visible but the first
+    // wheel/touch gesture is still swallowed by overflow: hidden.
+    unlockScrollRef.current();
+
     if (mountedRef.current) setExiting(true);
-    setTimeout(() => onDone(), EXIT_MS);
+    const exitTimer = setTimeout(() => onDone(), EXIT_MS);
+    timersRef.current.push(exitTimer);
   }, [onDone]);
 
   useEffect(() => {
@@ -74,6 +82,15 @@ function BootTerminal({ onDone }) {
     const prevBodyOverflow = document.body.style.overflow;
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+
+    let scrollLocked = true;
+    const unlockScroll = () => {
+      if (!scrollLocked) return;
+      scrollLocked = false;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.overflow = prevBodyOverflow;
+    };
+    unlockScrollRef.current = unlockScroll;
 
     // Escape always skips (guarded finish handles double-fire).
     const onKey = (e) => {
@@ -125,8 +142,8 @@ function BootTerminal({ onDone }) {
       window.removeEventListener("keydown", onKey);
       timersRef.current.forEach(clearTimeout);
       timersRef.current = [];
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      document.body.style.overflow = prevBodyOverflow;
+      unlockScroll();
+      unlockScrollRef.current = () => {};
     };
     // finish/delay are stable; run once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps

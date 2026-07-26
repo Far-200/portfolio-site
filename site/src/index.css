@@ -70,7 +70,7 @@ body,
   width: 100%;
   max-width: 100%;
   min-height: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -88,7 +88,7 @@ body {
     var(--bg);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2949,7 +2949,8 @@ a {
 
 .lab-hero-top .section-tag {
   margin-bottom: 0;
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
 }
 
 .lab-status {
@@ -3194,7 +3195,8 @@ a {
   align-items: baseline;
   gap: 0.6rem;
   min-width: 0;
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
 }
 
 .eng-log-date {
@@ -3242,7 +3244,8 @@ a {
     0 0 0 1px rgba(16, 185, 129, 0.06),
     0 8px 32px rgba(0, 0, 0, 0.45),
     0 0 40px rgba(16, 185, 129, 0.06);
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
+  font-family:
+    "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
 }
 
 .learn-terminal-bar {
