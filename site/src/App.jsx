@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import SkillsPage from "./pages/SkillsPage";
 import ProjectsPage from "./pages/ProjectsPage";
+import LabPage from "./pages/LabPage";
 import ContactPage from "./pages/ContactPage";
 import CortexAIPage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
@@ -90,6 +91,7 @@ function AnimatedRoutes() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/skills" element={<SkillsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/lab" element={<LabPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/projects/cortex-ai" element={<CortexAIPage />} />
           <Route
