@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
-import githubProfile from "../assets/github_profile.gif";
+import githubProfile from "../assets/Mewoth.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
 
 const container = {
