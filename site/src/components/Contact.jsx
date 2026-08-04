@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
-import githubProfile from "../assets/Mewoth.jpg";
+import githubProfile from "../assets/github_pfp.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
 
 const container = {
@@ -58,7 +58,10 @@ function Contact() {
         </motion.div>
 
         <motion.div className="contact-buttons" variants={row}>
-          <a href="mailto:farhaabkhanff@gmail.com" className="btn btn-primary">
+          <a
+            href="mailto:hello.farhaankhan@gmail.com"
+            className="btn btn-primary"
+          >
             Email Me
           </a>
           <SocialProfileLink

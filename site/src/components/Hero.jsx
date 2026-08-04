@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import profileImage from "../assets/profile.jpg";
-import githubProfile from "../assets/Mewoth.jpg";
+import githubProfile from "../assets/github_pfp.jpg";
 import DeveloperTerminal from "./DeveloperTerminal";
 import SocialProfileLink from "./SocialProfileLink";
 

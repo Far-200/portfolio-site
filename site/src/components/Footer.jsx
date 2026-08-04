@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
-import githubProfile from "../assets/Mewoth.jpg";
+import githubProfile from "../assets/github_pfp.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
 
 const XIcon = () => (
@@ -60,7 +60,7 @@ function Footer() {
         <div className="footer-links-block">
           <h4>Connect</h4>
           <div className="footer-socials">
-            <a href="mailto:farhaabkhanff@gmail.com" aria-label="Email">
+            <a href="mailto:hello.farhaankhan@gmail.com" aria-label="Email">
               <FaEnvelope />
             </a>
             <SocialProfileLink
