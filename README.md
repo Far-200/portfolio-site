@@ -59,19 +59,20 @@ The portfolio also hosts several mini developer utilities:
 ```
 portfolio-site/
 │
-├── public/
-│   ├── favicon
-│   └── assets
-│
-├── src/
-│   ├── components
-│   ├── pages
-│   ├── devtools
-│   └── styles
-│
-├── index.html
-├── package.json
-└── vite.config.js
+└── site/
+    ├── public/
+    │   ├── favicon
+    │   └── assets
+    │
+    ├── src/
+    │   ├── components
+    │   ├── pages
+    │   ├── devtools
+    │   └── styles
+    │
+    ├── index.html
+    ├── package.json
+    └── vite.config.js
 ```
 
 ---
@@ -82,6 +83,7 @@ Clone the repository
 
 ```bash
 git clone https://github.com/Far-200/portfolio-site.git
+cd portfolio-site/site
 ```
 
 Install dependencies
@@ -133,11 +135,8 @@ Currently grinding **DSA, React, Python, and AI projects** while preparing for s
 
 ---
 
-Notes:
-Add a new project, make something🫠🫠
-
 <div align="center">
 
-⭐ If you like the project, consider giving it a star🫠!
+⭐ If you like the project, consider giving it a star!
 
 </div>
