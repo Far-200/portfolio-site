@@ -1,0 +1,59 @@
+/* ============================================================
+   V4 DESIGN TOKENS
+   ============================================================
+   Namespaced tokens for the V4 redesign. These live alongside the
+   legacy tokens defined in ../index.css (--accent, --bg, --text-*,
+   etc.) without touching or overriding them.
+
+   Legacy components keep reading legacy tokens. New V4 components
+   should read only from here. As each legacy section is rebuilt,
+   it switches over to --v4-* and the old values it used to depend
+   on can eventually be deleted from index.css.
+
+   Nothing in this file is consumed by any existing component yet —
+   adding it should have zero visible effect on the current site.
+   ============================================================ */
+:root {
+  /* --- Background & surfaces --- */
+  --v4-bg: #0b0c0e;
+  --v4-surface: #111318;
+  --v4-surface-raised: #171a20;
+
+  /* --- Text --- */
+  --v4-text: #eceae5; /* warm off-white, not pure white */
+  --v4-text-muted: #8b9098; /* neutral cool grey */
+  --v4-text-subtle: #5b6067; /* tertiary / de-emphasized */
+
+  /* --- Borders --- */
+  --v4-border: #242830;
+  --v4-border-strong: #33383f;
+
+  /* --- Accent: restrained cobalt / electric blue --- */
+  --v4-accent: #3e7bfa;
+  --v4-accent-soft: rgba(62, 123, 250, 0.14); /* fills, badges */
+  --v4-accent-muted: rgba(62, 123, 250, 0.55); /* lower-emphasis accent use */
+
+  /* --- Layout --- */
+  --v4-content-max: 1200px; /* outer content width */
+  --v4-text-max: 60ch; /* readable line length for prose */
+  --v4-gutter: clamp(1.25rem, 4vw, 3rem); /* page-edge padding */
+  --v4-section-gap: clamp(3.5rem, 7vw, 6rem); /* vertical rhythm between sections */
+
+  /* --- Radii --- */
+  --v4-radius-sm: 8px;
+  --v4-radius-md: 14px;
+  --v4-radius-lg: 22px;
+
+  /* --- Motion timing (CSS-side companion to src/lib/motion.js) --- */
+  --v4-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --v4-duration-fast: 150ms;
+  --v4-duration-base: 320ms;
+  --v4-duration-slow: 560ms;
+
+  /* --- Typography --- */
+  --v4-tracking-label: 0.08em; /* uppercase eyebrow / metadata labels */
+  --v4-mono-size: 0.8125rem; /* status/metadata monospace text */
+
+  /* --- Focus --- */
+  --v4-focus-ring: 0 0 0 3px rgba(62, 123, 250, 0.45);
+}
