@@ -1,0 +1,113 @@
+/* ============================================================
+   V4 BUILD LOG
+   ============================================================
+   Visual layer for BuildLog.jsx (section chrome, year grouping,
+   list) plus optional scaffolding for the user-implemented
+   BuildLogEntry.jsx row. Nothing here is mandatory for that
+   component to use — see BuildLogEntry.jsx's own comment.
+   ============================================================ */
+
+.v4-log {
+  scroll-margin-top: 96px; /* clears the sticky nav on #log jumps */
+}
+
+.v4-log-header {
+  margin-bottom: 3rem;
+}
+
+.v4-log-heading {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--v4-text);
+  margin-bottom: 0.6rem;
+}
+
+.v4-log-subheading {
+  font-size: 1rem;
+  color: var(--v4-text-muted);
+  max-width: 46ch;
+}
+
+.v4-log-year-group + .v4-log-year-group {
+  margin-top: 3rem;
+}
+
+.v4-log-year {
+  font-family: var(--v4-font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  color: var(--v4-accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--v4-border);
+}
+
+.v4-log-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.v4-log-row {
+  border-top: 1px solid var(--v4-border);
+}
+.v4-log-row:last-child {
+  border-bottom: 1px solid var(--v4-border);
+}
+
+/* ── Optional row scaffold for BuildLogEntry.jsx ─────────────────
+   A DATE | TYPE | CONTENT row on desktop, stacking on mobile,
+   already tuned to match Selected Work's spacing/type scale. The
+   reserved component is free to use these classNames, ignore them,
+   or replace them entirely. */
+.v4-log-entry {
+  display: grid;
+  grid-template-columns: 4.5rem 6rem 1fr;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 1.1rem 0;
+}
+
+.v4-log-entry-date {
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+}
+
+.v4-log-entry-type {
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-accent-muted);
+}
+
+.v4-log-entry-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.v4-log-entry-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--v4-text);
+}
+
+.v4-log-entry-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--v4-text-muted);
+  max-width: 60ch;
+}
+
+@media (max-width: 700px) {
+  .v4-log-entry {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+}

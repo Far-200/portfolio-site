@@ -8,6 +8,8 @@ import "./styles/v4-ambient.css";
 import "./styles/v4-nav.css";
 import "./styles/v4-hero.css";
 import "./styles/v4-selected-work.css";
+import "./styles/v4-build-log.css";
+import "./styles/v4-lab-bridge.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

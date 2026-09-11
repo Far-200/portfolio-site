@@ -1,0 +1,106 @@
+/* ============================================================
+   V4 LAB BRIDGE
+   ============================================================
+   Compact homepage pointer into /lab — not a redesign of the Lab
+   page itself, which keeps its existing (legacy-styled) visuals.
+   ============================================================ */
+
+.v4-lab-bridge-inner {
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-lg);
+  padding: clamp(2rem, 4vw, 3rem);
+}
+
+.v4-lab-bridge-tag {
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+  margin-bottom: 0.75rem;
+}
+
+.v4-lab-bridge-heading {
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--v4-text);
+  margin-bottom: 0.75rem;
+}
+
+.v4-lab-bridge-copy {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--v4-text-muted);
+  max-width: 52ch;
+  margin-bottom: 2rem;
+}
+
+.v4-lab-bridge-list {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.v4-lab-bridge-item {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--v4-border);
+}
+.v4-lab-bridge-item:last-child {
+  border-bottom: 1px solid var(--v4-border);
+}
+
+.v4-lab-bridge-item-status {
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-accent-muted);
+}
+
+.v4-lab-bridge-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.v4-lab-bridge-item-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--v4-text);
+}
+
+.v4-lab-bridge-item-summary {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--v4-text-muted);
+}
+
+.v4-lab-bridge-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--v4-accent);
+  transition: gap var(--v4-duration-fast) ease;
+}
+.v4-lab-bridge-cta:hover {
+  gap: 0.6rem;
+}
+.v4-lab-bridge-cta:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+  border-radius: var(--v4-radius-sm);
+}
+
+@media (max-width: 600px) {
+  .v4-lab-bridge-item {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}

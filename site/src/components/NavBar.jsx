@@ -3,12 +3,13 @@ import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-// WORK points at the homepage's #work anchor (Selected Work). `end`
-// is required here — without it, NavLink treats "/" as a prefix of
-// every route (since every path starts with "/"), which would mark
-// WORK active everywhere instead of just on the homepage.
+// WORK and LOG point at homepage anchors (Selected Work / Build Log).
+// `end` is required on both — without it, NavLink treats "/" as a
+// prefix of every route (since every path starts with "/"), which
+// would mark them active everywhere instead of just on the homepage.
 const NAV_LINKS = [
   { to: "/#work", label: "Work", end: true },
+  { to: "/#log", label: "Log", end: true },
   { to: "/lab", label: "Lab" },
   { to: "/about", label: "About" },
 ];
