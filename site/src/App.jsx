@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -12,7 +12,7 @@ import SkillsPage from "./pages/SkillsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import LabPage from "./pages/LabPage";
 import ContactPage from "./pages/ContactPage";
-import CortexAIPage from "./pages/project-pages/FolderStructure";
+import FolderStructurePage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
 import PromptRouterPage from "./pages/project-pages/PromptRouterPage";
@@ -50,7 +50,19 @@ function AnimatedRoutes() {
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/lab" element={<LabPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/projects/cortex-ai" element={<CortexAIPage />} />
+          <Route
+            path="/projects/folder-structure-visualizer"
+            element={<FolderStructurePage />}
+          />
+          {/* Legacy slug — this project used to be routed under an old
+              project identity ("cortex-ai"). Redirect rather than break
+              links that already point at it. */}
+          <Route
+            path="/projects/cortex-ai"
+            element={
+              <Navigate to="/projects/folder-structure-visualizer" replace />
+            }
+          />
           <Route
             path="/projects/password-estimator"
             element={<PasswordCrackEsti />}

@@ -10,9 +10,9 @@ import {
 
 const GITHUB_URL = "https://github.com/Far-200";
 
-// Hero-only for now — labData's ACTIVE_BUILDS doesn't match what
-// belongs in this present-tense status strip. Migrate into the
-// unified project data model in Phase 3.
+// Hero-only — labData's ACTIVE_BUILDS and projects.js both model
+// finished/ongoing project identity, not this present-tense status
+// strip, so it stays a local constant rather than being derived.
 const CURRENTLY_BUILDING = "Think Before Code · Attendance Analytics · site-3d";
 
 function Hero() {
@@ -42,7 +42,7 @@ function Hero() {
         </motion.p>
 
         <motion.div className="v4-hero-ctas" variants={item}>
-          <Link to="/projects" className="v4-hero-cta-primary">
+          <Link to="/#work" className="v4-hero-cta-primary">
             View selected work
           </Link>
           <a

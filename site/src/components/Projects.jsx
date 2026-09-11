@@ -1,41 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Github, ArrowRight } from "lucide-react";
+import { PROJECTS } from "../data/projects";
 
-const projects = [
-  {
-    title: "Folder Structure Visualizer",
-    desc: "Converts typed or pasted folder layouts into clean visual trees with ZIP scaffold export — a real developer utility you can use today.",
-    tech: ["React", "JavaScript", "Vite", "ZIP Export"],
-    route: "/projects/cortex-ai",
-    github: "https://github.com/Far-200/folder-structure-visualizer",
-    builtBecause: "manually creating 70 files was painful",
-  },
-  {
-    title: "Password Strength & Crack Time Estimator",
-    desc: "Security-focused tool that evaluates password strength and estimates crack time using entropy-based logic. No backend, runs fully in browser.",
-    tech: ["React", "JavaScript", "CSS"],
-    route: "/projects/password-estimator",
-    github: "https://github.com/Far-200/Password-Strength-Crack-Time-Estimator",
-    builtBecause: "most password checkers just say 'strong' with zero math",
-  },
-  {
-    title: "Developer JSON Formatter Tool",
-    desc: "Clean utility for formatting, validating, minifying, and testing JSON and API responses — built for developer workflow speed.",
-    tech: ["React", "JavaScript", "CSS", "API Testing"],
-    route: "/projects/devtool",
-    github: "https://github.com/Far-200/DevTool",
-    builtBecause: "copy-pasting JSON into random websites felt wrong",
-  },
-  {
-    title: "PromptRouter",
-    desc: "Privacy-first Chrome extension that recommends the right AI model for your prompt in real time — 100% local, no API calls, no data sent.",
-    tech: ["JavaScript", "Chrome Extension", "Manifest V3", "AI UX"],
-    route: "/projects/prompt-router",
-    github: "https://github.com/Far-200/prompt-model-suggester",
-    builtBecause: "people use expensive AI models for tiny prompts",
-  },
-];
+// Every project with a real case-study route — reproduces the same
+// four entries this page has always shown (Think Before Code and
+// FlowTrace don't have case-study pages yet, so they naturally sit
+// this one out until Phase 4/6 builds those).
+const projects = PROJECTS.filter((p) => Boolean(p.internalRoute));
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -62,7 +34,7 @@ function ProjectCard({ project, index }) {
 
       <span className="project-num">{String(index + 1).padStart(2, "0")}</span>
       <h3>{project.title}</h3>
-      <p>{project.desc}</p>
+      <p>{project.summary}</p>
 
       {/* Built Because micro-section */}
       {project.builtBecause && (
@@ -85,9 +57,9 @@ function ProjectCard({ project, index }) {
       </div>
 
       <div className="project-actions">
-        {project.route && (
+        {project.internalRoute && (
           <Link
-            to={project.route}
+            to={project.internalRoute}
             className="project-link project-link--premium"
           >
             <span>View Project</span>

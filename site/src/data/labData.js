@@ -1,6 +1,18 @@
 // ── The Lab — central content source ──
 // Keeping Lab content here instead of scattered across components,
 // per the same data-driven pattern the rest of the site is heading toward.
+//
+// github/internalRoute for entries that also have a projects.js record
+// are read from there instead of typed again here, so the two files
+// can't drift out of sync on those fields. Everything else here (title,
+// tech, status tone, focus copy, summaries) stays Lab-specific — Lab's
+// voice and behaviour aren't meant to match the homepage 1:1.
+//
+// Aptivision, Astra, and God of Code have no projects.js record yet
+// (no canonical GitHub/route facts were established for them in this
+// phase) and stay fully local to this file. Migrating them is Phase 4.
+
+import { getProjectBySlug } from "./projects";
 
 export const LAB_SUMMARY = [
   { value: "03", label: "Active Builds" },
@@ -43,7 +55,7 @@ export const ACTIVE_BUILDS = [
     focus:
       "Maintaining ten coaching skills across problem decoding, DSA, debugging, testing, review, specification, and pattern transfer.",
     tech: ["Claude Skills", "Developer Education", "Socratic Learning", "Open Source"],
-    github: "https://github.com/Far-200/think-before-code",
+    github: getProjectBySlug("think-before-code").github,
     demo: "https://github.com/Far-200/think-before-code/tree/main/demo",
   },
 ];
@@ -98,7 +110,7 @@ export const PROJECT_ARCHIVE = [
     status: "Maintained",
     summary: "Socratic engineering skill suite for reasoning before implementation.",
     tech: ["Claude Skills", "Markdown", "Open Source"],
-    github: "https://github.com/Far-200/think-before-code",
+    github: getProjectBySlug("think-before-code").github,
   },
   {
     id: "astra-archive",
@@ -125,7 +137,7 @@ export const PROJECT_ARCHIVE = [
     summary:
       "A visual C execution and reasoning tool focused on making program flow easier to understand.",
     tech: ["C", "Visualisation", "Developer Tooling"],
-    github: null,
+    github: getProjectBySlug("flowtrace").github,
   },
   {
     id: "folder-structure-visualizer",
@@ -134,8 +146,8 @@ export const PROJECT_ARCHIVE = [
     summary:
       "Converts typed folder layouts into visual trees and exportable project scaffolds.",
     tech: ["React", "JavaScript", "ZIP Export"],
-    github: "https://github.com/Far-200/folder-structure-visualizer",
-    internalRoute: "/projects/cortex-ai",
+    github: getProjectBySlug("folder-structure-visualizer").github,
+    internalRoute: getProjectBySlug("folder-structure-visualizer").internalRoute,
   },
   {
     id: "prompt-router",
@@ -144,8 +156,8 @@ export const PROJECT_ARCHIVE = [
     summary:
       "Privacy-first Chrome extension that recommends a suitable AI model locally.",
     tech: ["JavaScript", "Chrome Extension", "Manifest V3"],
-    github: "https://github.com/Far-200/prompt-model-suggester",
-    internalRoute: "/projects/prompt-router",
+    github: getProjectBySlug("prompt-router").github,
+    internalRoute: getProjectBySlug("prompt-router").internalRoute,
   },
   {
     id: "password-estimator",
@@ -153,8 +165,8 @@ export const PROJECT_ARCHIVE = [
     status: "Shipped",
     summary: "Browser-based password analysis using entropy and estimated crack-time logic.",
     tech: ["React", "JavaScript", "Security UX"],
-    github: "https://github.com/Far-200/Password-Strength-Crack-Time-Estimator",
-    internalRoute: "/projects/password-estimator",
+    github: getProjectBySlug("password-estimator").github,
+    internalRoute: getProjectBySlug("password-estimator").internalRoute,
   },
   {
     id: "devtool",
@@ -162,8 +174,8 @@ export const PROJECT_ARCHIVE = [
     status: "Shipped",
     summary: "Utility for formatting, validating, minifying, and inspecting JSON.",
     tech: ["React", "JavaScript", "API Testing"],
-    github: "https://github.com/Far-200/DevTool",
-    internalRoute: "/projects/devtool",
+    github: getProjectBySlug("devtool").github,
+    internalRoute: getProjectBySlug("devtool").internalRoute,
   },
 ];
 

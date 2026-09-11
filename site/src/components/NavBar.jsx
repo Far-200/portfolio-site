@@ -3,13 +3,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-// WORK currently points at the dedicated /projects route rather than
-// an in-page anchor — the homepage doesn't have a distinct "work"
-// section id yet (that lands with the Selected Work rebuild), and
-// /projects already shows the same project set cleanly from any
-// route, including non-home ones.
+// WORK points at the homepage's #work anchor (Selected Work). `end`
+// is required here — without it, NavLink treats "/" as a prefix of
+// every route (since every path starts with "/"), which would mark
+// WORK active everywhere instead of just on the homepage.
 const NAV_LINKS = [
-  { to: "/projects", label: "Work" },
+  { to: "/#work", label: "Work", end: true },
   { to: "/lab", label: "Lab" },
   { to: "/about", label: "About" },
 ];
@@ -74,10 +73,11 @@ function NavBar() {
 
         {/* Desktop links — hidden on mobile via CSS */}
         <div className="v4-nav-links">
-          {NAV_LINKS.map(({ to, label }) => (
+          {NAV_LINKS.map(({ to, label, end }) => (
             <NavLink
               key={to}
               to={to}
+              end={end}
               className={({ isActive }) =>
                 `v4-nav-link${isActive ? " v4-nav-link--active" : ""}`
               }
@@ -138,10 +138,11 @@ function NavBar() {
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="v4-nav-mobile-links">
-              {NAV_LINKS.map(({ to, label }) => (
+              {NAV_LINKS.map(({ to, label, end }) => (
                 <NavLink
                   key={to}
                   to={to}
+                  end={end}
                   className={({ isActive }) =>
                     `v4-nav-mobile-link${isActive ? " v4-nav-mobile-link--active" : ""}`
                   }

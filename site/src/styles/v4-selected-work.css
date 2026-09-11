@@ -1,0 +1,355 @@
+/* ============================================================
+   V4 SELECTED WORK
+   ============================================================
+   Visual layer for SelectedWork.jsx + ProjectVisual.jsx — the
+   homepage's flagship project index, replacing the old <Projects/>
+   card grid there. Projects.jsx and its legacy
+   .project-card/.projects-grid rules in index.css are untouched and
+   still power the /projects page.
+   ============================================================ */
+
+.v4-work {
+  scroll-margin-top: 96px; /* clears the sticky nav on #work jumps */
+}
+
+.v4-work-header {
+  margin-bottom: 3rem;
+}
+
+.v4-work-heading {
+  font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--v4-text);
+  margin-bottom: 0.6rem;
+}
+
+.v4-work-subheading {
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+}
+
+.v4-work-entry {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  padding: 3rem 0;
+}
+
+/* Folder Structure Visualizer's real screenshot gets more room than
+   the two typographic diagrams. */
+.v4-work-entry--media {
+  grid-template-columns: 1fr 1.25fr;
+}
+
+.v4-work-entry + .v4-work-entry {
+  border-top: 1px solid var(--v4-border);
+}
+
+.v4-work-entry:first-child {
+  padding-top: 0;
+}
+
+.v4-work-entry-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ── Eyebrow: number / category / status, one line ──────────── */
+.v4-work-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+}
+
+.v4-work-index {
+  color: var(--v4-accent);
+  font-weight: 600;
+}
+
+.v4-work-eyebrow-sep {
+  color: var(--v4-border-strong);
+}
+
+.v4-work-category,
+.v4-work-status {
+  color: var(--v4-text-subtle);
+}
+
+.v4-work-title {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--v4-text);
+  margin-bottom: 1.25rem;
+}
+
+/* Pull-quote treatment — this is each entry's one strong hook line,
+   so it gets more visual weight than the rest of the narrative. */
+.v4-work-problem {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--v4-text);
+  max-width: 42ch;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--v4-accent);
+}
+
+.v4-work-block {
+  margin-bottom: 1rem;
+}
+
+.v4-work-block-label {
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+  margin-bottom: 0.35rem;
+}
+
+.v4-work-block-text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--v4-text-muted);
+  max-width: 46ch;
+}
+
+/* Technical detail — a quieter follow-up line under Built, not a
+   second fully-labelled block (reduces vertical fragmentation). */
+.v4-work-note {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--v4-text-subtle);
+  max-width: 46ch;
+  margin-top: 0.5rem;
+}
+
+.v4-work-tech {
+  font-family: var(--v4-font-mono);
+  font-size: 0.8125rem;
+  color: var(--v4-text-subtle);
+  margin-bottom: 1rem;
+}
+
+.v4-work-built-because {
+  font-size: 0.85rem;
+  color: var(--v4-text-subtle);
+  margin-bottom: 1.5rem;
+}
+
+.v4-work-built-because-label {
+  color: var(--v4-accent-muted);
+}
+
+.v4-work-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.v4-work-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--v4-text-muted);
+  transition: color var(--v4-duration-fast) ease;
+}
+.v4-work-link:hover {
+  color: var(--v4-accent);
+}
+.v4-work-link:hover .v4-work-link-arrow {
+  transform: translate(1px, -1px);
+}
+.v4-work-link:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+  border-radius: var(--v4-radius-sm);
+}
+
+.v4-work-link-arrow {
+  transition: transform var(--v4-duration-fast) ease;
+}
+
+/* ── Right column: shared frame for all three visual treatments ── */
+.v4-work-visual-frame {
+  position: relative;
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-md);
+  overflow: hidden;
+  margin-top: -0.35rem; /* slight editorial offset against the text column */
+}
+
+.v4-work-visual-ghost-num {
+  position: absolute;
+  top: -0.6rem;
+  right: 0.75rem;
+  font-size: 5.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--v4-text);
+  opacity: 0.045;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.v4-work-visual-tag {
+  position: relative;
+  z-index: 1;
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+  margin-bottom: 1.25rem;
+}
+
+.v4-work-diagram {
+  position: relative;
+  z-index: 1;
+  padding: 1.75rem;
+}
+
+/* Socratic loop */
+.v4-work-loop {
+  display: flex;
+  flex-direction: column;
+}
+
+.v4-work-loop-step {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.55rem 0;
+}
+
+.v4-work-loop-step:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  left: 0;
+  bottom: -0.85rem;
+  width: 1.6rem;
+  text-align: center;
+  color: var(--v4-border-strong);
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+}
+
+.v4-work-loop-num {
+  width: 1.6rem;
+  flex-shrink: 0;
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  color: var(--v4-accent-muted);
+}
+
+.v4-work-loop-text {
+  font-size: 0.9rem;
+  color: var(--v4-text-muted);
+}
+
+.v4-work-visual-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--v4-border);
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+}
+
+/* FlowTrace pipeline */
+.v4-work-code-group {
+  margin-bottom: 0.5rem;
+}
+
+.v4-work-code-label {
+  font-family: var(--v4-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+  margin-bottom: 0.35rem;
+}
+
+.v4-work-code {
+  font-family: var(--v4-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--v4-text-muted);
+  background: var(--v4-surface);
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-sm);
+  padding: 0.65rem 0.85rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.v4-work-pipeline-step {
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  color: var(--v4-accent-muted);
+  margin: 0.6rem 0 0.9rem 0.85rem;
+}
+
+/* Real screenshot (Folder Structure Visualizer) */
+.v4-work-screenshot {
+  position: relative;
+  z-index: 1;
+}
+
+.v4-work-screenshot-frame {
+  display: block;
+  aspect-ratio: 16 / 11;
+}
+
+.v4-work-screenshot-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.v4-work-visual-caption {
+  padding: 0.75rem 1rem;
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+  border-top: 1px solid var(--v4-border);
+}
+
+@media (max-width: 900px) {
+  .v4-work-entry,
+  .v4-work-entry--media {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .v4-work-visual-frame {
+    margin-top: 0;
+  }
+}
