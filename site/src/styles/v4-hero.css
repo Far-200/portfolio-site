@@ -1,0 +1,178 @@
+/* ============================================================
+   V4 HERO
+   ============================================================
+   Visual layer for the rewritten Hero.jsx. Legacy .hero / .hero-*
+   rules in index.css are left in place but unused — Hero.jsx no
+   longer renders those classNames.
+   ============================================================ */
+
+.v4-hero {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  align-items: center;
+  gap: 3.5rem;
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  /* Deliberate close to the hero shell rather than an abrupt stop
+     right before the legacy About section. */
+  border-bottom: 1px solid var(--v4-border);
+}
+
+.v4-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.v4-hero-identity {
+  font-family: var(--v4-font-mono);
+  font-size: var(--v4-mono-size);
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-muted);
+  margin-bottom: 1.1rem;
+}
+
+.v4-hero-headline {
+  font-size: clamp(2.25rem, 4.6vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--v4-text);
+  max-width: 16ch;
+  margin: 0 0 1.25rem;
+}
+
+.v4-hero-supporting {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--v4-text-muted);
+  max-width: var(--v4-text-max);
+  margin-bottom: 2rem;
+}
+
+.v4-hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+
+.v4-hero-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.78rem 1.5rem;
+  border-radius: var(--v4-radius-md);
+  background: var(--v4-accent);
+  color: var(--v4-bg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition:
+    transform var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-hero-cta-primary:hover {
+  transform: translateY(-1px);
+  background: #5c93fb;
+}
+.v4-hero-cta-primary:active {
+  transform: translateY(0);
+}
+.v4-hero-cta-primary:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+.v4-hero-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.78rem 1.4rem;
+  border-radius: var(--v4-radius-md);
+  border: 1px solid var(--v4-border);
+  color: var(--v4-text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition:
+    transform var(--v4-duration-fast) var(--v4-ease),
+    border-color var(--v4-duration-fast) var(--v4-ease),
+    color var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-hero-cta-secondary:hover {
+  transform: translateY(-1px);
+  border-color: var(--v4-border-strong);
+  color: var(--v4-text);
+}
+.v4-hero-cta-secondary:active {
+  transform: translateY(0);
+}
+.v4-hero-cta-secondary:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+.v4-hero-building {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--v4-border);
+  width: 100%;
+  max-width: 480px;
+}
+
+.v4-hero-building-label {
+  font-family: var(--v4-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-text-subtle);
+}
+
+.v4-hero-building-value {
+  font-size: 0.875rem;
+  color: var(--v4-text-muted);
+  line-height: 1.5;
+}
+
+.v4-hero-portrait {
+  display: flex;
+  justify-content: center;
+}
+
+.v4-hero-portrait-img {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: var(--v4-radius-lg);
+  border: 1px solid var(--v4-border);
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .v4-hero {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+  }
+  .v4-hero-portrait-img {
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 560px) {
+  .v4-hero-ctas {
+    width: 100%;
+  }
+  .v4-hero-cta-primary,
+  .v4-hero-cta-secondary {
+    flex: 1 1 auto;
+    text-align: center;
+    justify-content: center;
+  }
+}

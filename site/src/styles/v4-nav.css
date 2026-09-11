@@ -1,0 +1,207 @@
+/* ============================================================
+   V4 NAVIGATION
+   ============================================================
+   Visual layer for the rewritten NavBar.jsx. Legacy .navbar /
+   .nav-link / .nav-mobile-* rules in index.css are left in place
+   but unused — NavBar.jsx no longer renders those classNames.
+   ============================================================ */
+
+.v4-nav {
+  position: sticky;
+  top: 0;
+  z-index: 3000;
+  background: rgba(11, 12, 14, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition:
+    background var(--v4-duration-base) var(--v4-ease),
+    border-color var(--v4-duration-base) var(--v4-ease);
+}
+
+.v4-nav--scrolled {
+  background: rgba(11, 12, 14, 0.92);
+  border-bottom-color: var(--v4-border);
+}
+
+.v4-nav-inner {
+  width: min(var(--v4-content-max), calc(100% - (var(--v4-gutter) * 2)));
+  margin: auto;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.v4-nav-logo {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--v4-text);
+  flex-shrink: 0;
+  transition: color var(--v4-duration-fast) ease;
+}
+.v4-nav-logo:hover {
+  color: var(--v4-accent);
+}
+.v4-nav-logo:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+  border-radius: var(--v4-radius-sm);
+}
+
+.v4-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.v4-nav-link {
+  position: relative;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--v4-radius-sm);
+  color: var(--v4-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  transition:
+    color var(--v4-duration-fast) ease,
+    background var(--v4-duration-fast) ease;
+}
+.v4-nav-link:hover {
+  color: var(--v4-text);
+  background: rgba(255, 255, 255, 0.03);
+}
+.v4-nav-link:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+.v4-nav-link--active {
+  color: var(--v4-text);
+}
+
+.v4-nav-active-dot {
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  translate: -50% 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--v4-accent);
+}
+
+.v4-nav-resume {
+  margin-left: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-sm);
+  color: var(--v4-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  transition:
+    border-color var(--v4-duration-fast) ease,
+    color var(--v4-duration-fast) ease;
+}
+.v4-nav-resume:hover {
+  border-color: var(--v4-accent-muted);
+  color: var(--v4-accent);
+}
+.v4-nav-resume:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+/* ── Mobile toggle + panel ─────────────────────────────────── */
+.v4-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--v4-radius-sm);
+  border: 1px solid var(--v4-border);
+  background: var(--v4-surface);
+  color: var(--v4-text);
+  transition: border-color var(--v4-duration-fast) ease;
+}
+.v4-nav-toggle:hover {
+  border-color: var(--v4-border-strong);
+}
+.v4-nav-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+.v4-nav-mobile-panel {
+  overflow: hidden;
+  border-top: 1px solid var(--v4-border);
+}
+
+.v4-nav-mobile-links {
+  width: min(var(--v4-content-max), calc(100% - (var(--v4-gutter) * 2)));
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem 0 1.1rem;
+}
+
+.v4-nav-mobile-link {
+  padding: 0.75rem 0.6rem;
+  border-radius: var(--v4-radius-sm);
+  color: var(--v4-text-muted);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  transition:
+    color var(--v4-duration-fast) ease,
+    background var(--v4-duration-fast) ease;
+}
+.v4-nav-mobile-link:hover {
+  color: var(--v4-text);
+  background: rgba(255, 255, 255, 0.03);
+}
+.v4-nav-mobile-link:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+.v4-nav-mobile-link--active {
+  color: var(--v4-text);
+}
+.v4-nav-mobile-link--resume {
+  color: var(--v4-accent);
+}
+
+@media (max-width: 760px) {
+  .v4-nav-links {
+    display: none;
+  }
+  .v4-nav-toggle {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 761px) {
+  .v4-nav-mobile-panel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-nav-mobile-panel {
+    transition: none !important;
+  }
+}

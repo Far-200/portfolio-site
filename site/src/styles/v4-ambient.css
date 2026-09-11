@@ -1,0 +1,103 @@
+/* ============================================================
+   V4 AMBIENT BACKGROUND
+   ============================================================
+   Styles the layers rendered by AmbientBackground.jsx (mounted
+   once in App.jsx, in place of the old CursorGlow/GridBackground
+   pair). Legacy .bg-grid / .cursor-glow rules in index.css are
+   left in place but unused now — nothing renders those classNames
+   any more.
+
+   Three stacked layers, all fixed and pointer-events: none:
+     .v4-ambient-grid       quiet, static dotted texture — always on
+     .v4-ambient-spotlight  the same grid, brighter + cobalt-tinted,
+                             revealed only near the pointer via a mask
+     .v4-ambient-glow       an extremely soft cobalt wash at the
+                             pointer position
+
+   Pointer position lives in --v4-pointer-x/-y, set by the component
+   via a ref (not inherited from :root) so it's a no-op everywhere
+   else on the page.
+
+   .v4-ambient's own background is a solid --v4-bg fill. It sits
+   behind the grid/spotlight/glow layers below but in front of the
+   legacy body{} gradient (still emerald-tinted, untouched in
+   index.css) — this is what was letting the old green wash bleed
+   through the sparse dot grid. The fill is unmasked and fully
+   opaque on purpose so it reads as flat charcoal, not a fade.
+   ============================================================ */
+
+.v4-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--v4-bg);
+  --v4-pointer-x: -9999px;
+  --v4-pointer-y: -9999px;
+}
+
+.v4-ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    var(--v4-border-strong) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 80% at 50% 50%,
+    black 40%,
+    transparent 100%
+  );
+  opacity: 0.4;
+}
+
+/* Same grid, brighter + faintly cobalt, only visible within a soft
+   radius around the pointer. */
+.v4-ambient-spotlight {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    var(--v4-accent-muted) 1px,
+    transparent 1px
+  );
+  background-size: 30px 30px;
+  opacity: 0.9;
+  -webkit-mask-image: radial-gradient(
+    circle 220px at var(--v4-pointer-x) var(--v4-pointer-y),
+    black 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 220px at var(--v4-pointer-x) var(--v4-pointer-y),
+    black 0%,
+    transparent 100%
+  );
+}
+
+/* Extremely restrained cobalt wash — not a glowing orb, just a hint
+   that the interface notices the pointer. */
+.v4-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle 420px at var(--v4-pointer-x) var(--v4-pointer-y),
+    var(--v4-accent-soft) 0%,
+    transparent 70%
+  );
+  filter: blur(60px);
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .v4-ambient-spotlight,
+  .v4-ambient-glow {
+    display: none;
+  }
+}

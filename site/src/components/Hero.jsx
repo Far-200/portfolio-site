@@ -1,195 +1,77 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import profileImage from "../assets/profile.jpg";
-import githubProfile from "../assets/github_pfp.jpg";
-import DeveloperTerminal from "./DeveloperTerminal";
-import SocialProfileLink from "./SocialProfileLink";
+import {
+  staggerContainer,
+  staggerItem,
+  fadeOnly,
+  useReducedMotion,
+} from "../lib/motion";
 
-// Typewriter cycling status lines — the personality layer
-const STATUS_LINES = [
-  "building weirdly useful tools",
-  "shipping developer tools",
-  "debugging life choices",
-  "turning caffeine into commits",
-  "making things people actually use",
-];
+const GITHUB_URL = "https://github.com/Far-200";
 
-function TypewriterStatus() {
-  const [lineIndex, setLineIndex] = useState(0);
-  const [displayed, setDisplayed] = useState("");
-  const [phase, setPhase] = useState("typing"); // typing | pause | erasing
-
-  useEffect(() => {
-    const full = STATUS_LINES[lineIndex];
-
-    if (phase === "typing") {
-      if (displayed.length < full.length) {
-        const t = setTimeout(
-          () => setDisplayed(full.slice(0, displayed.length + 1)),
-          48,
-        );
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setPhase("pause"), 1800);
-        return () => clearTimeout(t);
-      }
-    }
-
-    if (phase === "pause") {
-      const t = setTimeout(() => setPhase("erasing"), 300);
-      return () => clearTimeout(t);
-    }
-
-    if (phase === "erasing") {
-      if (displayed.length > 0) {
-        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 28);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => {
-          setLineIndex((i) => (i + 1) % STATUS_LINES.length);
-          setPhase("typing");
-        }, 0);
-        return () => clearTimeout(t);
-      }
-    }
-  }, [displayed, phase, lineIndex]);
-
-  return (
-    <span className="typewriter-text">
-      <span className="typewriter-prefix">// </span>
-      {displayed}
-      <span className="typewriter-cursor" aria-hidden="true">
-        |
-      </span>
-    </span>
-  );
-}
-
-// Framer motion variants
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.09, delayChildren: 0.05 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const photoVariant = {
-  hidden: { opacity: 0, x: 28, scale: 0.97 },
-  show: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    transition: { duration: 0.75, delay: 0.12, ease: [0.16, 1, 0.3, 1] },
-  },
-};
+// Hero-only for now — labData's ACTIVE_BUILDS doesn't match what
+// belongs in this present-tense status strip. Migrate into the
+// unified project data model in Phase 3.
+const CURRENTLY_BUILDING = "Think Before Code · Attendance Analytics · site-3d";
 
 function Hero() {
+  const prefersReducedMotion = useReducedMotion();
+  const container = prefersReducedMotion ? fadeOnly : staggerContainer;
+  const item = prefersReducedMotion ? fadeOnly : staggerItem;
+
   return (
-    <section className="hero section">
-      {/* ── Left column ── */}
+    <section className="v4-hero section">
       <motion.div
-        className="hero-left"
+        className="v4-hero-content"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        <motion.p className="badge" variants={item}>
-          Building wierdly useful softwares since 2023
+        <motion.p className="v4-hero-identity" variants={item}>
+          Farhaan Khan
         </motion.p>
 
-        <motion.h1 variants={item}>
-          Building tools
-          <span>developers actually use</span>
+        <motion.h1 className="v4-hero-headline" variants={item}>
+          I build things, then figure out why they broke.
         </motion.h1>
 
-        <motion.div className="hero-typewriter" variants={item}>
-          <TypewriterStatus />
-        </motion.div>
-
-        <motion.p className="hero-text" variants={item}>
-          Building developer tools, full-stack apps, and AI-assisted systems
-          that people might actually use instead of abandoning after the GitHub
-          push.
+        <motion.p className="v4-hero-supporting" variants={item}>
+          CSE student building developer tools, full-stack applications, and
+          AI-assisted systems.
         </motion.p>
 
-        <motion.div className="hero-buttons" variants={item}>
-          <Link to="/projects" className="btn btn-primary">
-            View Projects
+        <motion.div className="v4-hero-ctas" variants={item}>
+          <Link to="/projects" className="v4-hero-cta-primary">
+            View selected work
           </Link>
-          <Link to="/skills" className="btn btn-secondary">
-            Skills
-          </Link>
-          <SocialProfileLink
-            href="https://github.com/Far-200"
-            label="GitHub"
-            handle="@Far-200"
-            profileName="Far-200"
-            profileImage={githubProfile}
-            className="hero-social-link"
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="v4-hero-cta-secondary"
           >
-            <span className="btn btn-secondary">GitHub</span>
-          </SocialProfileLink>
+            GitHub ↗
+          </a>
         </motion.div>
 
-        <motion.div className="hero-stats" variants={item}>
-          <div className="hero-stat-card">
-            <h3>4+</h3>
-            <p>Deployed Projects</p>
-          </div>
-          <div className="hero-stat-card">
-            <h3>Full-Stack</h3>
-            <p>React · Node · APIs</p>
-          </div>
-          <div className="hero-stat-card">
-            <h3>AI + Tools</h3>
-            <p>Practical systems</p>
-          </div>
+        <motion.div className="v4-hero-building" variants={item}>
+          <span className="v4-hero-building-label">Currently building</span>
+          <span className="v4-hero-building-value">{CURRENTLY_BUILDING}</span>
         </motion.div>
       </motion.div>
 
-      {/* ── Right column ── */}
       <motion.div
-        className="hero-right"
-        variants={photoVariant}
+        className="v4-hero-portrait"
+        variants={prefersReducedMotion ? fadeOnly : staggerItem}
         initial="hidden"
         animate="show"
       >
-        <motion.div
-          className="hero-photo-card"
-          whileHover={{
-            y: -6,
-            transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
-          }}
-        >
-          <img
-            src={profileImage}
-            alt="Farhaan Khan portrait"
-            className="hero-photo"
-          />
-          <div className="hero-status">Open to Internships &amp; Roles</div>
-        </motion.div>
-
-        <a
-          href="/resume/Farhaan_Khan_Resume.pdf"
-          target="_blank"
-          rel="noreferrer"
-          className="resume-cta"
-        >
-          View Resume ↗
-        </a>
-
-        {/* Developer Terminal — replaces GitHub heatmap */}
-        <DeveloperTerminal />
+        <img
+          src={profileImage}
+          alt="Farhaan Khan portrait"
+          className="v4-hero-portrait-img"
+        />
       </motion.div>
     </section>
   );

@@ -53,6 +53,11 @@
   /* --- Typography --- */
   --v4-tracking-label: 0.08em; /* uppercase eyebrow / metadata labels */
   --v4-mono-size: 0.8125rem; /* status/metadata monospace text */
+  /* Same stack the legacy site already uses for terminal/metadata text
+     (index.css uses this literal stack in ~8 places) — reused here so
+     V4 components don't repeat it, not a new font. */
+  --v4-font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace,
+    monospace;
 
   /* --- Focus --- */
   --v4-focus-ring: 0 0 0 3px rgba(62, 123, 250, 0.45);

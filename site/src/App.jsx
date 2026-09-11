@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BootTerminal from "./components/BootTerminal";
+import AmbientBackground from "./components/AmbientBackground";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import SkillsPage from "./pages/SkillsPage";
@@ -15,50 +16,6 @@ import CortexAIPage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
 import PromptRouterPage from "./pages/project-pages/PromptRouterPage";
-
-// ── Smooth spring-based cursor glow (rAF lerp, no layout thrash) ──
-function CursorGlow() {
-  const glowRef = useRef(null);
-  const posRef = useRef({ x: -999, y: -999 });
-  const currentRef = useRef({ x: -999, y: -999 });
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    const onMove = (e) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-    };
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const animate = () => {
-      currentRef.current.x = lerp(
-        currentRef.current.x,
-        posRef.current.x,
-        0.075,
-      );
-      currentRef.current.y = lerp(
-        currentRef.current.y,
-        posRef.current.y,
-        0.075,
-      );
-      if (glowRef.current) {
-        glowRef.current.style.transform = `translate(${currentRef.current.x}px, ${currentRef.current.y}px) translate(-50%, -50%)`;
-      }
-      rafRef.current = requestAnimationFrame(animate);
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    rafRef.current = requestAnimationFrame(animate);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  return <div ref={glowRef} className="cursor-glow" aria-hidden="true" />;
-}
-
-// ── Subtle animated dot grid ──
-function GridBackground() {
-  return <div className="bg-grid" aria-hidden="true" />;
-}
 
 // ── Page transition variants ──
 const pageVariants = {
@@ -136,8 +93,7 @@ function App() {
 
   return (
     <div className="app-shell">
-      <CursorGlow />
-      <GridBackground />
+      <AmbientBackground />
 
       {/* Boot overlay — only on first session load */}
       <AnimatePresence>

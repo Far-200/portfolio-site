@@ -61,7 +61,8 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(16, 185, 129, 0.35) transparent;
+  /* V4 polish: cobalt/graphite, not the legacy emerald. */
+  scrollbar-color: rgba(62, 123, 250, 0.32) transparent;
 }
 
 html,
@@ -128,11 +129,12 @@ a {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.35);
+  /* V4 polish: cobalt/graphite, not the legacy emerald. */
+  background: rgba(62, 123, 250, 0.32);
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(52, 211, 153, 0.55);
+  background: rgba(62, 123, 250, 0.5);
 }
 
 /* ============================================================
@@ -167,7 +169,7 @@ a {
   will-change: transform;
 }
 
-.app-shell > *:not(.cursor-glow):not(.bg-grid):not(.boot-overlay) {
+.app-shell > *:not(.cursor-glow):not(.bg-grid):not(.boot-overlay):not(.v4-ambient) {
   position: relative;
   z-index: 1;
 }
