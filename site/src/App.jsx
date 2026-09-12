@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BootTerminal from "./components/BootTerminal";
 import AmbientBackground from "./components/AmbientBackground";
 import HomePage from "./pages/HomePage";
+import WorkPage from "./pages/WorkPage";
+import LogPage from "./pages/LogPage";
 import AboutPage from "./pages/AboutPage";
 import SkillsPage from "./pages/SkillsPage";
-import ProjectsPage from "./pages/ProjectsPage";
 import LabPage from "./pages/LabPage";
 import ContactPage from "./pages/ContactPage";
 import FolderStructurePage from "./pages/project-pages/FolderStructure";
@@ -36,7 +37,7 @@ function AnimatedRoutes() {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait" initial={false}>
-      <motion.div
+      <Motion.div
         key={location.pathname}
         variants={pageVariants}
         initial="initial"
@@ -45,9 +46,14 @@ function AnimatedRoutes() {
       >
         <Routes location={location}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/work" element={<WorkPage />} />
+          <Route path="/log" element={<LogPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/skills" element={<SkillsPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
+          <Route
+            path="/projects"
+            element={<Navigate to="/work" replace />}
+          />
           <Route path="/lab" element={<LabPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route
@@ -73,7 +79,7 @@ function AnimatedRoutes() {
             element={<PromptRouterPage />}
           />
         </Routes>
-      </motion.div>
+      </Motion.div>
     </AnimatePresence>
   );
 }

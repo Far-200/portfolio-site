@@ -1,58 +1,58 @@
 /* ============================================================
-   V4 LAB BRIDGE
+   V4 LOG BRIDGE
    ============================================================
-   Compact homepage pointer into /lab — not a redesign of the Lab
-   page itself, which keeps its existing (legacy-styled) visuals.
+   Compact homepage pointer to the complete engineering timeline.
    ============================================================ */
 
-.v4-log-bridge + .v4-lab-bridge::before {
+.section + .v4-log-bridge::before {
   display: none;
 }
 
-.v4-lab-bridge-inner {
+.v4-log-bridge + .v4-lab-bridge::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--v4-border),
+    transparent
+  );
+}
+
+.v4-log-bridge-inner {
   display: grid;
-  grid-template-columns: minmax(14rem, 0.85fr) minmax(0, 1.35fr);
+  grid-template-columns: minmax(10rem, 0.65fr) minmax(0, 1.6fr);
   column-gap: clamp(2rem, 6vw, 5rem);
   padding: clamp(2rem, 4vw, 3rem) 0;
   border-top: 1px solid var(--v4-border);
   border-bottom: 1px solid var(--v4-border);
 }
 
-.v4-lab-bridge-header {
+.v4-log-bridge-header {
   grid-row: 1 / span 2;
 }
 
-.v4-lab-bridge-tag {
+.v4-log-bridge-label {
   font-family: var(--v4-font-mono);
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: var(--v4-tracking-label);
   text-transform: uppercase;
   color: var(--v4-text-subtle);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
 }
 
-.v4-lab-bridge-heading {
+.v4-log-bridge-heading {
   font-size: clamp(1.45rem, 2.4vw, 1.9rem);
   font-weight: 700;
-  letter-spacing: -0.015em;
-  color: var(--v4-text);
   line-height: 1.2;
-  margin-bottom: 0.8rem;
+  letter-spacing: -0.02em;
+  color: var(--v4-text);
 }
 
-.v4-lab-bridge-copy {
-  font-size: 0.925rem;
-  line-height: 1.7;
-  color: var(--v4-text-muted);
-  max-width: 34ch;
-}
-
-.v4-lab-bridge-list {
+.v4-log-bridge-list {
   list-style: none;
 }
 
-.v4-lab-bridge-item {
+.v4-log-bridge-item {
   display: grid;
   grid-template-columns: 7.25rem minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 2rem);
@@ -61,34 +61,42 @@
   border-top: 1px solid var(--v4-border);
 }
 
-.v4-lab-bridge-item:last-child {
+.v4-log-bridge-item:last-child {
   border-bottom: 1px solid var(--v4-border);
 }
 
-.v4-lab-bridge-item-status {
+.v4-log-bridge-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding-top: 0.18rem;
   font-family: var(--v4-font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 500;
   letter-spacing: var(--v4-tracking-label);
   text-transform: uppercase;
   color: var(--v4-text-subtle);
-  padding-top: 0.2rem;
+  white-space: nowrap;
 }
 
-.v4-lab-bridge-item-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+.v4-log-bridge-meta-separator {
+  color: var(--v4-border-strong);
 }
 
-.v4-lab-bridge-item-title {
+.v4-log-bridge-entry {
+  min-width: 0;
+}
+
+.v4-log-bridge-title {
   font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: -0.01em;
   color: var(--v4-text);
+  margin-bottom: 0.3rem;
 }
 
-.v4-lab-bridge-item-summary {
+.v4-log-bridge-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -99,10 +107,11 @@
   color: var(--v4-text-muted);
 }
 
-.v4-lab-bridge-cta {
+.v4-log-bridge-cta {
+  grid-column: 2;
+  justify-self: start;
   display: inline-flex;
   align-items: center;
-  justify-self: start;
   gap: 0.4rem;
   margin-top: 1.25rem;
   font-size: 0.875rem;
@@ -110,36 +119,38 @@
   color: var(--v4-accent);
   transition: gap var(--v4-duration-fast) ease;
 }
-.v4-lab-bridge-cta:hover {
+
+.v4-log-bridge-cta:hover {
   gap: 0.6rem;
 }
-.v4-lab-bridge-cta:focus-visible {
+
+.v4-log-bridge-cta:focus-visible {
   outline: none;
   box-shadow: var(--v4-focus-ring);
   border-radius: var(--v4-radius-sm);
 }
 
-@media (max-width: 600px) {
-  .v4-lab-bridge-inner {
+@media (max-width: 700px) {
+  .v4-log-bridge-inner {
     grid-template-columns: 1fr;
   }
 
-  .v4-lab-bridge-header {
+  .v4-log-bridge-header {
     grid-row: auto;
     margin-bottom: 1.75rem;
   }
 
-  .v4-lab-bridge-copy {
-    max-width: var(--v4-text-max);
-  }
-
-  .v4-lab-bridge-item {
+  .v4-log-bridge-item {
     grid-template-columns: 1fr;
     gap: 0.35rem;
     padding: 1.15rem 0;
   }
 
-  .v4-lab-bridge-item-status {
+  .v4-log-bridge-meta {
     padding-top: 0;
+  }
+
+  .v4-log-bridge-cta {
+    grid-column: 1;
   }
 }

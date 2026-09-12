@@ -1,17 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-// WORK and LOG point at homepage anchors (Selected Work / Build Log).
-// `end` is required on both — without it, NavLink treats "/" as a
-// prefix of every route (since every path starts with "/"), which
-// would mark them active everywhere instead of just on the homepage.
 const NAV_LINKS = [
-  { to: "/#work", label: "Work", end: true },
-  { to: "/#log", label: "Log", end: true },
-  { to: "/lab", label: "Lab" },
-  { to: "/about", label: "About" },
+  { to: "/", label: "Home", end: true },
+  { to: "/work", label: "Work", end: true },
+  { to: "/log", label: "Log", end: true },
+  { to: "/lab", label: "Lab", end: true },
+  { to: "/about", label: "About", end: true },
 ];
 
 const RESUME_HREF = "/resume/Farhaan_Khan_Resume.pdf";
@@ -60,7 +57,7 @@ function NavBar() {
   }, [menuOpen]);
 
   return (
-    <motion.nav
+    <Motion.nav
       className={`v4-nav${scrolled ? " v4-nav--scrolled" : ""}`}
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -87,7 +84,7 @@ function NavBar() {
                 <>
                   {label}
                   {isActive && (
-                    <motion.span
+                    <Motion.span
                       className="v4-nav-active-dot"
                       layoutId="v4-nav-active-dot"
                       transition={{ type: "spring", stiffness: 420, damping: 36 }}
@@ -130,7 +127,7 @@ function NavBar() {
       {/* Mobile menu panel */}
       <AnimatePresence initial={false}>
         {menuOpen && (
-          <motion.div
+          <Motion.div
             id={MOBILE_MENU_ID}
             className="v4-nav-mobile-panel"
             initial={{ opacity: 0, height: 0 }}
@@ -160,10 +157,10 @@ function NavBar() {
                 Resume ↗
               </a>
             </div>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </Motion.nav>
   );
 }
 

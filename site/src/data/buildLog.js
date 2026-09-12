@@ -14,16 +14,6 @@
 
 export const BUILD_LOG = [
   {
-    id: "log-portfolio-v4",
-    date: "SEP",
-    year: "2026",
-    type: "BUILD",
-    title: "Portfolio V4",
-    description:
-      "Rebuilt the homepage around a token-driven V4 design system — ambient background, hero, and an editorial Selected Work section.",
-    projectId: null,
-  },
-  {
     id: "log-think-before-code",
     date: "JUL",
     year: "2026",
@@ -42,16 +32,6 @@ export const BUILD_LOG = [
     description:
       "Built a custom AST/interpreter pipeline to execute C-like code and expose its state for visualization.",
     projectId: "flowtrace",
-  },
-  {
-    id: "log-site-3d",
-    date: "JUN",
-    year: "2026",
-    type: "EXPERIMENT",
-    title: "site-3d",
-    description:
-      "Started moving scene work into Blender-authored assets driven through React Three Fiber.",
-    projectId: null,
   },
   {
     id: "log-attendance-analytics",

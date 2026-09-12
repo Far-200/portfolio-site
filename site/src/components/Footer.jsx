@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
 import githubProfile from "../assets/github_pfp.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
+import { fadeOnly, sectionReveal, useReducedMotion } from "../lib/motion";
 
 const XIcon = () => (
   <svg
@@ -32,12 +33,14 @@ const SiDevfolio = () => (
 );
 
 function Footer() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <motion.footer
+    <Motion.footer
       className="footer"
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45 }}
+      variants={prefersReducedMotion ? fadeOnly : sectionReveal}
+      initial="hidden"
+      whileInView="show"
       viewport={{ once: true }}
     >
       <div className="footer-container">
@@ -48,13 +51,13 @@ function Footer() {
 
         <div className="footer-links-block">
           <h4>Quick Links</h4>
-          <div className="footer-links">
+          <nav className="footer-links" aria-label="Footer navigation">
             <Link to="/">Home</Link>
+            <Link to="/work">Work</Link>
+            <Link to="/log">Log</Link>
+            <Link to="/lab">Lab</Link>
             <Link to="/about">About</Link>
-            <Link to="/skills">Skills</Link>
-            <Link to="/projects">Projects</Link>
-            <Link to="/contact">Contact</Link>
-          </div>
+          </nav>
         </div>
 
         <div className="footer-links-block">
@@ -108,7 +111,7 @@ function Footer() {
         <p>© 2026 Farhaan Khan</p>
         <p className="footer-console">console.log(portfolio.isLive)</p>
       </div>
-    </motion.footer>
+    </Motion.footer>
   );
 }
 

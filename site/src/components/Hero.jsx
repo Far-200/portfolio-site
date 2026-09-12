@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import profileImage from "../assets/profile.jpg";
 import {
   staggerContainer,
@@ -22,27 +22,27 @@ function Hero() {
 
   return (
     <section className="v4-hero section">
-      <motion.div
+      <Motion.div
         className="v4-hero-content"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        <motion.p className="v4-hero-identity" variants={item}>
+        <Motion.p className="v4-hero-identity" variants={item}>
           Farhaan Khan
-        </motion.p>
+        </Motion.p>
 
-        <motion.h1 className="v4-hero-headline" variants={item}>
+        <Motion.h1 className="v4-hero-headline" variants={item}>
           I build things, then figure out why they broke.
-        </motion.h1>
+        </Motion.h1>
 
-        <motion.p className="v4-hero-supporting" variants={item}>
+        <Motion.p className="v4-hero-supporting" variants={item}>
           CSE student building developer tools, full-stack applications, and
           AI-assisted systems.
-        </motion.p>
+        </Motion.p>
 
-        <motion.div className="v4-hero-ctas" variants={item}>
-          <Link to="/#work" className="v4-hero-cta-primary">
+        <Motion.div className="v4-hero-ctas" variants={item}>
+          <Link to="/work" className="v4-hero-cta-primary">
             View selected work
           </Link>
           <a
@@ -53,15 +53,15 @@ function Hero() {
           >
             GitHub ↗
           </a>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div className="v4-hero-building" variants={item}>
+        <Motion.div className="v4-hero-building" variants={item}>
           <span className="v4-hero-building-label">Currently building</span>
           <span className="v4-hero-building-value">{CURRENTLY_BUILDING}</span>
-        </motion.div>
-      </motion.div>
+        </Motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="v4-hero-portrait"
         variants={prefersReducedMotion ? fadeOnly : staggerItem}
         initial="hidden"
@@ -72,7 +72,7 @@ function Hero() {
           alt="Farhaan Khan portrait"
           className="v4-hero-portrait-img"
         />
-      </motion.div>
+      </Motion.div>
     </section>
   );
 }
