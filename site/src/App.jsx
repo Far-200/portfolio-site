@@ -10,9 +10,7 @@ import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
 import LogPage from "./pages/LogPage";
 import AboutPage from "./pages/AboutPage";
-import SkillsPage from "./pages/SkillsPage";
 import LabPage from "./pages/LabPage";
-import ContactPage from "./pages/ContactPage";
 import FolderStructurePage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
@@ -49,13 +47,19 @@ function AnimatedRoutes() {
           <Route path="/work" element={<WorkPage />} />
           <Route path="/log" element={<LogPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/skills" element={<SkillsPage />} />
+          <Route
+            path="/skills"
+            element={<Navigate to="/about#toolkit" replace />}
+          />
           <Route
             path="/projects"
             element={<Navigate to="/work" replace />}
           />
           <Route path="/lab" element={<LabPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route
+            path="/contact"
+            element={<Navigate to="/about#contact" replace />}
+          />
           <Route
             path="/projects/folder-structure-visualizer"
             element={<FolderStructurePage />}

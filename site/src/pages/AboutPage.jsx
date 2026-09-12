@@ -2,8 +2,8 @@ import About from "../components/About";
 
 function AboutPage() {
   return (
-    <main className="page">
-      <About showPhoto={false} />
+    <main className="page v4-about-page">
+      <About />
     </main>
   );
 }

@@ -1136,10 +1136,7 @@ a {
   margin: 0 auto;
   padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3rem);
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(8rem, 0.7fr) minmax(
-      12rem,
-      0.8fr
-    );
+  grid-template-columns: minmax(15rem, 1fr) max-content max-content;
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: start;
 }
@@ -1172,8 +1169,10 @@ a {
 
 .footer-links {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: clamp(0.9rem, 1.8vw, 1.5rem);
+  white-space: nowrap;
 }
 
 .footer-links a {
@@ -1590,6 +1589,11 @@ a {
 
   .footer-container {
     grid-template-columns: 1fr;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .footer-bottom {
