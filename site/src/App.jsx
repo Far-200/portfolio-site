@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
-import BootTerminal from "./components/BootTerminal";
 import { ResumeChooserProvider } from "./components/ResumeChooser";
 import AmbientBackground from "./components/AmbientBackground";
 import HomePage from "./pages/HomePage";
@@ -89,39 +87,11 @@ function AnimatedRoutes() {
 }
 
 // ── Root App ──
-// Boot animation runs once per browser session (sessionStorage key: "booted").
-// To disable permanently: set VITE_SKIP_BOOT=true in your .env file and
-// add `if (import.meta.env.VITE_SKIP_BOOT) return true;` at top of shouldBoot.
-function shouldBoot() {
-  try {
-    if (sessionStorage.getItem("booted")) return false;
-  } catch {
-    return false;
-  }
-  return true;
-}
-
 function App() {
-  const [booting, setBooting] = useState(shouldBoot);
-
-  const handleBootDone = () => {
-    try {
-      sessionStorage.setItem("booted", "1");
-    } catch {
-      /* noop */
-    }
-    setBooting(false);
-  };
-
   return (
     <ResumeChooserProvider>
       <div className="app-shell">
         <AmbientBackground />
-
-        {/* Boot overlay — only on first session load */}
-        <AnimatePresence>
-          {booting && <BootTerminal onDone={handleBootDone} />}
-        </AnimatePresence>
 
         <NavBar />
         <ScrollToTop />
