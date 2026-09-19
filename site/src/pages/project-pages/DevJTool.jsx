@@ -31,7 +31,7 @@ function DevJTool() {
   ];
 
   return (
-    <section className="section project-detail-page">
+    <section className="section project-detail-page v4-project">
       <motion.div
         className="project-detail-hero"
         initial={{ opacity: 0, y: 28 }}
@@ -66,8 +66,8 @@ function DevJTool() {
             <span>Live Demo ↗</span>
           </a>
 
-          <Link to="/projects" className="btn btn-secondary">
-            Back to Projects
+          <Link to="/work" className="btn btn-secondary">
+            Back to Work
           </Link>
         </div>
       </motion.div>

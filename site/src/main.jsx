@@ -14,6 +14,7 @@ import "./styles/v4-lab-bridge.css";
 import "./styles/v4-lab.css";
 import "./styles/v4-notfound.css";
 import "./styles/v4-resume.css";
+import "./styles/v4-project.css";
 import "./styles/v4-about.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

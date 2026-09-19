@@ -1,0 +1,161 @@
+/* ============================================================
+   V4 SKIN FOR PROJECT DETAIL PAGES  (/projects/*)
+   ============================================================
+   The four project pages still use their original markup and the
+   legacy classes in index.css. Rather than rewrite them, this file
+   scopes a V4 look to `.v4-project`: it remaps the legacy emerald
+   tokens to the V4 palette (so every rule that reads --accent etc.
+   recolors itself) and flattens the heavy glass cards into V4's
+   hairline style.
+   ============================================================ */
+
+.v4-project {
+  /* Remap legacy tokens locally — nothing outside this page is affected. */
+  --accent: var(--v4-accent);
+  --accent-light: #6b9bff;
+  --accent-dim: var(--v4-accent-soft);
+  --accent-glow: var(--v4-accent-soft);
+  --border: var(--v4-border);
+  --border-soft: var(--v4-border);
+  --border-accent: var(--v4-accent-muted);
+  --text-primary: var(--v4-text);
+  --text-secondary: var(--v4-text-muted);
+  --text-muted: var(--v4-text-subtle);
+  --text-accent: var(--v4-accent);
+  --surface-0: transparent;
+  --surface-1: var(--v4-surface);
+  --surface-deep: var(--v4-surface);
+}
+
+/* ── Hero ───────────────────────────────────────────────── */
+.v4-project .section-tag {
+  font-family: var(--v4-font-mono);
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  color: var(--v4-accent);
+}
+
+.v4-project .section-tag::before {
+  background: var(--v4-accent);
+}
+
+.v4-project .project-detail-hero h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--v4-text);
+}
+
+/* ── Buttons: V4 primary / ghost, no glow or shimmer ────── */
+.v4-project .btn {
+  border-radius: var(--v4-radius-sm);
+  transition:
+    background var(--v4-duration-fast) var(--v4-ease),
+    border-color var(--v4-duration-fast) var(--v4-ease),
+    color var(--v4-duration-fast) var(--v4-ease);
+}
+
+.v4-project .btn:hover {
+  transform: none;
+}
+
+.v4-project .btn-primary {
+  background: var(--v4-accent);
+  color: #fff;
+  box-shadow: none;
+}
+
+.v4-project .btn-primary:hover {
+  background: #5a8ffb;
+  box-shadow: none;
+}
+
+.v4-project .btn-primary::after {
+  display: none;
+}
+
+.v4-project .btn-secondary {
+  background: transparent;
+  color: var(--v4-text-muted);
+  border: 1px solid var(--v4-border-strong);
+}
+
+.v4-project .btn-secondary:hover {
+  background: transparent;
+  color: var(--v4-text);
+  border-color: var(--v4-accent-muted);
+}
+
+.v4-project .btn:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+/* ── Sections: hairline panels instead of glass cards ───── */
+.v4-project .project-detail-main,
+.v4-project .project-detail-side,
+.v4-project .project-section-block,
+.v4-project .glass-card {
+  background: var(--v4-surface);
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-md);
+  backdrop-filter: none;
+  transform: none;
+}
+
+.v4-project .project-detail-main h2,
+.v4-project .project-detail-side h2,
+.v4-project .project-section-block h2 {
+  font-family: var(--v4-font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  color: var(--v4-text-muted);
+}
+
+.v4-project .project-detail-grid {
+  align-items: stretch;
+}
+
+/* Feature / stack tiles: quieter than the panel they sit in */
+.v4-project .project-feature-card,
+.v4-project .project-stack-item {
+  background: var(--v4-bg);
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-sm);
+}
+
+.v4-project .project-feature-card:hover,
+.v4-project .project-stack-item:hover {
+  border-color: var(--v4-accent-muted);
+  background: var(--v4-bg);
+  transform: none;
+}
+
+.v4-project .project-stack-icon {
+  color: var(--v4-accent);
+}
+
+.v4-project .project-learnings li::before {
+  background: var(--v4-accent);
+}
+
+/* ── Demo video frame ───────────────────────────────────── */
+.v4-project .project-video-wrap {
+  padding: 0;
+  background: var(--v4-surface);
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-md);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.v4-project .project-demo-video {
+  border: 0;
+  border-radius: 0;
+  background: var(--v4-bg);
+}
+
+.v4-project .project-gallery-subtext {
+  color: var(--v4-text-muted);
+}
