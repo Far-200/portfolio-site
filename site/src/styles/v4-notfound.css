@@ -1,0 +1,71 @@
+/* ============================================================
+   V4 404
+   ============================================================ */
+
+.v4-notfound {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.v4-notfound > .section {
+  width: min(1200px, 92%);
+}
+
+.v4-notfound-code {
+  font-family: var(--v4-font-mono);
+  font-size: var(--v4-mono-size);
+  letter-spacing: var(--v4-tracking-label);
+  color: var(--v4-accent);
+  margin-bottom: 1rem;
+}
+
+.v4-notfound-title {
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--v4-text);
+  margin-bottom: 0.9rem;
+}
+
+.v4-notfound-copy {
+  max-width: 50ch;
+  color: var(--v4-text-muted);
+  line-height: 1.65;
+  margin-bottom: 1.75rem;
+  overflow-wrap: anywhere;
+}
+
+.v4-notfound-copy code {
+  font-family: var(--v4-font-mono);
+  font-size: 0.9em;
+  color: var(--v4-text);
+}
+
+.v4-notfound-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.v4-notfound-links a {
+  font-family: var(--v4-font-mono);
+  font-size: var(--v4-mono-size);
+  color: var(--v4-text-muted);
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--v4-border-strong);
+  transition:
+    color var(--v4-duration-fast) var(--v4-ease),
+    border-color var(--v4-duration-fast) var(--v4-ease);
+}
+
+.v4-notfound-links a:hover {
+  color: var(--v4-text);
+  border-color: var(--v4-accent);
+}
+
+.v4-notfound-links a:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+  border-radius: 4px;
+}

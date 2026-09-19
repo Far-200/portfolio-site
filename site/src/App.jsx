@@ -11,6 +11,7 @@ import WorkPage from "./pages/WorkPage";
 import LogPage from "./pages/LogPage";
 import AboutPage from "./pages/AboutPage";
 import LabPage from "./pages/LabPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import FolderStructurePage from "./pages/project-pages/FolderStructure";
 import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
@@ -82,6 +83,7 @@ function AnimatedRoutes() {
             path="/projects/prompt-router"
             element={<PromptRouterPage />}
           />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Motion.div>
     </AnimatePresence>

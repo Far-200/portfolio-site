@@ -319,9 +319,11 @@
   z-index: 1;
 }
 
+/* Matches the source screenshot's ~16:10 ratio so `cover` no longer
+   crops the left/right edges of the app UI. */
 .v4-work-screenshot-frame {
   display: block;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 16 / 10;
 }
 
 .v4-work-screenshot-frame img {

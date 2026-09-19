@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
+import { CURRENTLY_BUILDING } from "../data/labData";
 import profileImage from "../assets/profile.jpg";
 import {
   staggerContainer,
@@ -9,11 +10,6 @@ import {
 } from "../lib/motion";
 
 const GITHUB_URL = "https://github.com/Far-200";
-
-// Hero-only — labData's ACTIVE_BUILDS and projects.js both model
-// finished/ongoing project identity, not this present-tense status
-// strip, so it stays a local constant rather than being derived.
-const CURRENTLY_BUILDING = "Think Before Code · Attendance Analytics · site-3d";
 
 function Hero() {
   const prefersReducedMotion = useReducedMotion();

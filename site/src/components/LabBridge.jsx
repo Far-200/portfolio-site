@@ -1,14 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { PROJECT_ARCHIVE } from "../data/labData";
+import { ACTIVE_BUILDS } from "../data/labData";
 import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
 
-// A different layer of work than Selected Work's three flagships —
-// smaller/earlier-stage entries already tracked in labData.js.
-const PREVIEW_IDS = ["aptivision", "astra-archive"];
+// Earlier-stage work than Selected Work's flagships, from labData.js.
+const PREVIEW_IDS = ["aptivision", "astra"];
 const PREVIEWS = PREVIEW_IDS.map((id) =>
-  PROJECT_ARCHIVE.find((p) => p.id === id),
+  ACTIVE_BUILDS.find((b) => b.id === id),
 );
 
 function LabBridge() {
@@ -40,9 +39,9 @@ function LabBridge() {
         <ul className="v4-lab-bridge-list">
           {PREVIEWS.map((item) => (
             <li className="v4-lab-bridge-item" key={item.id}>
-              <span className="v4-lab-bridge-item-status">{item.status}</span>
+              <span className="v4-lab-bridge-item-status">{item.stage}</span>
               <div className="v4-lab-bridge-item-body">
-                <h3 className="v4-lab-bridge-item-title">{item.title}</h3>
+                <h3 className="v4-lab-bridge-item-title">{item.name}</h3>
                 <p className="v4-lab-bridge-item-summary">{item.summary}</p>
               </div>
             </li>
