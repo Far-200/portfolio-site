@@ -1,5 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/resume/Farhaan_Khan_Resume.pdf",
+      "destination": "/resume/Farhaan_Khan_Resume_ATS.pdf",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

@@ -219,7 +219,17 @@
   border-top: 1px solid var(--v4-border);
 }
 
-.v4-about-contact-links a {
+.v4-about-contact-links button {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--v4-border);
+  cursor: pointer;
+}
+
+.v4-about-contact-links :is(a, button) {
   display: grid;
   grid-template-columns: 7.75rem minmax(0, 1fr);
   gap: 1.25rem;
@@ -230,7 +240,7 @@
   transition: color var(--v4-duration-fast) ease;
 }
 
-.v4-about-contact-links a > span:first-child {
+.v4-about-contact-links :is(a, button) > span:first-child {
   font-family: var(--v4-font-mono);
   font-size: 0.68rem;
   font-weight: 500;
@@ -239,7 +249,7 @@
   color: var(--v4-text-subtle);
 }
 
-.v4-about-contact-links a > span:last-child {
+.v4-about-contact-links :is(a, button) > span:last-child {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -253,17 +263,17 @@
   transition: transform var(--v4-duration-fast) var(--v4-ease);
 }
 
-.v4-about-contact-links a:hover,
-.v4-about-contact-links a:focus-visible {
+.v4-about-contact-links :is(a, button):hover,
+.v4-about-contact-links :is(a, button):focus-visible {
   color: var(--v4-accent);
 }
 
-.v4-about-contact-links a:hover svg,
-.v4-about-contact-links a:focus-visible svg {
+.v4-about-contact-links :is(a, button):hover svg,
+.v4-about-contact-links :is(a, button):focus-visible svg {
   transform: translate(1px, -1px);
 }
 
-.v4-about-contact-links a:focus-visible {
+.v4-about-contact-links :is(a, button):focus-visible {
   outline: none;
   border-radius: var(--v4-radius-sm);
   box-shadow: var(--v4-focus-ring);
@@ -306,24 +316,24 @@
 @media (max-width: 480px) {
   .v4-about-toolkit-row,
   .v4-about-now-row,
-  .v4-about-contact-links a {
+  .v4-about-contact-links :is(a, button) {
     grid-template-columns: 1fr;
     gap: 0.35rem;
   }
 
-  .v4-about-contact-links a > span:last-child {
+  .v4-about-contact-links :is(a, button) > span:last-child {
     justify-content: flex-start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .v4-about-contact-links a,
+  .v4-about-contact-links :is(a, button),
   .v4-about-contact-links svg {
     transition: none;
   }
 
-  .v4-about-contact-links a:hover svg,
-  .v4-about-contact-links a:focus-visible svg {
+  .v4-about-contact-links :is(a, button):hover svg,
+  .v4-about-contact-links :is(a, button):focus-visible svg {
     transform: none;
   }
 }

@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import BootTerminal from "./components/BootTerminal";
+import { ResumeChooserProvider } from "./components/ResumeChooser";
 import AmbientBackground from "./components/AmbientBackground";
 import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
@@ -52,10 +53,7 @@ function AnimatedRoutes() {
             path="/skills"
             element={<Navigate to="/about#toolkit" replace />}
           />
-          <Route
-            path="/projects"
-            element={<Navigate to="/work" replace />}
-          />
+          <Route path="/projects" element={<Navigate to="/work" replace />} />
           <Route path="/lab" element={<LabPage />} />
           <Route
             path="/contact"
@@ -116,19 +114,21 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
-      <AmbientBackground />
+    <ResumeChooserProvider>
+      <div className="app-shell">
+        <AmbientBackground />
 
-      {/* Boot overlay — only on first session load */}
-      <AnimatePresence>
-        {booting && <BootTerminal onDone={handleBootDone} />}
-      </AnimatePresence>
+        {/* Boot overlay — only on first session load */}
+        <AnimatePresence>
+          {booting && <BootTerminal onDone={handleBootDone} />}
+        </AnimatePresence>
 
-      <NavBar />
-      <ScrollToTop />
-      <AnimatedRoutes />
-      <Footer />
-    </div>
+        <NavBar />
+        <ScrollToTop />
+        <AnimatedRoutes />
+        <Footer />
+      </div>
+    </ResumeChooserProvider>
   );
 }
 

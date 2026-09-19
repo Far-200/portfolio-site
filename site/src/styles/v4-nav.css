@@ -114,6 +114,18 @@
     border-color var(--v4-duration-fast) ease,
     color var(--v4-duration-fast) ease;
 }
+/* Resume is a <button> that opens the chooser dialog. */
+button.v4-nav-resume,
+button.v4-nav-mobile-link {
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+button.v4-nav-mobile-link {
+  border: 0;
+  text-align: left;
+}
+
 .v4-nav-resume:hover {
   border-color: var(--v4-accent-muted);
   color: var(--v4-accent);

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
+import { useResumeChooser } from "./ResumeChooser";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -11,11 +12,10 @@ const NAV_LINKS = [
   { to: "/about", label: "About", end: true },
 ];
 
-const RESUME_HREF = "/resume/Farhaan_Khan_Resume.pdf";
-
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
 function NavBar() {
+  const { open: openResume } = useResumeChooser();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
@@ -96,15 +96,15 @@ function NavBar() {
             </NavLink>
           ))}
 
-          <a
-            href={RESUME_HREF}
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
             className="v4-nav-resume"
+            aria-haspopup="dialog"
+            onClick={openResume}
           >
             Resume
             <ArrowUpRight size={13} strokeWidth={2.25} aria-hidden="true" />
-          </a>
+          </button>
         </div>
 
         {/* Mobile menu toggle — hidden on desktop via CSS */}
@@ -148,14 +148,17 @@ function NavBar() {
                   {label}
                 </NavLink>
               ))}
-              <a
-                href={RESUME_HREF}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
                 className="v4-nav-mobile-link v4-nav-mobile-link--resume"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  setMenuOpen(false);
+                  openResume();
+                }}
               >
                 Resume ↗
-              </a>
+              </button>
             </div>
           </Motion.div>
         )}

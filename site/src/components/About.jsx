@@ -1,5 +1,6 @@
 import { motion as Motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { useResumeChooser } from "./ResumeChooser";
 import { fadeOnly, sectionReveal, useReducedMotion } from "../lib/motion";
 
 const BUILD_AREAS = [
@@ -67,6 +68,7 @@ function Reveal({ className, children }) {
 }
 
 function About() {
+  const { open: openResume } = useResumeChooser();
   return (
     <>
       <section
@@ -260,17 +262,13 @@ function About() {
                   <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
                 </span>
               </a>
-              <a
-                href="/resume/Farhaan_Khan_Resume.pdf"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <button type="button" onClick={openResume}>
                 <span>Resume</span>
                 <span>
-                  PDF
+                  ATS or Visual PDF
                   <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
                 </span>
-              </a>
+              </button>
             </div>
           </div>
         </Reveal>

@@ -1,0 +1,124 @@
+/* ============================================================
+   V4 RESUME CHOOSER
+   ============================================================ */
+
+.v4-resume-dialog {
+  /* Native <dialog> is centred by the UA; keep it that way and just
+     restyle the surface. */
+  margin: auto;
+  width: min(440px, calc(100vw - 2rem));
+  padding: 0;
+  color: var(--v4-text);
+  background: var(--v4-surface);
+  border: 1px solid var(--v4-border-strong);
+  border-radius: var(--v4-radius-md);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.v4-resume-dialog[open] {
+  animation: v4-resume-in var(--v4-duration-base) var(--v4-ease);
+}
+
+.v4-resume-dialog::backdrop {
+  background: rgba(6, 7, 9, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+html:has(.v4-resume-dialog[open]) {
+  overflow: hidden;
+}
+
+@keyframes v4-resume-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v4-resume-panel {
+  position: relative;
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.v4-resume-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--v4-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--v4-radius-sm);
+  cursor: pointer;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
+}
+
+.v4-resume-close:hover {
+  color: var(--v4-text);
+}
+
+.v4-resume-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding-right: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.v4-resume-options {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.v4-resume-option {
+  display: block;
+  padding: 1rem 1.1rem;
+  background: var(--v4-bg);
+  border: 1px solid var(--v4-border);
+  border-radius: var(--v4-radius-sm);
+  transition:
+    border-color var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease);
+}
+
+.v4-resume-option:hover {
+  border-color: var(--v4-accent-muted);
+  background: var(--v4-surface-raised);
+}
+
+.v4-resume-option-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--v4-text);
+  margin-bottom: 0.3rem;
+}
+
+.v4-resume-option-desc {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--v4-text-muted);
+}
+
+.v4-resume-option:focus-visible,
+.v4-resume-close:focus-visible {
+  outline: none;
+  box-shadow: var(--v4-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-resume-dialog[open] {
+    animation: none;
+  }
+}
