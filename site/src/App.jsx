@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { ResumeChooserProvider } from "./components/ResumeChooser";
 import AmbientBackground from "./components/AmbientBackground";
+import NavCompass from "./components/NavCompass";
 import { getProjectBySlug } from "./data/projects";
 import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
@@ -125,6 +126,9 @@ function App() {
           <AnimatedRoutes />
           <Footer />
         </div>
+        {/* Outside .app-shell: its rule for direct children (index.css)
+            would otherwise override this control's position: fixed. */}
+        <NavCompass />
       </ResumeChooserProvider>
     </MotionConfig>
   );

@@ -1,0 +1,226 @@
+/* ============================================================
+   V4 NAV COMPASS
+   ============================================================
+   Styles NavCompass.jsx: a 44px circular control, bottom-right, that
+   only exists once the top navbar has scrolled out of view. The ring is
+   scroll progress; the opened stack is the navbar's destinations.
+
+   It reuses the navbar's own type (mono-ish uppercase labels), colours,
+   radius and focus ring so the two read as one navigation system, and
+   the timings/easing/travel tokens from v4-tokens.css. No spring, no
+   blur, no overlay: it fades in with at most --v4-travel of movement.
+
+   Stacking: z-index 3000 (the navbar's token) puts it above page
+   content. The resume <dialog> is in the browser's top layer, so it is
+   always above this, whatever the number.
+   ============================================================ */
+
+.v4-compass {
+  position: fixed;
+  right: calc(1.25rem + env(safe-area-inset-right, 0px));
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 3000;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  translate: 0 var(--v4-travel);
+  transition:
+    opacity var(--v4-duration-fast) var(--v4-ease),
+    translate var(--v4-duration-fast) var(--v4-ease),
+    visibility 0s linear var(--v4-duration-fast);
+}
+
+/* visibility (not display) keeps the closed control out of the tab order
+   and the accessibility tree while it is off screen. */
+.v4-compass[data-visible] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+
+/* ── Closed: the circle ─────────────────────────────────────── */
+.v4-compass-trigger {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--v4-surface);
+  color: var(--v4-text-muted);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-compass-trigger:focus-visible {
+  outline: none;
+  color: var(--v4-text);
+  box-shadow:
+    var(--v4-focus-ring),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-compass-trigger:hover {
+    color: var(--v4-text);
+  }
+}
+
+/* The ring. stroke-dashoffset is written straight from the scroll handler
+   (NavCompass.jsx), with no transition, so it tracks the page exactly. */
+.v4-compass-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.v4-compass-track,
+.v4-compass-progress {
+  stroke-width: 2;
+}
+.v4-compass-track {
+  stroke: var(--v4-border-strong);
+}
+.v4-compass-progress {
+  stroke: var(--v4-accent);
+}
+
+/* ── Open: the stack ────────────────────────────────────────── */
+/* Grows upward from the circle and stays inside the viewport. */
+.v4-compass-menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.5rem);
+  min-width: 10.5rem;
+  max-height: calc(100vh - 6.5rem - env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  padding: 0.35rem;
+  background: var(--v4-surface);
+  border: 1px solid var(--v4-border-strong);
+  border-radius: var(--v4-radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+@supports (height: 100dvh) {
+  .v4-compass-menu {
+    max-height: calc(100dvh - 6.5rem - env(safe-area-inset-bottom, 0px));
+  }
+}
+.v4-compass-menu[hidden] {
+  display: none;
+}
+.v4-compass-menu:not([hidden]) {
+  animation: v4-compass-menu-in var(--v4-duration-fast) var(--v4-ease);
+}
+@keyframes v4-compass-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--v4-travel));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.v4-compass-menu ul {
+  list-style: none;
+}
+.v4-compass-actions {
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid var(--v4-border);
+}
+
+.v4-compass-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-radius: var(--v4-radius-sm);
+  background: none;
+  color: var(--v4-text-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-compass-item:focus-visible {
+  outline: none;
+  color: var(--v4-text);
+  box-shadow: var(--v4-focus-ring);
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-compass-item:hover {
+    color: var(--v4-text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+/* Where you are: the brighter label plus one 5px cobalt dot. */
+.v4-compass-item[aria-current] {
+  color: var(--v4-text);
+}
+.v4-compass-item[aria-current]::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--v4-accent);
+}
+
+/* The "handled" dot for Resume (v4-interaction.css), inside the padding. */
+.v4-compass-item.v4-handled {
+  --v4-handled-x: 0.2rem;
+}
+
+/* Comfortable touch targets. */
+@media (pointer: coarse) {
+  .v4-compass-item {
+    min-height: 44px;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+/* index.css already removes every transition and animation, so the
+   compass and the stack just appear. This also drops the resting offset. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-compass {
+    translate: none;
+  }
+}
+
+/* ── Forced colors ──────────────────────────────────────────── */
+@media (forced-colors: active) {
+  .v4-compass-trigger {
+    border: 1px solid CanvasText;
+  }
+  .v4-compass-track {
+    stroke: GrayText;
+  }
+  .v4-compass-progress {
+    stroke: Highlight;
+  }
+  .v4-compass-ring {
+    forced-color-adjust: none;
+  }
+  .v4-compass-item[aria-current]::after {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+}

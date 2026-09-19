@@ -224,6 +224,56 @@
   justify-content: center;
 }
 
+/* The frame is exactly the photo's box (same max-widths as the image
+   below), so the pointer region is the photo, not the empty column. */
+.v4-hero-portrait-frame {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Margin note under the photo's lower-left edge, in the same voice as
+   the note beside "broke". Absolutely positioned, so nothing moves.
+   Hover only, and only where hover really exists: on touch and other
+   coarse pointers it is not rendered at all. It sits in the hero's own
+   bottom padding, clear of the face. */
+.v4-hero-portrait-note {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  font-family: var(--v4-font-mono);
+  font-size: var(--v4-mono-size);
+  line-height: 1;
+  color: var(--v4-text-muted);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 var(--v4-travel);
+  transition:
+    opacity var(--v4-duration-fast) var(--v4-ease),
+    translate var(--v4-duration-fast) var(--v4-ease),
+    visibility 0s linear var(--v4-duration-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-hero-portrait-note {
+    display: block;
+  }
+  .v4-hero-portrait-frame:hover .v4-hero-portrait-note {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v4-hero-portrait-note {
+    translate: none;
+  }
+}
+
 .v4-hero-portrait-img {
   width: 100%;
   height: auto; /* the width/height attributes only reserve space; aspect-ratio sizes it */
@@ -243,6 +293,7 @@
     grid-template-columns: 1fr;
     gap: 2.25rem;
   }
+  .v4-hero-portrait-frame,
   .v4-hero-portrait-img {
     max-width: 220px;
   }

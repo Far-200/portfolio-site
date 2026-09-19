@@ -60,6 +60,63 @@ function BrokeNote() {
   );
 }
 
+// Margin notes for the portrait, shown one per visit and cycled in order.
+const PORTRAIT_NOTES = [
+  "// usually less serious",
+  "// probably debugging something",
+  "// yes, that's me",
+  "// still building",
+];
+
+// Pointer must have been out for at least this long before the next note
+// counts as a new visit, so a pointer sitting on the photo's edge can't
+// flick through the list.
+const NOTE_REENTRY_MS = 250;
+
+// The photo plus its note. The note is decorative and hover-only: the
+// image is not made focusable (that would be a fake button for a joke),
+// the note is aria-hidden, and on touch / coarse pointers it is not shown
+// at all (see v4-hero.css), so nobody has to discover a tap gimmick.
+//
+// One note per clean entry: pointerenter fires once when the pointer comes
+// in from outside, so moving around inside never changes the text. The
+// text is chosen at entry time, while the note is still hidden.
+function PortraitFrame() {
+  const [noteIndex, setNoteIndex] = useState(0);
+  const nextNote = useRef(0);
+  const leftAt = useRef(Number.NEGATIVE_INFINITY);
+
+  const handleEnter = (e) => {
+    if (e.pointerType === "touch") return;
+    if (e.timeStamp - leftAt.current < NOTE_REENTRY_MS) return;
+    setNoteIndex(nextNote.current % PORTRAIT_NOTES.length);
+    nextNote.current += 1;
+  };
+
+  return (
+    <div
+      className="v4-hero-portrait-frame"
+      onPointerEnter={handleEnter}
+      onPointerLeave={(e) => {
+        leftAt.current = e.timeStamp;
+      }}
+    >
+      <img
+        src={profileImage}
+        alt="Farhaan Khan portrait"
+        className="v4-hero-portrait-img"
+        width={800}
+        height={800}
+        decoding="async"
+        fetchPriority="high"
+      />
+      <span className="v4-hero-portrait-note" aria-hidden="true">
+        {PORTRAIT_NOTES[noteIndex]}
+      </span>
+    </div>
+  );
+}
+
 function Hero() {
   const prefersReducedMotion = useReducedMotion();
   const container = prefersReducedMotion ? fadeOnly : staggerContainer;
@@ -112,15 +169,7 @@ function Hero() {
         initial="hidden"
         animate="show"
       >
-        <img
-          src={profileImage}
-          alt="Farhaan Khan portrait"
-          className="v4-hero-portrait-img"
-          width={800}
-          height={800}
-          decoding="async"
-          fetchPriority="high"
-        />
+        <PortraitFrame />
       </Motion.div>
     </section>
   );

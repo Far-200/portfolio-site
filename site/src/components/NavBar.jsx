@@ -4,16 +4,9 @@ import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useResumeChooser } from "./ResumeChooser";
 import { DURATION, EASE } from "../lib/motion";
+import { NAV_LINKS } from "../data/navLinks";
 import { setEntrySide } from "../lib/entryEdge";
 import { useHandled, RESUME_KEY } from "../lib/handled";
-
-const NAV_LINKS = [
-  { to: "/", label: "Home", end: true },
-  { to: "/work", label: "Work", end: true },
-  { to: "/log", label: "Log", end: true },
-  { to: "/lab", label: "Lab", end: true },
-  { to: "/about", label: "About", end: true },
-];
 
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
