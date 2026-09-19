@@ -1,0 +1,120 @@
+/* ============================================================
+   V4 HOVER / INTERACTION MOTION
+   ============================================================
+   One small, consistent vocabulary: 150ms colour/opacity shifts,
+   320ms for movement, the shared --v4-ease curve, and never more
+   than 2px of travel. Scroll reveals live in the components
+   (Framer Motion, src/lib/motion.js).
+
+   prefers-reduced-motion: index.css already disables every CSS
+   transition and animation globally; the media query at the bottom
+   also removes the transforms so nothing shifts on hover either.
+   ============================================================ */
+
+/* ── Selected Work ───────────────────────────────────────── */
+.v4-work-visual-frame {
+  transition:
+    border-color var(--v4-duration-base) var(--v4-ease),
+    transform var(--v4-duration-base) var(--v4-ease);
+}
+.v4-work-entry:hover .v4-work-visual-frame {
+  border-color: var(--v4-border-strong);
+  transform: translateY(-2px);
+}
+
+/* ── Build Log ───────────────────────────────────────────── */
+.v4-log-entry-title,
+.v4-log-entry-description {
+  transition: color var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-log-entry:hover::before {
+  border-color: var(--v4-accent-muted);
+}
+.v4-log-entry:hover .v4-log-entry-description {
+  color: var(--v4-text);
+}
+
+/* ── Lab ─────────────────────────────────────────────────── */
+.v4-lab-build,
+.v4-lab-utility,
+.v4-lab-list li {
+  transition: border-color var(--v4-duration-base) var(--v4-ease);
+}
+.v4-lab-build-name,
+.v4-lab-utility-title,
+.v4-lab-list li {
+  transition: color var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-lab-build:hover,
+.v4-lab-utility:hover {
+  border-bottom-color: var(--v4-border-strong);
+}
+.v4-lab-build:hover .v4-lab-build-name,
+.v4-lab-utility:hover .v4-lab-utility-title {
+  color: var(--v4-accent);
+}
+.v4-lab-list li:hover {
+  color: var(--v4-text);
+}
+.v4-lab-link svg {
+  transition: transform var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-lab-link:hover svg {
+  transform: translateX(2px);
+}
+
+/* ── About ───────────────────────────────────────────────── */
+.v4-about-build-row dt,
+.v4-about-build-row dd,
+.v4-about-toolkit-row dd,
+.v4-about-now-row dd,
+.v4-about-process-index {
+  transition: color var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-about-build-row:hover dd,
+.v4-about-toolkit-row:hover dd,
+.v4-about-now-row:hover dd {
+  color: var(--v4-text);
+}
+.v4-about-process-list li:hover .v4-about-process-index {
+  color: var(--v4-accent);
+}
+
+/* ── Resume chooser ──────────────────────────────────────── */
+.v4-resume-dialog[open]::backdrop {
+  animation: v4-resume-backdrop var(--v4-duration-base) var(--v4-ease);
+}
+@keyframes v4-resume-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.v4-resume-option {
+  transition:
+    border-color var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease),
+    transform var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-resume-option:active {
+  transform: scale(0.99);
+}
+.v4-resume-option-title svg {
+  transition: transform var(--v4-duration-fast) var(--v4-ease);
+}
+.v4-resume-option:hover .v4-resume-option-title svg,
+.v4-resume-option:focus-visible .v4-resume-option-title svg {
+  transform: translate(1px, -1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-work-entry:hover .v4-work-visual-frame,
+  .v4-lab-link:hover svg,
+  .v4-resume-option:active,
+  .v4-resume-option:hover .v4-resume-option-title svg,
+  .v4-resume-option:focus-visible .v4-resume-option-title svg {
+    transform: none;
+  }
+}

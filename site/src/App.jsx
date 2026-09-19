@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { motion as Motion, AnimatePresence } from "framer-motion";
+import { motion as Motion } from "framer-motion";
+import { EASE, useReducedMotion } from "./lib/motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -18,19 +19,19 @@ import PasswordCrackEsti from "./pages/project-pages/PasswordCrackEsti";
 import DevJTool from "./pages/project-pages/DevJTool";
 import PromptRouterPage from "./pages/project-pages/PromptRouterPage";
 
-// ── Page transition variants ──
-const pageVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.38, ease: [0.16, 1, 0.3, 1] },
-  },
-  exit: {
-    opacity: 0,
-    y: -6,
-    transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
-  },
+// ── Page entry transition ──
+// Enter-only on purpose: the new route mounts immediately (no exit
+// animation / mode="wait"), so navigation is never delayed and scroll
+// resets while the new page is already in place. Keep it short.
+const pageEnter = {
+  initial: { opacity: 0, y: 6 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.28, ease: EASE },
+};
+const pageEnterReduced = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.15 },
 };
 
 const DEFAULT_TITLE = "Farhaan Khan | Developer Portfolio";
@@ -53,61 +54,57 @@ function titleFor(pathname) {
 
 function AnimatedRoutes() {
   const location = useLocation();
+  const prefersReducedMotion = useReducedMotion();
+  const enter = prefersReducedMotion ? pageEnterReduced : pageEnter;
 
   useEffect(() => {
     document.title = titleFor(location.pathname);
   }, [location.pathname]);
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <Motion.div
-        key={location.pathname}
-        variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-      >
-        <Routes location={location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/work" element={<WorkPage />} />
-          <Route path="/log" element={<LogPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route
-            path="/skills"
-            element={<Navigate to="/about#toolkit" replace />}
-          />
-          <Route path="/projects" element={<Navigate to="/work" replace />} />
-          <Route path="/lab" element={<LabPage />} />
-          <Route
-            path="/contact"
-            element={<Navigate to="/about#contact" replace />}
-          />
-          <Route
-            path="/projects/folder-structure-visualizer"
-            element={<FolderStructurePage />}
-          />
-          {/* Legacy slug — this project used to be routed under an old
+    <Motion.div
+      key={location.pathname}
+      initial={enter.initial}
+      animate={enter.animate}
+      transition={enter.transition}
+    >
+      <Routes location={location}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/work" element={<WorkPage />} />
+        <Route path="/log" element={<LogPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route
+          path="/skills"
+          element={<Navigate to="/about#toolkit" replace />}
+        />
+        <Route path="/projects" element={<Navigate to="/work" replace />} />
+        <Route path="/lab" element={<LabPage />} />
+        <Route
+          path="/contact"
+          element={<Navigate to="/about#contact" replace />}
+        />
+        <Route
+          path="/projects/folder-structure-visualizer"
+          element={<FolderStructurePage />}
+        />
+        {/* Legacy slug — this project used to be routed under an old
               project identity ("cortex-ai"). Redirect rather than break
               links that already point at it. */}
-          <Route
-            path="/projects/cortex-ai"
-            element={
-              <Navigate to="/projects/folder-structure-visualizer" replace />
-            }
-          />
-          <Route
-            path="/projects/password-estimator"
-            element={<PasswordCrackEsti />}
-          />
-          <Route path="/projects/devtool" element={<DevJTool />} />
-          <Route
-            path="/projects/prompt-router"
-            element={<PromptRouterPage />}
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Motion.div>
-    </AnimatePresence>
+        <Route
+          path="/projects/cortex-ai"
+          element={
+            <Navigate to="/projects/folder-structure-visualizer" replace />
+          }
+        />
+        <Route
+          path="/projects/password-estimator"
+          element={<PasswordCrackEsti />}
+        />
+        <Route path="/projects/devtool" element={<DevJTool />} />
+        <Route path="/projects/prompt-router" element={<PromptRouterPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Motion.div>
   );
 }
 

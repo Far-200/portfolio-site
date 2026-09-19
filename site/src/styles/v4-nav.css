@@ -85,15 +85,33 @@
   color: var(--v4-text);
 }
 
+/* Active indicator: a short bar that slides between links (shared
+   layoutId in NavBar.jsx). Hovered links preview it as a fainter bar. */
 .v4-nav-active-dot {
   position: absolute;
-  bottom: 1px;
+  bottom: 0;
   left: 50%;
   translate: -50% 0;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
   background: var(--v4-accent);
+}
+.v4-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--v4-border-strong);
+  transform: scaleX(0);
+  transition: transform var(--v4-duration-base) var(--v4-ease);
+}
+.v4-nav-link:hover:not(.v4-nav-link--active)::after {
+  transform: scaleX(1);
 }
 
 .v4-nav-resume {
@@ -192,6 +210,7 @@ button.v4-nav-mobile-link {
 }
 .v4-nav-mobile-link--active {
   color: var(--v4-text);
+  box-shadow: inset 2px 0 0 var(--v4-accent);
 }
 .v4-nav-mobile-link--resume {
   color: var(--v4-accent);
