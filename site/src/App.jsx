@@ -34,7 +34,7 @@ const pageEnterReduced = {
   transition: { duration: DURATION.fast },
 };
 
-const DEFAULT_TITLE = "Farhaan Khan | Developer Portfolio";
+const DEFAULT_TITLE = "Farhaan Khan | Portfolio | Software Developer";
 const PAGE_TITLES = {
   "/": DEFAULT_TITLE,
   "/work": "Work | Farhaan Khan",
