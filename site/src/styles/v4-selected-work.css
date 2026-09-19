@@ -12,8 +12,17 @@
   scroll-margin-top: 96px; /* clears the sticky nav on #work jumps */
 }
 
+/* Heading + count sit on one line over a hairline, so the heading and
+   the entries below read as a single composition. */
 .v4-work-header {
-  margin-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: 0.35rem;
+  padding-bottom: var(--v4-heading-gap);
+  border-bottom: 1px solid var(--v4-border);
 }
 
 .v4-work-heading {
@@ -21,7 +30,6 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--v4-text);
-  margin-bottom: 0.6rem;
 }
 
 .v4-work-subheading {
@@ -33,26 +41,18 @@
   color: var(--v4-text-subtle);
 }
 
+/* One editorial unit per project: identical two-column grid for every
+   entry, both columns starting on the same top edge. */
 .v4-work-entry {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 3rem;
-  align-items: start;
-  padding: 3rem 0;
-}
-
-/* Folder Structure Visualizer's real screenshot gets more room than
-   the two typographic diagrams. */
-.v4-work-entry--media {
-  grid-template-columns: 1fr 1.25fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: stretch;
+  padding: clamp(1.5rem, 2.6vw, 2.25rem) 0;
 }
 
 .v4-work-entry + .v4-work-entry {
   border-top: 1px solid var(--v4-border);
-}
-
-.v4-work-entry:first-child {
-  padding-top: 0;
 }
 
 .v4-work-entry-text {
@@ -61,22 +61,37 @@
   align-items: flex-start;
 }
 
-/* ── Eyebrow: number / category / status, one line ──────────── */
+/* ── Head: large cobalt numeral | category+status over title ─────
+   The numeral is the site's recurring cobalt motif — same treatment
+   on every entry (including the screenshot one). */
+.v4-work-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  column-gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.v4-work-index {
+  font-size: clamp(2.6rem, 4.4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+  color: var(--v4-accent);
+  opacity: 0.85;
+}
+
 .v4-work-eyebrow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.4rem;
   font-family: var(--v4-font-mono);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   letter-spacing: var(--v4-tracking-label);
   text-transform: uppercase;
-}
-
-.v4-work-index {
-  color: var(--v4-accent);
-  font-weight: 600;
 }
 
 .v4-work-eyebrow-sep {
@@ -93,64 +108,41 @@
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--v4-text);
-  margin-bottom: 1.25rem;
+  line-height: 1.15;
 }
 
 /* Pull-quote treatment — this is each entry's one strong hook line,
    so it gets more visual weight than the rest of the narrative. */
 .v4-work-problem {
-  font-size: 1.15rem;
+  font-size: clamp(1.15rem, 1.6vw, 1.3rem);
   line-height: 1.6;
   font-weight: 500;
   color: var(--v4-text);
-  max-width: 42ch;
-  margin-bottom: 1.5rem;
+  max-width: 40ch;
+  margin-bottom: 1.1rem;
   padding-left: 1rem;
   border-left: 2px solid var(--v4-accent);
 }
 
-.v4-work-block {
-  margin-bottom: 1rem;
-}
-
-.v4-work-block-label {
-  font-family: var(--v4-font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: var(--v4-tracking-label);
-  text-transform: uppercase;
-  color: var(--v4-text-subtle);
-  margin-bottom: 0.35rem;
-}
-
-.v4-work-block-text {
-  font-size: 0.9375rem;
+.v4-work-summary {
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--v4-text-muted);
-  max-width: 46ch;
-}
-
-/* Technical detail — a quieter follow-up line under Built, not a
-   second fully-labelled block (reduces vertical fragmentation). */
-.v4-work-note {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--v4-text-subtle);
-  max-width: 46ch;
-  margin-top: 0.5rem;
+  max-width: 48ch;
+  margin-bottom: 0.9rem;
 }
 
 .v4-work-tech {
   font-family: var(--v4-font-mono);
   font-size: 0.8125rem;
   color: var(--v4-text-subtle);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .v4-work-built-because {
   font-size: 0.85rem;
   color: var(--v4-text-subtle);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .v4-work-built-because-label {
@@ -161,6 +153,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
+  margin-top: 0.35rem;
 }
 
 .v4-work-link {
@@ -170,7 +163,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--v4-text-muted);
-  transition: color var(--v4-duration-fast) ease;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
 }
 .v4-work-link:hover {
   color: var(--v4-accent);
@@ -185,7 +178,7 @@
 }
 
 .v4-work-link-arrow {
-  transition: transform var(--v4-duration-fast) ease;
+  transition: transform var(--v4-duration-fast) var(--v4-ease);
 }
 
 /* ── Right column: shared frame for all three visual treatments ── */
@@ -194,21 +187,12 @@
   border: 1px solid var(--v4-border);
   border-radius: var(--v4-radius-md);
   overflow: hidden;
-  margin-top: -0.35rem; /* slight editorial offset against the text column */
-}
-
-.v4-work-visual-ghost-num {
-  position: absolute;
-  top: -0.6rem;
-  right: 0.75rem;
-  font-size: 5.5rem;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--v4-text);
-  opacity: 0.045;
-  z-index: 0;
-  pointer-events: none;
-  user-select: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Soft cobalt glow tied to the frame itself, so the light comes from
+     the content rather than from empty space around it. */
+  box-shadow: 0 30px 70px -44px rgba(62, 123, 250, 0.32);
 }
 
 .v4-work-visual-tag {
@@ -220,13 +204,13 @@
   letter-spacing: var(--v4-tracking-label);
   text-transform: uppercase;
   color: var(--v4-text-subtle);
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.9rem;
 }
 
 .v4-work-diagram {
   position: relative;
   z-index: 1;
-  padding: 1.75rem;
+  padding: 1.5rem;
 }
 
 /* Socratic loop */
@@ -281,7 +265,7 @@
 
 /* FlowTrace pipeline */
 .v4-work-code-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .v4-work-code-label {
@@ -301,7 +285,7 @@
   background: var(--v4-surface);
   border: 1px solid var(--v4-border);
   border-radius: var(--v4-radius-sm);
-  padding: 0.65rem 0.85rem;
+  padding: 0.5rem 0.85rem;
   overflow-x: auto;
   white-space: pre;
 }
@@ -310,7 +294,13 @@
   font-family: var(--v4-font-mono);
   font-size: 0.7rem;
   color: var(--v4-accent-muted);
-  margin: 0.6rem 0 0.9rem 0.85rem;
+  margin: 0.3rem 0 0.45rem 0.85rem;
+}
+
+/* The screenshot keeps its natural height, aligned to the top edge. */
+.v4-work-visual-frame--media {
+  align-self: start;
+  justify-content: flex-start;
 }
 
 /* Real screenshot (Folder Structure Visualizer) */

@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { BUILD_LOG } from "../data/buildLog";
-import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
+import {
+  sectionReveal,
+  fadeOnly,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 const RECENT_ENTRIES = BUILD_LOG.slice(0, 2);
 
@@ -16,7 +21,7 @@ function LogBridge() {
         variants={prefersReducedMotion ? fadeOnly : sectionReveal}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true }}
+        viewport={revealViewport}
       >
         <header className="v4-log-bridge-header">
           <p className="v4-log-bridge-label">Latest from the log</p>

@@ -12,6 +12,9 @@
    ============================================================ */
 
 /* ── Selected Work ───────────────────────────────────────── */
+/* Hover moves the frame (transform) and lifts its border; the cobalt
+   glow is a static shadow. Animating a large blurred box-shadow forces
+   a repaint every frame, so it is deliberately not transitioned. */
 .v4-work-visual-frame {
   transition:
     border-color var(--v4-duration-base) var(--v4-ease),
@@ -112,6 +115,10 @@
 @media (prefers-reduced-motion: reduce) {
   .v4-work-entry:hover .v4-work-visual-frame,
   .v4-lab-link:hover svg,
+  .v4-lab-bridge-cta:hover svg,
+  .v4-log-bridge-cta:hover svg,
+  .v4-lab-bridge-cta:focus-visible svg,
+  .v4-log-bridge-cta:focus-visible svg,
   .v4-resume-option:active,
   .v4-resume-option:hover .v4-resume-option-title svg,
   .v4-resume-option:focus-visible .v4-resume-option-title svg {

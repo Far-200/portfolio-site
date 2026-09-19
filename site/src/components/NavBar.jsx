@@ -3,6 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useResumeChooser } from "./ResumeChooser";
+import { DURATION, EASE } from "../lib/motion";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -61,7 +62,7 @@ function NavBar() {
       className={`v4-nav${scrolled ? " v4-nav--scrolled" : ""}`}
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: DURATION.slow, ease: EASE }}
       ref={navRef}
     >
       <div className="v4-nav-inner">
@@ -133,7 +134,7 @@ function NavBar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: DURATION.base, ease: EASE }}
           >
             <div className="v4-nav-mobile-links">
               {NAV_LINKS.map(({ to, label, end }) => (

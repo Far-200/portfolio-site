@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ACTIVE_BUILDS, LEARNING_FOCUS, LAB_UTILITIES } from "../data/labData";
 import {
-  ACTIVE_BUILDS,
-  LEARNING_FOCUS,
-  LAB_UTILITIES,
-} from "../data/labData";
-import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
+  sectionReveal,
+  fadeOnly,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 function Reveal({ children, ...rest }) {
   const prefersReducedMotion = useReducedMotion();
@@ -15,7 +16,7 @@ function Reveal({ children, ...rest }) {
       variants={prefersReducedMotion ? fadeOnly : sectionReveal}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={revealViewport}
       {...rest}
     >
       {children}

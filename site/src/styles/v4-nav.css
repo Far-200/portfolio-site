@@ -40,7 +40,7 @@
   letter-spacing: -0.01em;
   color: var(--v4-text);
   flex-shrink: 0;
-  transition: color var(--v4-duration-fast) ease;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
 }
 .v4-nav-logo:hover {
   color: var(--v4-accent);
@@ -70,8 +70,8 @@
   display: inline-flex;
   align-items: center;
   transition:
-    color var(--v4-duration-fast) ease,
-    background var(--v4-duration-fast) ease;
+    color var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease);
 }
 .v4-nav-link:hover {
   color: var(--v4-text);
@@ -129,8 +129,8 @@
   gap: 0.3rem;
   white-space: nowrap;
   transition:
-    border-color var(--v4-duration-fast) ease,
-    color var(--v4-duration-fast) ease;
+    border-color var(--v4-duration-fast) var(--v4-ease),
+    color var(--v4-duration-fast) var(--v4-ease);
 }
 /* Resume is a <button> that opens the chooser dialog. */
 button.v4-nav-resume,
@@ -164,7 +164,7 @@ button.v4-nav-mobile-link {
   border: 1px solid var(--v4-border);
   background: var(--v4-surface);
   color: var(--v4-text);
-  transition: border-color var(--v4-duration-fast) ease;
+  transition: border-color var(--v4-duration-fast) var(--v4-ease);
 }
 .v4-nav-toggle:hover {
   border-color: var(--v4-border-strong);
@@ -197,8 +197,8 @@ button.v4-nav-mobile-link {
   letter-spacing: var(--v4-tracking-label);
   text-transform: uppercase;
   transition:
-    color var(--v4-duration-fast) ease,
-    background var(--v4-duration-fast) ease;
+    color var(--v4-duration-fast) var(--v4-ease),
+    background var(--v4-duration-fast) var(--v4-ease);
 }
 .v4-nav-mobile-link:hover {
   color: var(--v4-text);

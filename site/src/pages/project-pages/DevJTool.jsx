@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { DURATION, EASE, revealViewport } from "../../lib/motion";
 import { FaGithub, FaReact, FaCode, FaExchangeAlt } from "react-icons/fa";
 import { SiVite, SiJavascript, SiJson } from "react-icons/si";
 import { Link } from "react-router-dom";
@@ -34,9 +35,9 @@ function DevJTool() {
     <section className="section project-detail-page v4-project">
       <motion.div
         className="project-detail-hero"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
       >
         <p className="section-tag">Project Spotlight</p>
         <h1>DevTool — JSON Formatter & API Tester</h1>
@@ -75,10 +76,10 @@ function DevJTool() {
       <div className="project-detail-grid">
         <motion.div
           className="project-detail-main glass-card"
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-          viewport={{ once: true }}
+          transition={{ duration: DURATION.slow, ease: EASE }}
+          viewport={revealViewport}
         >
           <h2>Overview</h2>
           <p>
@@ -96,10 +97,10 @@ function DevJTool() {
 
         <motion.div
           className="project-detail-side glass-card"
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.08 }}
-          viewport={{ once: true }}
+          transition={{ duration: DURATION.slow, ease: EASE, delay: 0.08 }}
+          viewport={revealViewport}
         >
           <h2>Tech Stack</h2>
 
@@ -116,10 +117,10 @@ function DevJTool() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Key Features</h2>
         <div className="project-feature-grid">
@@ -133,10 +134,10 @@ function DevJTool() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Project Focus</h2>
         <div className="project-feature-grid">
@@ -153,10 +154,10 @@ function DevJTool() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>What I Learned</h2>
         <ul className="project-learnings">
@@ -168,10 +169,10 @@ function DevJTool() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Next Improvements</h2>
         <p>

@@ -1,7 +1,12 @@
 import { motion as Motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useResumeChooser } from "./ResumeChooser";
-import { fadeOnly, sectionReveal, useReducedMotion } from "../lib/motion";
+import {
+  fadeOnly,
+  sectionReveal,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 const BUILD_AREAS = [
   {
@@ -60,7 +65,7 @@ function Reveal({ className, children }) {
       variants={prefersReducedMotion ? fadeOnly : sectionReveal}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={revealViewport}
     >
       {children}
     </Motion.div>

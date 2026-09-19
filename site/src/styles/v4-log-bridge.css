@@ -8,6 +8,18 @@
   display: none;
 }
 
+/* The band's own rules and padding provide the spacing; the shared
+   section padding would double it. */
+.v4-log-bridge,
+.v4-lab-bridge {
+  padding-block: 0;
+}
+
+/* Log bridge + Lab bridge read as one continuous ruled block. */
+.v4-log-bridge-inner {
+  border-bottom: 0;
+}
+
 .v4-log-bridge + .v4-lab-bridge::before {
   background: linear-gradient(
     90deg,
@@ -21,7 +33,7 @@
   display: grid;
   grid-template-columns: minmax(10rem, 0.65fr) minmax(0, 1.6fr);
   column-gap: clamp(2rem, 6vw, 5rem);
-  padding: clamp(2rem, 4vw, 3rem) 0;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
   border-top: 1px solid var(--v4-border);
   border-bottom: 1px solid var(--v4-border);
 }
@@ -117,11 +129,16 @@
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--v4-accent);
-  transition: gap var(--v4-duration-fast) ease;
 }
 
-.v4-log-bridge-cta:hover {
-  gap: 0.6rem;
+/* The arrow moves; the layout never does (was animating `gap`). */
+.v4-log-bridge-cta svg {
+  transition: transform var(--v4-duration-fast) var(--v4-ease);
+}
+
+.v4-log-bridge-cta:hover svg,
+.v4-log-bridge-cta:focus-visible svg {
+  transform: translateX(3px);
 }
 
 .v4-log-bridge-cta:focus-visible {

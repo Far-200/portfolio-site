@@ -10,9 +10,9 @@
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
   align-items: center;
-  gap: 3.5rem;
-  padding-top: clamp(2rem, 5vw, 3.5rem);
-  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding-top: clamp(1.5rem, 3.5vw, 2.5rem);
+  padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
   /* Deliberate close to the hero shell rather than an abrupt stop
      right before the legacy About section. */
   border-bottom: 1px solid var(--v4-border);
@@ -146,7 +146,10 @@
 
 .v4-hero-portrait-img {
   width: 100%;
-  max-width: 280px;
+  height: auto; /* the width/height attributes only reserve space; aspect-ratio sizes it */
+  max-width: 320px;
+  /* Cobalt halo hugging the portrait — light anchored to the content. */
+  box-shadow: 0 0 120px -30px rgba(62, 123, 250, 0.4);
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center 20%;

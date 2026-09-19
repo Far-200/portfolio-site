@@ -37,7 +37,7 @@
   --v4-content-max: 1200px; /* outer content width */
   --v4-text-max: 60ch; /* readable line length for prose */
   --v4-gutter: clamp(1.25rem, 4vw, 3rem); /* page-edge padding */
-  --v4-section-gap: clamp(3.5rem, 7vw, 6rem); /* vertical rhythm between sections */
+  --v4-section-gap: clamp(2rem, 4vw, 3.5rem); /* larger break, e.g. before a footer-like band */
 
   /* --- Radii --- */
   --v4-radius-sm: 8px;

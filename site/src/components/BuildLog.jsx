@@ -5,6 +5,8 @@ import BuildLogEntry from "./BuildLogEntry";
 import {
   EASE,
   sectionReveal,
+  DURATION,
+  revealViewport,
   staggerContainer,
   useReducedMotion,
 } from "../lib/motion";
@@ -18,16 +20,16 @@ const timelineDraw = {
   hidden: { scaleY: 0 },
   show: {
     scaleY: 1,
-    transition: { duration: 0.5, ease: EASE },
+    transition: { duration: DURATION.slow, ease: EASE },
   },
 };
 
 const entryReveal = {
-  hidden: { opacity: 0, y: 8 },
+  hidden: { opacity: 0, y: 6 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: EASE },
+    transition: { duration: DURATION.base, ease: EASE },
   },
 };
 
@@ -57,7 +59,7 @@ function BuildLog() {
         variants={prefersReducedMotion ? undefined : sectionReveal}
         initial={prefersReducedMotion ? false : "hidden"}
         whileInView={prefersReducedMotion ? undefined : "show"}
-        viewport={{ once: true }}
+        viewport={revealViewport}
       >
         <h2 className="v4-log-heading">Build Log</h2>
         <p className="v4-log-subheading">
@@ -78,7 +80,7 @@ function BuildLog() {
             variants={prefersReducedMotion ? undefined : timelineAssembly}
             initial={prefersReducedMotion ? false : "hidden"}
             whileInView={prefersReducedMotion ? undefined : "show"}
-            viewport={{ once: true, amount: 0.15 }}
+            viewport={revealViewport}
           >
             <Motion.span
               className="v4-log-timeline-line"

@@ -1,0 +1,33 @@
+/* ============================================================
+   V4 SHARED VERTICAL RHYTHM
+   ============================================================
+   One spacing system for every V4 route. Previously each page
+   stacked its own padding on top of the legacy `.section` padding
+   (60px top + 60px bottom, raised to 4rem/3rem on tablets), so two
+   neighbouring sections were separated by 120px+ of empty space and
+   Home, Lab and About each ran a different rhythm.
+
+     --v4-section-y     padding above AND below every section, so the
+                        gap between two sections is 2x this value
+     --v4-heading-gap   space between a section heading and its content
+
+   Loaded right after the tokens and before the per-page V4 sheets, so
+   those can still make local overrides. It also beats the legacy
+   breakpoint overrides for `.section` in index.css, which loaded first.
+   ============================================================ */
+
+:root {
+  --v4-section-y: clamp(1.5rem, 2.8vw, 2.5rem); /* 40px at 1440 */
+  --v4-heading-gap: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.section {
+  padding-block: var(--v4-section-y);
+}
+
+/* Legacy centred hairline (index.css) drawn above every adjacent
+   `.section`. V4 sections already carry their own full-width rules, so
+   it only produced a faint double line. */
+.section + .section::before {
+  display: none;
+}

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
-import { EASE, useReducedMotion } from "./lib/motion";
+import { DURATION, EASE, useReducedMotion } from "./lib/motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -26,12 +26,12 @@ import PromptRouterPage from "./pages/project-pages/PromptRouterPage";
 const pageEnter = {
   initial: { opacity: 0, y: 6 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.28, ease: EASE },
+  transition: { duration: DURATION.base, ease: EASE },
 };
 const pageEnterReduced = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.15 },
+  transition: { duration: DURATION.fast },
 };
 
 const DEFAULT_TITLE = "Farhaan Khan | Developer Portfolio";

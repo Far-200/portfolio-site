@@ -8,15 +8,14 @@
    any more.
 
    Three stacked layers, all fixed and pointer-events: none:
-     .v4-ambient-grid       quiet, static dotted texture — always on
-     .v4-ambient-spotlight  the same grid, brighter + cobalt-tinted,
-                             revealed only near the pointer via a mask
-     .v4-ambient-glow       an extremely soft cobalt wash at the
-                             pointer position
+     .v4-ambient-grid  quiet, static dotted texture — always on
+     .v4-ambient-spot  the same grid, brighter + cobalt-tinted,
+                       revealed only near the pointer
+     .v4-ambient-glow  an extremely soft cobalt wash at the pointer
 
-   Pointer position lives in --v4-pointer-x/-y, set by the component
-   via a ref (not inherited from :root) so it's a no-op everywhere
-   else on the page.
+   The two pointer layers are positioned with `transform` by the
+   component (no CSS variables, no React state), so following the
+   pointer never repaints.
 
    .v4-ambient's own background is a solid --v4-bg fill. It sits
    behind the grid/spotlight/glow layers below but in front of the
@@ -31,9 +30,8 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
   background: var(--v4-bg);
-  --v4-pointer-x: -9999px;
-  --v4-pointer-y: -9999px;
 }
 
 .v4-ambient-grid {
@@ -58,45 +56,56 @@
   opacity: 0.4;
 }
 
-/* Same grid, brighter + faintly cobalt, only visible within a soft
-   radius around the pointer. */
-.v4-ambient-spotlight {
+/* Same grid, brighter + faintly cobalt, only visible near the pointer.
+   The spot is a fixed 480px box moved with `transform` (see
+   AmbientBackground.jsx); its radial mask travels with it, and the inner
+   dots layer is counter-shifted in JS so its dots stay on the same
+   30px grid as the static layer above — no per-frame repaint. */
+.v4-ambient-spot {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 480px;
+  opacity: 0.9;
+  transform: translate3d(-9999px, -9999px, 0);
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(closest-side, black 0%, transparent 100%);
+  mask-image: radial-gradient(closest-side, black 0%, transparent 100%);
+}
+
+.v4-ambient-spot-dots {
+  position: absolute;
+  inset: -60px;
   background-image: radial-gradient(
     circle,
     var(--v4-accent-muted) 1px,
     transparent 1px
   );
   background-size: 30px 30px;
-  opacity: 0.9;
-  -webkit-mask-image: radial-gradient(
-    circle 220px at var(--v4-pointer-x) var(--v4-pointer-y),
-    black 0%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    circle 220px at var(--v4-pointer-x) var(--v4-pointer-y),
-    black 0%,
-    transparent 100%
-  );
+  will-change: transform;
 }
 
 /* Extremely restrained cobalt wash — not a glowing orb, just a hint
-   that the interface notices the pointer. */
+   that the interface notices the pointer. The gradient is already
+   soft, so no blur filter (which forced a full-viewport repaint). */
 .v4-ambient-glow {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 840px;
+  height: 840px;
   background: radial-gradient(
-    circle 420px at var(--v4-pointer-x) var(--v4-pointer-y),
+    closest-side,
     var(--v4-accent-soft) 0%,
-    transparent 70%
+    transparent 100%
   );
-  filter: blur(60px);
+  transform: translate3d(-9999px, -9999px, 0);
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .v4-ambient-spotlight,
+  .v4-ambient-spot,
   .v4-ambient-glow {
     display: none;
   }

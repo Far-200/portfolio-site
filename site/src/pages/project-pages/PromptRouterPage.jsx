@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { DURATION, EASE, revealViewport } from "../../lib/motion";
 import { FaGithub, FaRobot, FaLock, FaBolt, FaChrome } from "react-icons/fa";
 import { SiJavascript, SiGooglechrome } from "react-icons/si";
 import { Link } from "react-router-dom";
@@ -31,9 +32,9 @@ function PromptRouterPage() {
     <section className="section project-detail-page v4-project">
       <motion.div
         className="project-detail-hero"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
       >
         <p className="section-tag">Project Spotlight</p>
         <h1>PromptRouter</h1>
@@ -63,10 +64,10 @@ function PromptRouterPage() {
       <div className="project-detail-grid">
         <motion.div
           className="project-detail-main glass-card"
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-          viewport={{ once: true }}
+          transition={{ duration: DURATION.slow, ease: EASE }}
+          viewport={revealViewport}
         >
           <h2>Overview</h2>
           <p>
@@ -85,10 +86,10 @@ function PromptRouterPage() {
 
         <motion.div
           className="project-detail-side glass-card"
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.08 }}
-          viewport={{ once: true }}
+          transition={{ duration: DURATION.slow, ease: EASE, delay: 0.08 }}
+          viewport={revealViewport}
         >
           <h2>Tech Stack</h2>
 
@@ -105,10 +106,10 @@ function PromptRouterPage() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Key Features</h2>
         <div className="project-feature-grid">
@@ -122,10 +123,10 @@ function PromptRouterPage() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Project Focus</h2>
         <div className="project-feature-grid">
@@ -142,10 +143,10 @@ function PromptRouterPage() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>What I Learned</h2>
         <ul className="project-learnings">
@@ -157,10 +158,10 @@ function PromptRouterPage() {
 
       <motion.div
         className="project-section-block glass-card"
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-        viewport={{ once: true }}
+        transition={{ duration: DURATION.slow, ease: EASE }}
+        viewport={revealViewport}
       >
         <h2>Next Improvements</h2>
         <p>

@@ -47,7 +47,7 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(1.5rem, 4vw, 3.5rem);
   max-width: 58rem;
-  margin: clamp(2.25rem, 5vw, 4rem) 0 0 auto;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0 auto;
 }
 
 .v4-about-intro-copy p {
@@ -74,8 +74,8 @@
 
 .v4-about-practice-column {
   min-width: 0;
-  padding: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem)
-    0;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(2rem, 5vw, 4rem)
+    clamp(1.25rem, 2.5vw, 1.75rem) 0;
 }
 
 .v4-about-process-column {
@@ -193,7 +193,7 @@
 }
 
 .v4-about-split-inner {
-  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
   border-top: 1px solid var(--v4-border);
 }
 
@@ -210,7 +210,7 @@
 }
 
 .v4-about-contact-inner {
-  padding-bottom: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
   border-bottom: 1px solid var(--v4-border);
 }
 
@@ -237,7 +237,7 @@
   padding: 0.9rem 0;
   border-bottom: 1px solid var(--v4-border);
   color: var(--v4-text-muted);
-  transition: color var(--v4-duration-fast) ease;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
 }
 
 .v4-about-contact-links :is(a, button) > span:first-child {

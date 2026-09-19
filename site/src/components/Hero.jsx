@@ -67,6 +67,10 @@ function Hero() {
           src={profileImage}
           alt="Farhaan Khan portrait"
           className="v4-hero-portrait-img"
+          width={800}
+          height={800}
+          decoding="async"
+          fetchPriority="high"
         />
       </Motion.div>
     </section>

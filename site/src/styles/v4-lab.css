@@ -7,7 +7,7 @@
    ============================================================ */
 
 .v4-lab-header {
-  padding-bottom: 1rem;
+  padding-bottom: 0;
 }
 
 .v4-lab-title {
@@ -37,21 +37,12 @@
   text-decoration-color: var(--v4-accent);
 }
 
-.v4-lab-section {
-  padding-top: var(--v4-section-gap);
-  padding-bottom: 0;
-}
-
-.v4-lab-page > .v4-lab-section:last-child {
-  padding-bottom: var(--v4-section-gap);
-}
-
 .v4-lab-heading {
   font-size: clamp(1.4rem, 2.4vw, 1.85rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--v4-text);
-  padding-bottom: 1.25rem;
+  padding-bottom: var(--v4-heading-gap);
   border-bottom: 1px solid var(--v4-border);
 }
 
@@ -76,7 +67,7 @@
   display: grid;
   grid-template-columns: minmax(150px, 0.4fr) 1fr;
   gap: 2rem;
-  padding: 1.75rem 0;
+  padding: 1.25rem 0;
   border-bottom: 1px solid var(--v4-border);
 }
 
@@ -133,7 +124,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.5rem;
-  padding-top: 1.75rem;
+  padding-top: 1.25rem;
 }
 
 .v4-lab-list li {
@@ -154,7 +145,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 2rem;
-  padding: 1.25rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid var(--v4-border);
 }
 

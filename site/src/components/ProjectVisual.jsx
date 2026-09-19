@@ -80,6 +80,9 @@ function ScreenshotVisual({ project, prefersReducedMotion }) {
           src={project.media.src}
           alt={project.media.alt}
           loading="lazy"
+          decoding="async"
+          width={1600}
+          height={1000}
           whileHover={prefersReducedMotion ? undefined : mediaHover}
         />
       </ImageWrap>
@@ -88,7 +91,7 @@ function ScreenshotVisual({ project, prefersReducedMotion }) {
   );
 }
 
-function ProjectVisual({ project, index, prefersReducedMotion }) {
+function ProjectVisual({ project, prefersReducedMotion }) {
   if (project.media) {
     return (
       <div className="v4-work-visual-frame v4-work-visual-frame--media">
@@ -100,13 +103,8 @@ function ProjectVisual({ project, index, prefersReducedMotion }) {
     );
   }
 
-  const number = String(index + 1).padStart(2, "0");
-
   return (
     <div className="v4-work-visual-frame">
-      <span className="v4-work-visual-ghost-num" aria-hidden="true">
-        {number}
-      </span>
       {project.id === "think-before-code" && <SocraticLoopVisual />}
       {project.id === "flowtrace" && <FlowTraceVisual />}
     </div>

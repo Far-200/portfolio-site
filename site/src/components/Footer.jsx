@@ -4,7 +4,12 @@ import { motion as Motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
 import githubProfile from "../assets/github_pfp.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
-import { fadeOnly, sectionReveal, useReducedMotion } from "../lib/motion";
+import {
+  sectionReveal,
+  fadeOnly,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 const XIcon = () => (
   <svg
@@ -41,7 +46,7 @@ function Footer() {
       variants={prefersReducedMotion ? fadeOnly : sectionReveal}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true }}
+      viewport={revealViewport}
     >
       <div className="footer-container">
         <div className="footer-brand">

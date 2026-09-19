@@ -2,7 +2,12 @@ import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ACTIVE_BUILDS, LAB_UTILITIES } from "../data/labData";
-import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
+import {
+  sectionReveal,
+  fadeOnly,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 // Work that isn't one of Selected Work's flagships, from labData.js.
 const PREVIEWS = [
@@ -28,7 +33,7 @@ function LabBridge() {
         variants={prefersReducedMotion ? fadeOnly : sectionReveal}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true }}
+        viewport={revealViewport}
       >
         <header className="v4-lab-bridge-header">
           <p className="v4-lab-bridge-tag">Beyond Selected Work</p>

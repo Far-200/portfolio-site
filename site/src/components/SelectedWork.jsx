@@ -3,7 +3,12 @@ import { motion } from "framer-motion";
 import { Github, ArrowUpRight } from "lucide-react";
 import { FLAGSHIP_PROJECTS } from "../data/projects";
 import ProjectVisual from "./ProjectVisual";
-import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
+import {
+  sectionReveal,
+  fadeOnly,
+  revealViewport,
+  useReducedMotion,
+} from "../lib/motion";
 
 function WorkEntry({ project, index, prefersReducedMotion }) {
   const number = String(index + 1).padStart(2, "0");
@@ -15,28 +20,26 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
       variants={prefersReducedMotion ? fadeOnly : sectionReveal}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={revealViewport}
     >
       <div className="v4-work-entry-text">
-        <p className="v4-work-eyebrow">
-          <span className="v4-work-index">{number}</span>
-          <span className="v4-work-eyebrow-sep" aria-hidden="true">/</span>
-          <span className="v4-work-category">{project.category}</span>
-          <span className="v4-work-eyebrow-sep" aria-hidden="true">/</span>
-          <span className="v4-work-status">{project.status}</span>
-        </p>
-
-        <h3 className="v4-work-title">{project.title}</h3>
+        <div className="v4-work-head">
+          <span className="v4-work-index" aria-hidden="true">
+            {number}
+          </span>
+          <div className="v4-work-head-text">
+            <p className="v4-work-eyebrow">
+              <span className="v4-work-category">{project.category}</span>
+              <span className="v4-work-eyebrow-sep" aria-hidden="true">/</span>
+              <span className="v4-work-status">{project.status}</span>
+            </p>
+            <h3 className="v4-work-title">{project.title}</h3>
+          </div>
+        </div>
 
         <p className="v4-work-problem">{project.problem}</p>
 
-        <div className="v4-work-block">
-          <p className="v4-work-block-label">Built</p>
-          <p className="v4-work-block-text">{project.built}</p>
-          {project.technicalNote && (
-            <p className="v4-work-note">{project.technicalNote}</p>
-          )}
-        </div>
+        <p className="v4-work-summary">{project.summary}</p>
 
         <p className="v4-work-tech">{project.tech.join(" · ")}</p>
 
@@ -88,7 +91,6 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
 
       <ProjectVisual
         project={project}
-        index={index}
         prefersReducedMotion={prefersReducedMotion}
       />
     </motion.article>
@@ -105,7 +107,7 @@ function SelectedWork() {
         variants={prefersReducedMotion ? fadeOnly : sectionReveal}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true }}
+        viewport={revealViewport}
       >
         <h2 className="v4-work-heading">Selected Work</h2>
         <p className="v4-work-subheading">03 Projects / Built, Broken, Iterated</p>

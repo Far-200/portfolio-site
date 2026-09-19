@@ -19,8 +19,18 @@
   );
 }
 
+/* Same heading pattern as Selected Work: title left, note right,
+   over a hairline. */
 .v4-log-header {
-  margin-bottom: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: 0.35rem;
+  margin-bottom: var(--v4-heading-gap);
+  padding-bottom: var(--v4-heading-gap);
+  border-bottom: 1px solid var(--v4-border);
 }
 
 .v4-log-heading {
@@ -28,7 +38,6 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--v4-text);
-  margin-bottom: 0.6rem;
 }
 
 .v4-log-subheading {
@@ -43,7 +52,7 @@
 }
 
 .v4-log-year-group + .v4-log-year-group {
-  margin-top: 4rem;
+  margin-top: 2.5rem;
 }
 
 .v4-log-year {
@@ -81,13 +90,13 @@
   grid-template-columns: 7.75rem minmax(0, 1fr);
   gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: start;
-  padding: 1.65rem 0 1.8rem 1.75rem;
+  padding: 1.2rem 0 1.3rem 1.75rem;
 }
 
 .v4-log-entry::before {
   content: "";
   position: absolute;
-  top: 2.08rem;
+  top: 1.63rem;
   left: -4px;
   width: 7px;
   height: 7px;
@@ -159,7 +168,7 @@
   align-items: center;
   gap: 0.4rem;
   color: inherit;
-  transition: color var(--v4-duration-fast) ease;
+  transition: color var(--v4-duration-fast) var(--v4-ease);
 }
 
 .v4-log-entry-link:hover,
@@ -177,7 +186,7 @@
   flex: 0 0 auto;
   color: var(--v4-text-subtle);
   transition:
-    color var(--v4-duration-fast) ease,
+    color var(--v4-duration-fast) var(--v4-ease),
     transform var(--v4-duration-fast) var(--v4-ease);
 }
 
@@ -196,9 +205,6 @@
 }
 
 @media (max-width: 700px) {
-  .v4-log-header {
-    margin-bottom: 2.25rem;
-  }
 
   .v4-log-year {
     margin-left: 1.25rem;
@@ -208,11 +214,11 @@
   .v4-log-entry {
     grid-template-columns: 1fr;
     gap: 0.55rem;
-    padding: 1.3rem 0 1.65rem 1.25rem;
+    padding: 1rem 0 1.15rem 1.25rem;
   }
 
   .v4-log-entry::before {
-    top: 1.57rem;
+    top: 1.32rem;
   }
 
   .v4-log-entry-meta {
