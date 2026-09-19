@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import NavBar from "./components/NavBar";
@@ -5,6 +6,7 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { ResumeChooserProvider } from "./components/ResumeChooser";
 import AmbientBackground from "./components/AmbientBackground";
+import { getProjectBySlug } from "./data/projects";
 import HomePage from "./pages/HomePage";
 import WorkPage from "./pages/WorkPage";
 import LogPage from "./pages/LogPage";
@@ -31,8 +33,31 @@ const pageVariants = {
   },
 };
 
+const DEFAULT_TITLE = "Farhaan Khan | Developer Portfolio";
+const PAGE_TITLES = {
+  "/": DEFAULT_TITLE,
+  "/work": "Work | Farhaan Khan",
+  "/log": "Build Log | Farhaan Khan",
+  "/lab": "Lab | Farhaan Khan",
+  "/about": "About | Farhaan Khan",
+};
+
+function titleFor(pathname) {
+  if (PAGE_TITLES[pathname]) return PAGE_TITLES[pathname];
+  const project = getProjectBySlug(pathname.replace("/projects/", ""));
+  if (project?.internalRoute === pathname) {
+    return `${project.title} | Farhaan Khan`;
+  }
+  return "Page not found | Farhaan Khan";
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
+
+  useEffect(() => {
+    document.title = titleFor(location.pathname);
+  }, [location.pathname]);
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Motion.div
