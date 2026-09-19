@@ -14,25 +14,24 @@ import { getProjectBySlug } from "./projects";
 
 export const ACTIVE_BUILDS = [
   {
-    id: "aptivision",
-    name: "AptiVision",
-    stage: "Building",
-    summary:
-      "Visual aptitude trainer now being expanded toward a real full-stack architecture.",
-    focus:
-      "Designing data models, API boundaries, module endpoints, and the first FastAPI + SQLite foundation.",
-    tech: ["React", "FastAPI", "SQLite"],
-    github: "https://github.com/Far-200/aptivision",
-  },
-  {
-    id: "astra",
-    name: "Astra",
+    id: "flowtrace",
+    name: "FlowTrace",
     stage: "Experimental",
     summary:
-      "Expressive browser companion with mascot transformations and state-driven behaviour.",
+      "A C-like execution visualizer that shows how program state changes while code runs.",
     focus:
-      "Building the mascot state machine, transformation sequences, idle behaviour, and reduced-motion support.",
-    tech: ["JavaScript", "HTML", "CSS"],
+      "Building a custom AST/interpreter pipeline that executes C-like code and exposes its state for visualisation.",
+    tech: getProjectBySlug("flowtrace").tech,
+    github: getProjectBySlug("flowtrace").github,
+  },
+  {
+    id: "attendance-analytics",
+    name: "Attendance Analytics",
+    stage: "Learning",
+    summary:
+      "Attendance summary reporting with an API layer and early predictive modelling on top of it.",
+    focus: null,
+    tech: [],
     github: null,
   },
   {
@@ -72,8 +71,23 @@ export const LEARNING_FOCUS = [
   },
 ];
 
-// Smaller shipped work that isn't one of the Selected Work flagships.
+// Everything else: smaller shipped utilities and earlier-stage experiments
+// that aren't Selected Work flagships or in active development.
 export const LAB_UTILITIES = [
+  {
+    id: "aptivision",
+    title: "AptiVision",
+    summary:
+      "Visual aptitude trainer, with a FastAPI + SQLite backend in design.",
+    github: "https://github.com/Far-200/aptivision",
+  },
+  {
+    id: "astra",
+    title: "Astra",
+    stage: "Experimental",
+    summary:
+      "Expressive browser companion with mascot transformations and state-driven behaviour.",
+  },
   {
     id: "prompt-router",
     title: "PromptRouter",
@@ -99,7 +113,7 @@ export const LAB_UTILITIES = [
   const project = getProjectBySlug(u.id);
   return {
     ...u,
-    github: project?.github ?? null,
+    github: u.github ?? project?.github ?? null,
     internalRoute: project?.internalRoute ?? null,
   };
 });

@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { ACTIVE_BUILDS } from "../data/labData";
+import { ACTIVE_BUILDS, LAB_UTILITIES } from "../data/labData";
 import { sectionReveal, fadeOnly, useReducedMotion } from "../lib/motion";
 
-// Earlier-stage work than Selected Work's flagships, from labData.js.
-const PREVIEW_IDS = ["aptivision", "astra"];
-const PREVIEWS = PREVIEW_IDS.map((id) =>
-  ACTIVE_BUILDS.find((b) => b.id === id),
-);
+// Work that isn't one of Selected Work's flagships, from labData.js.
+const PREVIEWS = [
+  ACTIVE_BUILDS.find((b) => b.id === "attendance-analytics"),
+  LAB_UTILITIES.find((u) => u.id === "astra"),
+].map((item) => ({
+  id: item.id,
+  name: item.name ?? item.title,
+  stage: item.stage,
+  summary: item.summary,
+}));
 
 function LabBridge() {
   const prefersReducedMotion = useReducedMotion();

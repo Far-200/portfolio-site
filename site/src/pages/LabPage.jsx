@@ -49,10 +49,14 @@ function LabPage() {
               </div>
               <div className="v4-lab-build-body">
                 <p className="v4-lab-build-summary">{build.summary}</p>
-                <p className="v4-lab-build-focus">
-                  <span>Focus</span> {build.focus}
-                </p>
-                <p className="v4-lab-tech">{build.tech.join(" · ")}</p>
+                {build.focus && (
+                  <p className="v4-lab-build-focus">
+                    <span>Focus</span> {build.focus}
+                  </p>
+                )}
+                {build.tech.length > 0 && (
+                  <p className="v4-lab-tech">{build.tech.join(" · ")}</p>
+                )}
                 {build.github && (
                   <a
                     className="v4-lab-link"
@@ -95,7 +99,12 @@ function LabPage() {
           {LAB_UTILITIES.map((item) => (
             <li className="v4-lab-utility" key={item.id}>
               <div>
-                <h3 className="v4-lab-utility-title">{item.title}</h3>
+                <h3 className="v4-lab-utility-title">
+                  {item.title}
+                  {item.stage && (
+                    <span className="v4-lab-utility-stage">{item.stage}</span>
+                  )}
+                </h3>
                 <p className="v4-lab-utility-summary">{item.summary}</p>
               </div>
               <div className="v4-lab-utility-links">

@@ -210,3 +210,13 @@
     gap: 0.75rem;
   }
 }
+
+.v4-lab-utility-stage {
+  margin-left: 0.75rem;
+  font-family: var(--v4-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: var(--v4-tracking-label);
+  text-transform: uppercase;
+  color: var(--v4-accent);
+}
