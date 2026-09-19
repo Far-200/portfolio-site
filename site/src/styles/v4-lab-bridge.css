@@ -115,7 +115,7 @@
 }
 .v4-lab-bridge-cta:hover svg,
 .v4-lab-bridge-cta:focus-visible svg {
-  transform: translateX(3px);
+  transform: translateX(var(--v4-travel));
 }
 .v4-lab-bridge-cta:focus-visible {
   outline: none;

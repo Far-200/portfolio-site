@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { motion as Motion } from "framer-motion";
+import { motion as Motion, MotionConfig } from "framer-motion";
 import { DURATION, EASE, useReducedMotion } from "./lib/motion";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -110,17 +110,23 @@ function AnimatedRoutes() {
 
 // ── Root App ──
 function App() {
+  // reducedMotion="user": when the OS asks for reduced motion, every
+  // Framer animation of position, size, scale or layout (nav entrance,
+  // the active-link dot, the mobile menu height, project-page reveals)
+  // snaps to its end state. Opacity still fades, so nothing is hidden.
   return (
-    <ResumeChooserProvider>
-      <div className="app-shell">
-        <AmbientBackground />
+    <MotionConfig reducedMotion="user">
+      <ResumeChooserProvider>
+        <div className="app-shell">
+          <AmbientBackground />
 
-        <NavBar />
-        <ScrollToTop />
-        <AnimatedRoutes />
-        <Footer />
-      </div>
-    </ResumeChooserProvider>
+          <NavBar />
+          <ScrollToTop />
+          <AnimatedRoutes />
+          <Footer />
+        </div>
+      </ResumeChooserProvider>
+    </MotionConfig>
   );
 }
 

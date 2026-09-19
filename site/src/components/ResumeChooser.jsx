@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useRef, useMemo } from "react";
 import { X, ArrowUpRight } from "lucide-react";
+import { setEntryEdge } from "../lib/entryEdge";
+import { markHandled, RESUME_KEY } from "../lib/handled";
 
 // One shared "Which version would you like?" dialog. Every Resume entry
 // point (nav, mobile menu, About) calls useResumeChooser().open() instead
@@ -70,11 +72,18 @@ export function ResumeChooserProvider({ children }) {
             {OPTIONS.map((option) => (
               <li key={option.href}>
                 <a
-                  className="v4-resume-option"
+                  className="v4-resume-option v4-edge"
                   href={option.href}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={close}
+                  onPointerEnter={setEntryEdge}
+                  // markHandled is synchronous and never throws, so the PDF
+                  // opens exactly as before; onAuxClick covers middle-click.
+                  onClick={() => {
+                    markHandled(RESUME_KEY);
+                    close();
+                  }}
+                  onAuxClick={() => markHandled(RESUME_KEY)}
                 >
                   <span className="v4-resume-option-title">
                     {option.title}

@@ -44,6 +44,86 @@
   margin: 0 0 1.25rem;
 }
 
+/* ── Margin note beside "broke" ─────────────────────────────────
+   Absolutely positioned, so revealing it can't move anything (CLS 0).
+   Revealed by hover (fine pointers only, so phones don't get a sticky
+   hover), by keyboard focus, or by a click/tap that pins it open
+   (data-pinned). It is opacity plus at most --v4-travel of movement.
+   Beside the word from 901px up; tucked under it below that, in the gap
+   above the supporting paragraph, so it never covers text. */
+.v4-hero-note-wrap {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.v4-hero-broke {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: default;
+}
+.v4-hero-broke:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: var(--v4-focus-ring);
+}
+
+.v4-hero-note {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  font-family: var(--v4-font-mono);
+  font-size: var(--v4-mono-size);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--v4-text-muted);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 var(--v4-travel);
+  transition:
+    opacity var(--v4-duration-fast) var(--v4-ease),
+    translate var(--v4-duration-fast) var(--v4-ease),
+    visibility 0s linear var(--v4-duration-fast);
+}
+
+.v4-hero-note-wrap[data-pinned] .v4-hero-note,
+.v4-hero-broke:focus-visible + .v4-hero-note {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-hero-broke:hover + .v4-hero-note {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+}
+
+@media (min-width: 901px) {
+  .v4-hero-note {
+    top: 50%;
+    left: 100%;
+    margin-left: 0.75rem;
+    transform: translateY(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-hero-note {
+    translate: none;
+  }
+}
+
 .v4-hero-supporting {
   font-size: 1.05rem;
   line-height: 1.7;

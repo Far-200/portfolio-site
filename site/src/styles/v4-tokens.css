@@ -49,6 +49,8 @@
   --v4-duration-fast: 150ms;
   --v4-duration-base: 320ms;
   --v4-duration-slow: 560ms;
+  /* Longest a hover/focus nudge (arrows, notes, lifts) may travel. */
+  --v4-travel: 2px;
 
   /* --- Typography --- */
   --v4-tracking-label: 0.08em; /* uppercase eyebrow / metadata labels */

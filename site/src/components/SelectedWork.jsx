@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Github, ArrowUpRight } from "lucide-react";
 import { FLAGSHIP_PROJECTS } from "../data/projects";
 import ProjectVisual from "./ProjectVisual";
+import { setEntrySide } from "../lib/entryEdge";
+import { markHandled, useHandled, workKey } from "../lib/handled";
 import {
   sectionReveal,
   fadeOnly,
@@ -13,6 +15,13 @@ import {
 function WorkEntry({ project, index, prefersReducedMotion }) {
   const number = String(index + 1).padStart(2, "0");
   const entryClass = `v4-work-entry${project.media ? " v4-work-entry--media" : ""}`;
+
+  // Opening a project link leaves one quiet dot beside it for the rest of
+  // this tab's session (lib/handled.js). onAuxClick covers middle-click.
+  const caseStudyKey = workKey(project.id, "case-study");
+  const githubKey = workKey(project.id, "github");
+  const caseStudyHandled = useHandled(caseStudyKey);
+  const githubHandled = useHandled(githubKey);
 
   return (
     <motion.article
@@ -56,8 +65,12 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
           {project.internalRoute && (
             <Link
               to={project.internalRoute}
-              className="v4-work-link"
+              className="v4-work-link v4-handled"
+              data-handled={caseStudyHandled || undefined}
               aria-label={`View case study — ${project.title}`}
+              onPointerEnter={setEntrySide}
+              onClick={() => markHandled(caseStudyKey)}
+              onAuxClick={() => markHandled(caseStudyKey)}
             >
               View Case Study
               <ArrowUpRight
@@ -73,8 +86,12 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
               href={project.github}
               target="_blank"
               rel="noreferrer"
-              className="v4-work-link"
+              className="v4-work-link v4-handled"
+              data-handled={githubHandled || undefined}
               aria-label={`${project.title} on GitHub`}
+              onPointerEnter={setEntrySide}
+              onClick={() => markHandled(githubKey)}
+              onAuxClick={() => markHandled(githubKey)}
             >
               <Github size={14} strokeWidth={2} aria-hidden="true" />
               GitHub
@@ -89,10 +106,7 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
         </div>
       </div>
 
-      <ProjectVisual
-        project={project}
-        prefersReducedMotion={prefersReducedMotion}
-      />
+      <ProjectVisual project={project} />
     </motion.article>
   );
 }

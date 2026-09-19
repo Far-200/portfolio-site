@@ -3,8 +3,17 @@
    ============================================================
    One small, consistent vocabulary: 150ms colour/opacity shifts,
    320ms for movement, the shared --v4-ease curve, and never more
-   than 2px of travel. Scroll reveals live in the components
-   (Framer Motion, src/lib/motion.js).
+   than --v4-travel (2px) of travel. Scroll reveals live in the
+   components (Framer Motion, src/lib/motion.js).
+
+   Arrows move along the direction they point, by --v4-travel:
+   up-right arrows (the external / "open" ones) go up and right,
+   right arrows go right. Anything that moves on hover also moves
+   on :focus-visible.
+
+   Hover-only behaviour is wrapped in (hover: hover) and
+   (pointer: fine) so phones don't keep a stuck hover after a tap.
+   Focus rules are never inside that query.
 
    prefers-reduced-motion: index.css already disables every CSS
    transition and animation globally; the media query at the bottom
@@ -12,17 +21,41 @@
    ============================================================ */
 
 /* ── Selected Work ───────────────────────────────────────── */
-/* Hover moves the frame (transform) and lifts its border; the cobalt
-   glow is a static shadow. Animating a large blurred box-shadow forces
-   a repaint every frame, so it is deliberately not transitioned. */
+/* The cobalt glow is a static shadow. Animating a large blurred
+   box-shadow forces a repaint every frame, so it is deliberately not
+   transitioned. */
 .v4-work-visual-frame {
   transition:
     border-color var(--v4-duration-base) var(--v4-ease),
     transform var(--v4-duration-base) var(--v4-ease);
 }
-.v4-work-entry:hover .v4-work-visual-frame {
-  border-color: var(--v4-border-strong);
-  transform: translateY(-2px);
+.v4-work-screenshot-frame img {
+  transition: transform var(--v4-duration-slow) var(--v4-ease);
+}
+
+/* Only a frame that holds a real link is treated as a target. It lifts
+   and zooms when that link is hovered or focused, and its border answers
+   with the entry-side accent (.v4-edge). Hovering the text column never
+   moves it. */
+.v4-work-visual-frame:has(a.v4-work-screenshot-frame:focus-visible) {
+  border-color: var(--v4-accent-muted);
+  transform: translateY(calc(var(--v4-travel) * -1));
+}
+a.v4-work-screenshot-frame:focus-visible img {
+  transform: scale(1.02);
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-work-visual-frame:has(a.v4-work-screenshot-frame:hover) {
+    transform: translateY(calc(var(--v4-travel) * -1));
+  }
+  a.v4-work-screenshot-frame:hover img {
+    transform: scale(1.02);
+  }
+  /* The diagrams are not links: they only brighten their border a
+     little when the frame itself is under the pointer, no lift. */
+  .v4-work-visual-frame:not(:has(a.v4-work-screenshot-frame)):hover {
+    border-color: var(--v4-border-strong);
+  }
 }
 
 /* ── Build Log ───────────────────────────────────────────── */
@@ -38,13 +71,13 @@
 }
 
 /* ── Lab ─────────────────────────────────────────────────── */
+/* Titles here are plain text, not links, so they do not turn cobalt on
+   hover; only the real links below keep the interactive treatment. */
 .v4-lab-build,
 .v4-lab-utility,
 .v4-lab-list li {
   transition: border-color var(--v4-duration-base) var(--v4-ease);
 }
-.v4-lab-build-name,
-.v4-lab-utility-title,
 .v4-lab-list li {
   transition: color var(--v4-duration-fast) var(--v4-ease);
 }
@@ -52,18 +85,25 @@
 .v4-lab-utility:hover {
   border-bottom-color: var(--v4-border-strong);
 }
-.v4-lab-build:hover .v4-lab-build-name,
-.v4-lab-utility:hover .v4-lab-utility-title {
-  color: var(--v4-accent);
-}
 .v4-lab-list li:hover {
   color: var(--v4-text);
 }
 .v4-lab-link svg {
   transition: transform var(--v4-duration-fast) var(--v4-ease);
 }
-.v4-lab-link:hover svg {
-  transform: translateX(2px);
+.v4-lab-link:focus-visible svg {
+  transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+}
+.v4-lab-link:focus-visible .v4-lab-link-arrow-e {
+  transform: translateX(var(--v4-travel));
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-lab-link:hover svg {
+    transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+  }
+  .v4-lab-link:hover .v4-lab-link-arrow-e {
+    transform: translateX(var(--v4-travel));
+  }
 }
 
 /* ── About ───────────────────────────────────────────────── */
@@ -107,14 +147,26 @@
 .v4-resume-option-title svg {
   transition: transform var(--v4-duration-fast) var(--v4-ease);
 }
-.v4-resume-option:hover .v4-resume-option-title svg,
 .v4-resume-option:focus-visible .v4-resume-option-title svg {
-  transform: translate(1px, -1px);
+  transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-resume-option:hover .v4-resume-option-title svg {
+    transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .v4-work-entry:hover .v4-work-visual-frame,
+  .v4-work-visual-frame:has(a.v4-work-screenshot-frame:hover),
+  .v4-work-visual-frame:has(a.v4-work-screenshot-frame:focus-visible),
+  a.v4-work-screenshot-frame:hover img,
+  a.v4-work-screenshot-frame:focus-visible img,
+  .v4-work-link:hover .v4-work-link-arrow,
+  .v4-work-link:focus-visible .v4-work-link-arrow,
   .v4-lab-link:hover svg,
+  .v4-lab-link:focus-visible svg,
+  .v4-lab-link:hover .v4-lab-link-arrow-e,
+  .v4-lab-link:focus-visible .v4-lab-link-arrow-e,
   .v4-lab-bridge-cta:hover svg,
   .v4-log-bridge-cta:hover svg,
   .v4-lab-bridge-cta:focus-visible svg,

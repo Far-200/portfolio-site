@@ -90,7 +90,16 @@ html:has(.v4-resume-dialog[open]) {
     background var(--v4-duration-fast) var(--v4-ease);
 }
 
-.v4-resume-option:hover {
+/* Pointer: the border stays as it is and a cobalt segment grows on the
+   edge the pointer came in through (.v4-edge, v4-interaction.css), with
+   the existing arrow nudge. Keyboard focus has no direction to pretend
+   to, so it gets the whole border instead. Touch keeps :active only. */
+@media (hover: hover) and (pointer: fine) {
+  .v4-resume-option:hover {
+    background: var(--v4-surface-raised);
+  }
+}
+.v4-resume-option:focus-visible {
   border-color: var(--v4-accent-muted);
   background: var(--v4-surface-raised);
 }

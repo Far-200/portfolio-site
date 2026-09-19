@@ -18,6 +18,7 @@ import "./styles/v4-resume.css";
 import "./styles/v4-project.css";
 import "./styles/v4-motion.css";
 import "./styles/v4-about.css";
+import "./styles/v4-interaction.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

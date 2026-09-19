@@ -33,8 +33,14 @@
   transition: text-decoration-color var(--v4-duration-fast) var(--v4-ease);
 }
 
-.v4-lab-lede a:hover {
+.v4-lab-lede a:hover,
+.v4-lab-lede a:focus-visible {
   text-decoration-color: var(--v4-accent);
+}
+.v4-lab-lede a:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: var(--v4-focus-ring);
 }
 
 .v4-lab-heading {
@@ -179,7 +185,8 @@
   transition: color var(--v4-duration-fast) var(--v4-ease);
 }
 
-.v4-lab-link:hover {
+.v4-lab-link:hover,
+.v4-lab-link:focus-visible {
   color: var(--v4-accent);
 }
 

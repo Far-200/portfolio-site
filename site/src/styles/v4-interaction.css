@@ -1,0 +1,119 @@
+/* ============================================================
+   V4 INTERACTION LANGUAGE — SHARED PIECES
+   ============================================================
+   Three small ideas, each used in only a few places:
+
+   .v4-edge      Direction. The element grows a short accent segment on
+                 the edge the pointer came in through. lib/entryEdge.js
+                 writes data-from="left|right|top|bottom" once on
+                 pointerenter. No data-from (touch, keyboard) means no
+                 segment: keyboard focus gets its own neutral state.
+
+   .v4-handled   Memory. When data-handled is set (lib/handled.js,
+                 sessionStorage), one 4px static dot sits in the margin
+                 beside the label. It is absolutely positioned, so
+                 setting it never moves anything, and it never animates.
+                 The host sets --v4-handled-x to place it.
+
+   Forced colors: the focus rings across the site are box-shadows, which
+   Windows high-contrast mode drops, so a real outline is restored there.
+   ============================================================ */
+
+/* ── Direction ───────────────────────────────────────────────── */
+.v4-edge {
+  position: relative;
+}
+
+.v4-edge::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--v4-accent);
+  opacity: 0;
+  transition:
+    opacity var(--v4-duration-base) var(--v4-ease),
+    transform var(--v4-duration-base) var(--v4-ease);
+}
+
+/* A segment covering the middle half of the approached edge; it grows
+   along that edge rather than travelling anywhere. */
+.v4-edge[data-from="left"]::after,
+.v4-edge[data-from="right"]::after {
+  top: 25%;
+  bottom: 25%;
+  width: 2px;
+  transform: scaleY(0.4);
+}
+.v4-edge[data-from="top"]::after,
+.v4-edge[data-from="bottom"]::after {
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  transform: scaleX(0.4);
+}
+.v4-edge[data-from="left"]::after {
+  left: 0;
+}
+.v4-edge[data-from="right"]::after {
+  right: 0;
+}
+.v4-edge[data-from="top"]::after {
+  top: 0;
+}
+.v4-edge[data-from="bottom"]::after {
+  bottom: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .v4-edge:hover::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Memory ──────────────────────────────────────────────────── */
+.v4-handled {
+  position: relative;
+}
+
+.v4-handled[data-handled]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--v4-handled-x, -0.95rem);
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 50%;
+  background: var(--v4-accent-muted);
+  pointer-events: none;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+/* index.css already removes every transition. The segment still appears
+   (that is the state); it just doesn't grow into place. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-edge::after,
+  .v4-edge:hover::after {
+    transform: none;
+  }
+}
+
+/* ── Forced colors (Windows high contrast) ───────────────────── */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px;
+  }
+
+  .v4-edge::after {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .v4-handled[data-handled]::before {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+}

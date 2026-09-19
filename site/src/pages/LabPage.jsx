@@ -111,7 +111,12 @@ function LabPage() {
               <div className="v4-lab-utility-links">
                 {item.internalRoute && (
                   <Link to={item.internalRoute} className="v4-lab-link">
-                    View project <ArrowRight size={13} aria-hidden="true" />
+                    View project{" "}
+                    <ArrowRight
+                      size={13}
+                      className="v4-lab-link-arrow-e"
+                      aria-hidden="true"
+                    />
                   </Link>
                 )}
                 {item.github && (

@@ -4,6 +4,8 @@ import { motion as Motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useResumeChooser } from "./ResumeChooser";
 import { DURATION, EASE } from "../lib/motion";
+import { setEntrySide } from "../lib/entryEdge";
+import { useHandled, RESUME_KEY } from "../lib/handled";
 
 const NAV_LINKS = [
   { to: "/", label: "Home", end: true },
@@ -17,6 +19,7 @@ const MOBILE_MENU_ID = "mobile-nav-menu";
 
 function NavBar() {
   const { open: openResume } = useResumeChooser();
+  const resumeHandled = useHandled(RESUME_KEY);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef(null);
@@ -80,6 +83,7 @@ function NavBar() {
               className={({ isActive }) =>
                 `v4-nav-link${isActive ? " v4-nav-link--active" : ""}`
               }
+              onPointerEnter={setEntrySide}
             >
               {({ isActive }) => (
                 <>
@@ -99,7 +103,8 @@ function NavBar() {
 
           <button
             type="button"
-            className="v4-nav-resume"
+            className="v4-nav-resume v4-handled"
+            data-handled={resumeHandled || undefined}
             aria-haspopup="dialog"
             onClick={openResume}
           >
@@ -151,7 +156,8 @@ function NavBar() {
               ))}
               <button
                 type="button"
-                className="v4-nav-mobile-link v4-nav-mobile-link--resume"
+                className="v4-nav-mobile-link v4-nav-mobile-link--resume v4-handled"
+                data-handled={resumeHandled || undefined}
                 aria-haspopup="dialog"
                 onClick={() => {
                   setMenuOpen(false);

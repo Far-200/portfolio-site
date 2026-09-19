@@ -270,7 +270,7 @@
 
 .v4-about-contact-links :is(a, button):hover svg,
 .v4-about-contact-links :is(a, button):focus-visible svg {
-  transform: translate(1px, -1px);
+  transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
 }
 
 .v4-about-contact-links :is(a, button):focus-visible {

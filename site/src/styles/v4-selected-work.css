@@ -157,6 +157,7 @@
 }
 
 .v4-work-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -165,16 +166,52 @@
   color: var(--v4-text-muted);
   transition: color var(--v4-duration-fast) var(--v4-ease);
 }
-.v4-work-link:hover {
-  color: var(--v4-accent);
+
+/* Direction: a hairline under the link grows from the side the pointer
+   entered (data-from, set by setEntrySide). Keyboard focus shows it from
+   the centre; touch gets no line, only the colour. */
+.v4-work-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: var(--v4-accent-muted);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--v4-duration-base) var(--v4-ease);
 }
-.v4-work-link:hover .v4-work-link-arrow {
-  transform: translate(1px, -1px);
+.v4-work-link[data-from="left"]::after {
+  transform-origin: left;
 }
+.v4-work-link[data-from="right"]::after {
+  transform-origin: right;
+}
+
 .v4-work-link:focus-visible {
+  color: var(--v4-accent);
   outline: none;
   box-shadow: var(--v4-focus-ring);
   border-radius: var(--v4-radius-sm);
+}
+.v4-work-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: center;
+}
+.v4-work-link:focus-visible .v4-work-link-arrow {
+  transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-work-link:hover {
+    color: var(--v4-accent);
+  }
+  .v4-work-link:hover::after {
+    transform: scaleX(1);
+  }
+  .v4-work-link:hover .v4-work-link-arrow {
+    transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
+  }
 }
 
 .v4-work-link-arrow {
@@ -314,6 +351,13 @@
 .v4-work-screenshot-frame {
   display: block;
   aspect-ratio: 16 / 10;
+}
+
+/* Inset outline: the frame clips overflow, so a box-shadow ring drawn
+   outside the link would be cut off. */
+.v4-work-screenshot-frame:focus-visible {
+  outline: 2px solid var(--v4-accent);
+  outline-offset: -3px;
 }
 
 .v4-work-screenshot-frame img {

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { mediaHover } from "../lib/motion";
+import { setEntryEdge } from "../lib/entryEdge";
+import { markHandled, workKey } from "../lib/handled";
 
 // Right-hand visual for each flagship entry in Selected Work. Every
 // project here is HTML/CSS only — no fake screenshots, no SVG, no
@@ -64,26 +64,35 @@ function FlowTraceVisual() {
   );
 }
 
-function ScreenshotVisual({ project, prefersReducedMotion }) {
-  const ImageWrap = project.internalRoute ? Link : "div";
-  const wrapProps = project.internalRoute
+function ScreenshotVisual({ project }) {
+  const isLink = Boolean(project.internalRoute);
+  const ImageWrap = isLink ? Link : "div";
+  // Only a real link gets the directional edge and the "handled" record;
+  // the frame is otherwise a plain picture.
+  const markOpened = () => markHandled(workKey(project.id, "case-study"));
+  const wrapProps = isLink
     ? {
         to: project.internalRoute,
         "aria-label": `View case study — ${project.title}`,
+        onPointerEnter: setEntryEdge,
+        onClick: markOpened,
+        onAuxClick: markOpened,
       }
     : {};
 
   return (
     <div className="v4-work-screenshot">
-      <ImageWrap className="v4-work-screenshot-frame" {...wrapProps}>
-        <motion.img
+      <ImageWrap
+        className={`v4-work-screenshot-frame${isLink ? " v4-edge" : ""}`}
+        {...wrapProps}
+      >
+        <img
           src={project.media.src}
           alt={project.media.alt}
           loading="lazy"
           decoding="async"
           width={1600}
           height={1000}
-          whileHover={prefersReducedMotion ? undefined : mediaHover}
         />
       </ImageWrap>
       <p className="v4-work-visual-caption">ASCII tree → project scaffold</p>
@@ -91,14 +100,11 @@ function ScreenshotVisual({ project, prefersReducedMotion }) {
   );
 }
 
-function ProjectVisual({ project, prefersReducedMotion }) {
+function ProjectVisual({ project }) {
   if (project.media) {
     return (
       <div className="v4-work-visual-frame v4-work-visual-frame--media">
-        <ScreenshotVisual
-          project={project}
-          prefersReducedMotion={prefersReducedMotion}
-        />
+        <ScreenshotVisual project={project} />
       </div>
     );
   }

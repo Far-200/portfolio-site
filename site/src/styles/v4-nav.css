@@ -86,7 +86,10 @@
 }
 
 /* Active indicator: a short bar that slides between links (shared
-   layoutId in NavBar.jsx). Hovered links preview it as a fainter bar. */
+   layoutId in NavBar.jsx). Hovered links preview it as a fainter bar,
+   which grows from the side the pointer entered (data-from, written by
+   setEntrySide in lib/entryEdge.js). Keyboard focus shows the same bar
+   from the centre, and touch gets neither, so no direction is faked. */
 .v4-nav-active-dot {
   position: absolute;
   bottom: 0;
@@ -108,13 +111,29 @@
   border-radius: 2px;
   background: var(--v4-border-strong);
   transform: scaleX(0);
+  transform-origin: center;
   transition: transform var(--v4-duration-base) var(--v4-ease);
 }
-.v4-nav-link:hover:not(.v4-nav-link--active)::after {
+.v4-nav-link[data-from="left"]::after {
+  transform-origin: left;
+}
+.v4-nav-link[data-from="right"]::after {
+  transform-origin: right;
+}
+@media (hover: hover) and (pointer: fine) {
+  .v4-nav-link:hover:not(.v4-nav-link--active)::after {
+    transform: scaleX(1);
+  }
+}
+/* Declared last so keyboard focus is always centred, even if the pointer
+   left a data-from behind. */
+.v4-nav-link:focus-visible:not(.v4-nav-link--active)::after {
   transform: scaleX(1);
+  transform-origin: center;
 }
 
 .v4-nav-resume {
+  --v4-handled-x: 0.3rem; /* inside the left padding: no layout change */
   margin-left: 0.4rem;
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--v4-border);
@@ -213,6 +232,7 @@ button.v4-nav-mobile-link {
   box-shadow: inset 2px 0 0 var(--v4-accent);
 }
 .v4-nav-mobile-link--resume {
+  --v4-handled-x: 0.2rem; /* inside the left padding */
   color: var(--v4-accent);
 }
 

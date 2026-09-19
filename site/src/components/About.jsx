@@ -1,6 +1,7 @@
 import { motion as Motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useResumeChooser } from "./ResumeChooser";
+import { useHandled, RESUME_KEY } from "../lib/handled";
 import {
   fadeOnly,
   sectionReveal,
@@ -74,6 +75,7 @@ function Reveal({ className, children }) {
 
 function About() {
   const { open: openResume } = useResumeChooser();
+  const resumeHandled = useHandled(RESUME_KEY);
   return (
     <>
       <section
@@ -267,7 +269,12 @@ function About() {
                   <ArrowUpRight size={14} strokeWidth={2} aria-hidden="true" />
                 </span>
               </a>
-              <button type="button" onClick={openResume}>
+              <button
+                type="button"
+                className="v4-handled"
+                data-handled={resumeHandled || undefined}
+                onClick={openResume}
+              >
                 <span>Resume</span>
                 <span>
                   ATS or Visual PDF

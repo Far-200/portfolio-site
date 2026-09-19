@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion as Motion } from "framer-motion";
 import { CURRENTLY_BUILDING } from "../data/labData";
@@ -10,6 +11,54 @@ import {
 } from "../lib/motion";
 
 const GITHUB_URL = "https://github.com/Far-200";
+
+// The margin note that sits beside "broke". Change the copy here.
+const HERO_NOTE = "// again.";
+
+// "broke" is the one word in the headline that carries a private note.
+// Hover or keyboard focus reveals it (CSS, see v4-hero.css). A click or
+// tap pins it open, which is how touch gets it, and a pointer-down
+// anywhere else lets it go again.
+//
+// The sentence stays intact for assistive tech: the note is aria-hidden
+// (so it never becomes part of the heading's name) and is offered as the
+// button's description instead. It is non-essential; nothing here is
+// needed to understand the page.
+function BrokeNote() {
+  const [pinned, setPinned] = useState(false);
+  const wrapRef = useRef(null);
+
+  useEffect(() => {
+    if (!pinned) return undefined;
+    const onPointerDown = (e) => {
+      if (!wrapRef.current?.contains(e.target)) setPinned(false);
+    };
+    document.addEventListener("pointerdown", onPointerDown, { passive: true });
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [pinned]);
+
+  return (
+    <span
+      className="v4-hero-note-wrap"
+      ref={wrapRef}
+      data-pinned={pinned || undefined}
+    >
+      <button
+        type="button"
+        className="v4-hero-broke"
+        aria-expanded={pinned}
+        aria-describedby="hero-note"
+        onClick={() => setPinned((open) => !open)}
+      >
+        broke
+      </button>
+      .
+      <span className="v4-hero-note" id="hero-note" aria-hidden="true">
+        {HERO_NOTE}
+      </span>
+    </span>
+  );
+}
 
 function Hero() {
   const prefersReducedMotion = useReducedMotion();
@@ -29,7 +78,7 @@ function Hero() {
         </Motion.p>
 
         <Motion.h1 className="v4-hero-headline" variants={item}>
-          I build things, then figure out why they broke.
+          I build things, then figure out why they <BrokeNote />
         </Motion.h1>
 
         <Motion.p className="v4-hero-supporting" variants={item}>

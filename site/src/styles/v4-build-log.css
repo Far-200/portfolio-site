@@ -193,7 +193,7 @@
 .v4-log-entry-link:hover .v4-log-entry-arrow,
 .v4-log-entry-link:focus-visible .v4-log-entry-arrow {
   color: var(--v4-accent);
-  transform: translate(1px, -1px);
+  transform: translate(var(--v4-travel), calc(var(--v4-travel) * -1));
 }
 
 .v4-log-entry-description {
