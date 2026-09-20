@@ -26,16 +26,18 @@ const MENU_ID = "v4-compass-menu";
 const RING_RADIUS = 20;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
-// Homepage sections, top to bottom, and the nav destination each one
-// stands for. Real DOM hooks only: .v4-hero, #work (SelectedWork's own
-// id) and the two bridge sections. Elements that are not on the page
-// are skipped.
-const HOME_SECTIONS = [
-  { to: "/", selector: ".v4-hero" },
-  { to: "/work", selector: "#work" },
-  { to: "/log", selector: ".v4-log-bridge" },
-  { to: "/lab", selector: ".v4-lab-bridge" },
-];
+// Which nav destination the current route belongs to. The menu entries are
+// route links, so "you are here" follows the route, never what happens to
+// be scrolled into view. Project detail pages sit under Work; a route that
+// is not a nav destination (404, redirects in flight) matches nothing.
+function currentDestination(pathname) {
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  if (path === "/projects" || path.startsWith("/projects/")) {
+    return { to: "/work", kind: "true" };
+  }
+  const match = NAV_LINKS.find(({ to }) => to === path);
+  return { to: match?.to, kind: "page" };
+}
 
 // Progress = scrollTop / (scrollHeight - viewportHeight), clamped to
 // [0, 1]. One passive scroll listener, coalesced to one write per frame,
@@ -103,41 +105,6 @@ function useNavbarInView() {
   return inView;
 }
 
-// On the homepage, which section is under a thin band near the middle of
-// the viewport. Only the change of "which one" reaches React.
-function useHomeSection(enabled) {
-  const [section, setSection] = useState("/");
-
-  useEffect(() => {
-    if (!enabled || typeof IntersectionObserver !== "function") {
-      return undefined;
-    }
-    const targets = new Map();
-    for (const { to, selector } of HOME_SECTIONS) {
-      const element = document.querySelector(selector);
-      if (element) targets.set(element, to);
-    }
-    const inBand = new Set();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const to = targets.get(entry.target);
-          if (entry.isIntersecting) inBand.add(to);
-          else inBand.delete(to);
-        }
-        // Between sections nothing is in the band: keep the last answer.
-        const current = HOME_SECTIONS.find(({ to }) => inBand.has(to));
-        if (current) setSection(current.to);
-      },
-      { rootMargin: "-45% 0px -50% 0px" },
-    );
-    targets.forEach((_, element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, [enabled]);
-
-  return section;
-}
-
 function NavCompass() {
   const { pathname } = useLocation();
   const { open: openResume } = useResumeChooser();
@@ -148,7 +115,6 @@ function NavCompass() {
 
   const scrollable = useScrollProgress(ringRef);
   const navbarInView = useNavbarInView();
-  const homeSection = useHomeSection(pathname === "/");
   const visible = scrollable && !navbarInView;
 
   // The menu closes on a route change and when the compass hides (the
@@ -185,10 +151,8 @@ function NavCompass() {
     };
   }, [open]);
 
-  // Route-level "you are here", refined on the homepage by section.
-  const currentTo = pathname === "/" ? homeSection : pathname;
-  const currentKind =
-    pathname === "/" && homeSection !== "/" ? "location" : "page";
+  // Route-level "you are here". Resume and Top are actions, not places.
+  const current = currentDestination(pathname);
 
   const close = () => setOpen(false);
 
@@ -261,7 +225,7 @@ function NavCompass() {
               <Link
                 to={to}
                 className="v4-compass-item"
-                aria-current={currentTo === to ? currentKind : undefined}
+                aria-current={current.to === to ? current.kind : undefined}
                 onClick={close}
               >
                 {label}
