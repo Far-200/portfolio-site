@@ -25,7 +25,7 @@
 @media (min-width: 1800px) and (min-height: 1000px) { :root { --s: 1.16; } }
 @media (min-width: 701px) and (max-height: 520px) { .card-stage:not(.is-expanded) { padding-bottom: max(24px, env(safe-area-inset-bottom)); --field-y: 0px; } }
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
+body { margin: 0; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { font: inherit; color: inherit; cursor: pointer; border: 0; padding: 0; background: none; }
 a { color: inherit; text-decoration: none; }
@@ -46,16 +46,20 @@ button:active { transform: translateY(1px); }
 .ink-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; position: relative; }
 .ink-link::after { content: ""; position: absolute; bottom: 7px; left: 0; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 240ms var(--ease); }
 .ink-link:hover::after { transform: scaleX(1); }
-.card-stage { position: relative; isolation: isolate; overflow: clip; min-height: 100svh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); perspective: 1600px; --field-o: .55; --field-s: 1; --field-y: 0px; }
+.card-stage { position: relative; isolation: isolate; overflow: clip; min-height: 100svh; display: grid; place-items: center; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); perspective: 1600px; --field-o: .55; --field-wide: 0; --field-y: 0px; }
 /* Optical placement: the compact card sits a little above true centre. The extra bottom padding moves the centre up by half of it. */
 .card-stage:not(.is-expanded) { padding-bottom: calc(max(24px, env(safe-area-inset-bottom)) + 7svh); --field-y: -3.5svh; }
 /* The canvas answers the card: one very quiet field of light, sized and lifted by card state. */
-.card-stage::before { content: ""; position: absolute; inset: -18%; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 42% 40% at 50% 50%, rgb(232 236 214 / .078), rgb(232 236 214 / .038) 46%, rgb(232 236 214 / 0) 100%); opacity: var(--field-o); transform: translate3d(0, var(--field-y), 0) scale(var(--field-s)); transition: opacity 560ms var(--ease), transform 560ms var(--ease); }
-.card-stage.is-back { --field-o: .62; --field-s: 1.08; }
-.card-stage.is-expanded { --field-o: .72; --field-s: 1.5; }
+/* The stage is the only thing these layers are as big as: no overscan and no scaling, so they add nothing to any scrollable area.
+   A compact-sized field and a wider one crossfade by opacity as the card turns over and opens. */
+.card-stage::before, .card-stage::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; transition: opacity 560ms var(--ease); }
+.card-stage::before { background: radial-gradient(ellipse 57.12% 54.4% at 50% calc(50% + var(--field-y)), rgb(232 236 214 / .078), rgb(232 236 214 / .038) 46%, rgb(232 236 214 / 0) 100%); opacity: var(--field-o); }
+.card-stage::after { background: radial-gradient(ellipse 85.68% 81.6% at 50% 50%, rgb(232 236 214 / .078), rgb(232 236 214 / .038) 46%, rgb(232 236 214 / 0) 100%); opacity: var(--field-wide); }
+.card-stage.is-back { --field-o: .5; --field-wide: .2; }
+.card-stage.is-expanded { --field-o: 0; --field-wide: .72; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .card-stage:not(.is-expanded):has(.card-tilt:hover) { --field-o: .78; }
-  .card-stage.is-back:not(.is-expanded):has(.card-tilt:hover) { --field-o: .84; }
+  .card-stage.is-back:not(.is-expanded):has(.card-tilt:hover) { --field-o: .68; }
 }
 .card-tilt { position: relative; z-index: 1; max-width: 100%; }
 .business-card { width: calc(590 * var(--u)); height: calc(382 * var(--u)); position: relative; isolation: isolate; border-radius: 5px; box-shadow: 0 1px 1px #0003, 0 3px 6px -3px #0004; }
@@ -270,34 +274,46 @@ button:active { transform: translateY(1px); }
   :root { --folio-inset: 24px; }
   .card-stage { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
   .card-stage:not(.is-expanded) { padding-bottom: calc(max(16px, env(safe-area-inset-bottom)) + 4svh); --field-y: -2svh; }
-  /* A physical card adapted for the phone: nearly the full width, but only as tall as its content needs. */
-  .business-card { width: min(590px, calc(100vw - 32px)); height: clamp(316px, 81vw, 344px); }
-  .front-content { padding: 20px 22px 8px; }
-  .front-content .monogram { font-size: 32px; }
-  .front-identity { margin-top: 26px; }
-  .front-identity h1 { font-size: clamp(44px, 14vw, 64px); }
-  .front-role { margin-top: 9px; font-size: 11.5px; }
-  .front-line { font-size: 16px; max-width: 250px; margin-top: 14px; }
-  .front-bottom { padding-top: 2px; }
+  /* An intentionally vertical card on phones. Its size comes from one variable; type, padding and row heights scale from it,
+     so the front and back are composed separately inside the same outer dimensions. */
+  :root { --pw: min(calc(100vw - 44px), 372px, calc((100svh - 72px) / 1.42)); }
+  .business-card { width: var(--pw); height: calc(var(--pw) * 1.42); }
+  /* Ground shadow as a box-shadow on a zero-height box: it has no geometry, so however the card scales during a layout animation it cannot add scroll range. */
+  .business-card::before { top: auto; bottom: 0; left: 20%; right: 20%; height: 0; background: none; box-shadow: 0 8px 28px 10px rgb(0 0 0 / .36); }
+  /* Front: the mark at the head of the card, the name and its line settled in the lower half. */
+  .front-content { padding: calc(var(--pw) * .085) calc(var(--pw) * .085) calc(var(--pw) * .03); }
+  .front-content .monogram { font-size: 34px; }
+  .card-imprint .micro { font-size: 8px; letter-spacing: .1em; }
+  .front-identity { margin-top: auto; }
+  .front-identity h1 { font-size: calc(var(--pw) * .225); line-height: .92; }
+  .front-role { margin-top: 14px; font-size: 12px; }
+  .front-line { font-size: 16px; max-width: none; margin-top: 20px; }
+  .front-bottom { margin-top: 26px; padding-top: 2px; }
   .domain { font-size: 11px; }
   .flip-control { gap: 12px; font-size: 11px; }
   .flip-control .arrow { font-size: 23px; }
-  .card-imprint .micro { font-size: 8px; letter-spacing: .1em; }
-  .back-content { padding: 16px 20px 8px; }
-  .back-heading { margin-bottom: 4px; }
+  /* Back: the same card turned over, with the index given room to breathe. */
+  .back-content { padding: calc(var(--pw) * .08) calc(var(--pw) * .07) 8px; }
+  .back-heading { margin-bottom: 12px; }
   .back-heading .micro { font-size: 9px; }
-  .project-row { min-height: 44px; gap: 8px; grid-template-columns: 22px 1fr 18px; }
+  .project-row { min-height: clamp(48px, calc(var(--pw) * .19), 72px); gap: 8px; grid-template-columns: 22px 1fr 18px; }
   .project-number { font-size: 10px; }
-  .project-row-title { font-size: clamp(22px, 6vw, 28px); }
+  .project-row-title { font-size: clamp(20px, calc(var(--pw) * .07), 26px); line-height: 1.1; }
   .project-row .arrow { font-size: 20px; }
-  .currently-building { gap: 10px; margin-top: 4px; min-height: 44px; font-size: 12px; }
+  .currently-building { gap: 10px; margin-top: calc(var(--pw) * .06); min-height: 44px; font-size: 12px; }
   .currently-building .micro { font-size: 8px; }
-  .card-actions { justify-content: space-between; gap: 0 10px; font-size: 11px; }
+  .card-actions { justify-content: space-between; gap: 0 10px; font-size: 11px; padding-top: 6px; }
   .card-actions .arrow { font-size: 12px; }
   .card-actions .ink-link { gap: 4px; }
   .flip-control:focus-visible, .back-bottom .ink-link:focus-visible { outline-offset: 0; }
   .back-bottom nav { gap: 20px; font-size: 11px; }
-  .expanded-card { height: calc(100svh - 32px); }
+  /* Expanded: drop the portrait constraint; the same object opens into the full-width surface. */
+  .expanded-card { width: min(590px, calc(100vw - 32px)); height: calc(100svh - 32px); }
+  /* The card is only 16px from the screen edge here, so its ground shadow would be clipped anyway and only add scroll range. */
+  .expanded-card::before { display: none; }
+  /* Still scrolls by touch, wheel and keyboard; the rail itself is gone so it cannot break the sheet of paper. */
+  .surface-scroll { scrollbar-width: none; scrollbar-gutter: auto; }
+  .surface-scroll::-webkit-scrollbar { display: none; width: 0; height: 0; }
   .surface-header { height: 76px; gap: 16px; padding-top: 6px; }
   .surface-header > .micro { font-size: 8px; max-width: 120px; }
   .surface-body { padding-top: 20px; padding-bottom: 28px; }
@@ -342,10 +358,6 @@ button:active { transform: translateY(1px); }
 }
 @media (max-width: 360px) {
   :root { --folio-inset: 20px; }
-  .front-content { padding-inline: 18px; }
-  .front-identity h1 { font-size: 44px; }
-  .back-content { padding-inline: 16px; }
-  .project-row-title { font-size: 22px; }
   .about-portrait { gap: 14px; }
   .about-portrait img { width: 84px; height: 105px; }
   .about-portrait figcaption .micro { gap: 8px; }
