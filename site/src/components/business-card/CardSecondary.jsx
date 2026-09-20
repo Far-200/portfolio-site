@@ -10,7 +10,7 @@ export function CardAbout() {
   return <div className="card-about"><About portrait={
     <figure className="about-portrait">
       <img src={portrait} alt="Farhaan Khan" width="800" height="800" decoding="async" />
-      <figcaption><span className="micro">Farhaan Khan</span><span>Computer Science student</span></figcaption>
+      <figcaption><span className="micro"><span>Farhaan Khan</span><span aria-hidden="true">Fig. 01</span></span><span>Computer Science student</span></figcaption>
     </figure>
   } /></div>;
 }

@@ -48,7 +48,7 @@ export default function BusinessCardShell() {
 
   const collapse = () => navigate("/work", { state: { returnTo: location.pathname } });
   return (
-    <main className={`card-stage${expanded ? " is-expanded" : ""}`}>
+    <main className={`card-stage${expanded ? " is-expanded" : front ? "" : " is-back"}`}>
       <CardTilt expanded={expanded}>
         <Motion.div ref={shell} className={`business-card${expanded ? " expanded-card" : ""}`}
           layout={!reduced} transition={{ layout: { duration: 0.56, ease: [0.22, 1, 0.36, 1] } }}
