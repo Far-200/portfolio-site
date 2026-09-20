@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { motion as Motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
@@ -52,17 +51,6 @@ function Footer() {
         <div className="footer-brand">
           <h3>FK</h3>
           <p>Building practical projects and clean web experiences.</p>
-        </div>
-
-        <div className="footer-links-block">
-          <h4>Quick Links</h4>
-          <nav className="footer-links" aria-label="Footer navigation">
-            <Link to="/">Home</Link>
-            <Link to="/work">Work</Link>
-            <Link to="/log">Log</Link>
-            <Link to="/lab">Lab</Link>
-            <Link to="/about">About</Link>
-          </nav>
         </div>
 
         <div className="footer-links-block">

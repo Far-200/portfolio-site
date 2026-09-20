@@ -1136,7 +1136,7 @@ a {
   margin: 0 auto;
   padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3rem);
   display: grid;
-  grid-template-columns: minmax(15rem, 1fr) max-content max-content;
+  grid-template-columns: minmax(15rem, 1fr) max-content;
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: start;
 }
@@ -1165,32 +1165,6 @@ a {
   text-transform: uppercase;
   color: var(--v4-text-subtle);
   margin-bottom: 1rem;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: clamp(0.9rem, 1.8vw, 1.5rem);
-  white-space: nowrap;
-}
-
-.footer-links a {
-  color: var(--v4-text-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: color var(--v4-duration-fast) ease;
-  width: fit-content;
-}
-
-.footer-links a:hover {
-  color: var(--v4-accent);
-}
-
-.footer-links a:focus-visible {
-  outline: none;
-  border-radius: 2px;
-  box-shadow: var(--v4-focus-ring);
 }
 
 .footer-socials {
@@ -1233,7 +1207,12 @@ a {
     calc(100% - (var(--v4-gutter) * 2))
   );
   margin: 0 auto;
-  padding: 1rem 0 1.5rem;
+  /* The bottom padding keeps this row clear of the fixed NavCompass at the
+     end of the page: its 1.25rem offset + 44px circle (v4-nav-compass.css),
+     a small gap and the iOS home-indicator inset. Below ~1330px the
+     right-aligned console line would otherwise sit underneath it. */
+  padding: 1rem 0
+    calc(1.25rem + 44px + 0.5rem + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--v4-border);
   display: flex;
   align-items: center;
@@ -1589,11 +1568,6 @@ a {
 
   .footer-container {
     grid-template-columns: 1fr;
-  }
-
-  .footer-links {
-    flex-direction: column;
-    gap: 0.5rem;
   }
 
   .footer-bottom {
