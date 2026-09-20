@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Github, ArrowUpRight } from "lucide-react";
 import { FLAGSHIP_PROJECTS } from "../data/projects";
 import ProjectVisual from "./ProjectVisual";
@@ -24,7 +24,7 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
   const githubHandled = useHandled(githubKey);
 
   return (
-    <motion.article
+    <Motion.article
       className={entryClass}
       variants={prefersReducedMotion ? fadeOnly : sectionReveal}
       initial="hidden"
@@ -107,7 +107,7 @@ function WorkEntry({ project, index, prefersReducedMotion }) {
       </div>
 
       <ProjectVisual project={project} />
-    </motion.article>
+    </Motion.article>
   );
 }
 
@@ -116,7 +116,7 @@ function SelectedWork() {
 
   return (
     <section id="work" className="v4-work section">
-      <motion.div
+      <Motion.div
         className="v4-work-header"
         variants={prefersReducedMotion ? fadeOnly : sectionReveal}
         initial="hidden"
@@ -125,7 +125,7 @@ function SelectedWork() {
       >
         <h2 className="v4-work-heading">Selected Work</h2>
         <p className="v4-work-subheading">03 Projects / Built, Broken, Iterated</p>
-      </motion.div>
+      </Motion.div>
 
       <div className="v4-work-list">
         {FLAGSHIP_PROJECTS.map((project, index) => (

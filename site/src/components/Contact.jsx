@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
 import githubProfile from "../assets/github_pfp.jpg";
 import twitterProfile from "../assets/twitter_profile.jpg";
@@ -19,24 +19,24 @@ const row = {
 function Contact() {
   return (
     <section className="section contact-wrap">
-      <motion.div
+      <Motion.div
         className="contact-section"
         variants={container}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.1 }}
       >
-        <motion.p className="contact-tag" variants={row}>
+        <Motion.p className="contact-tag" variants={row}>
           Open to internships & roles · collaborations · cool ideas
-        </motion.p>
-        <motion.h2 variants={row}>Let's Connect</motion.h2>
-        <motion.p variants={row}>
+        </Motion.p>
+        <Motion.h2 variants={row}>Let's Connect</Motion.h2>
+        <Motion.p variants={row}>
           Whether it's internships, collaborations, interesting ideas, or simply
           talking about web development, UI, AI, or project-building, I'm always
           happy to connect.
-        </motion.p>
+        </Motion.p>
 
-        <motion.div className="contact-grid" variants={row}>
+        <Motion.div className="contact-grid" variants={row}>
           <div className="contact-info-card">
             <h3>Reach out for</h3>
             <ul>
@@ -55,9 +55,9 @@ function Contact() {
               <li>Opportunities to grow as a builder</li>
             </ul>
           </div>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div className="contact-buttons" variants={row}>
+        <Motion.div className="contact-buttons" variants={row}>
           <a
             href="mailto:hello.farhaankhan@gmail.com"
             className="btn btn-primary"
@@ -101,8 +101,8 @@ function Contact() {
           >
             Devfolio
           </a>
-        </motion.div>
-      </motion.div>
+        </Motion.div>
+      </Motion.div>
     </section>
   );
 }

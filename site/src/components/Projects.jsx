@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Github, ArrowRight } from "lucide-react";
 import { PROJECTS } from "../data/projects";
@@ -20,7 +20,7 @@ const cardVariants = {
 
 function ProjectCard({ project, index }) {
   return (
-    <motion.div
+    <Motion.div
       className="project-card project-card--enhanced"
       custom={index}
       variants={cardVariants}
@@ -46,13 +46,13 @@ function ProjectCard({ project, index }) {
 
       <div className="chip-wrap">
         {project.tech.map((t) => (
-          <motion.span
+          <Motion.span
             className="chip chip-purple chip--interactive"
             key={t}
             whileHover={{ scale: 1.06, transition: { duration: 0.15 } }}
           >
             {t}
-          </motion.span>
+          </Motion.span>
         ))}
       </div>
 
@@ -80,14 +80,14 @@ function ProjectCard({ project, index }) {
           <Github size={15} strokeWidth={2} />
         </a>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 }
 
 function Projects() {
   return (
     <section className="section">
-      <motion.div
+      <Motion.div
         className="section-heading"
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ function Projects() {
         <p className="section-tag">Work</p>
         <h2>Featured Projects</h2>
         <p>A few things I've built instead of resting like a normal human.</p>
-      </motion.div>
+      </Motion.div>
 
       <div className="projects-grid">
         {projects.map((project, index) => (

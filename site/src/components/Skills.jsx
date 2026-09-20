@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import {
   FaPython, FaJs, FaReact, FaHtml5, FaCss3Alt,
   FaNodeJs, FaGitAlt, FaGithub, FaDocker,
@@ -46,7 +46,7 @@ const skillGroups = [
 function Skills() {
   return (
     <section className="section skills-section-compact">
-      <motion.div
+      <Motion.div
         className="section-heading"
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -59,11 +59,11 @@ function Skills() {
           The tools, languages, and frameworks I use to build projects that
           actually do stuff instead of just looking emotional.
         </p>
-      </motion.div>
+      </Motion.div>
 
       <div className="skills-grid">
         {skillGroups.map((group, index) => (
-          <motion.div
+          <Motion.div
             className="glass-card skill-card"
             key={group.title}
             initial={{ opacity: 0, y: 18 }}
@@ -80,7 +80,7 @@ function Skills() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </Motion.div>
         ))}
       </div>
     </section>

@@ -18,7 +18,7 @@ const BUILD_AREAS = [
   {
     title: "Full-stack applications",
     description:
-      "Interfaces backed by real data, APIs, and end-to-end product thinking.",
+      "Interfaces connected to real data and APIs.",
   },
   {
     title: "AI-assisted systems",
@@ -73,7 +73,7 @@ function Reveal({ className, children }) {
   );
 }
 
-function About() {
+function About({ portrait }) {
   const { open: openResume } = useResumeChooser();
   const resumeHandled = useHandled(RESUME_KEY);
   return (
@@ -83,17 +83,18 @@ function About() {
         aria-labelledby="about-title"
       >
         <Reveal className="v4-about-intro-inner">
-          <p className="v4-about-eyebrow">About</p>
-          <h1 className="v4-about-title" id="about-title">
-            I build useful software, then learn from what breaks.
-          </h1>
-
+          <header className="about-statement">
+            <p className="v4-about-eyebrow">01 / About</p>
+            <h1 className="v4-about-title" id="about-title" tabIndex={-1} data-route-heading>
+              I build useful software, then learn from what breaks.
+            </h1>
+          </header>
+          {portrait}
           <div className="v4-about-intro-copy">
             <p>
-              I&apos;m Farhaan Khan, a Computer Science student focused on
+              I&apos;m Farhaan Khan, a Computer Science student. I build
               developer tools, full-stack applications, and AI-assisted
-              systems where interface decisions and underlying logic both
-              matter.
+              systems. I care about how they work as much as how they look.
             </p>
             <p>
               I learn best by building. I start with a problem, make a working
@@ -110,7 +111,7 @@ function About() {
       >
         <Reveal className="v4-about-practice-inner">
           <article className="v4-about-practice-column">
-            <p className="v4-about-section-label">Practice</p>
+            <p className="v4-about-section-label">02 / Practice</p>
             <h2 className="v4-about-section-heading">What I build</h2>
             <dl className="v4-about-build-list">
               {BUILD_AREAS.map((area) => (
@@ -147,15 +148,13 @@ function About() {
         <Reveal className="v4-about-toolkit-inner">
           <header className="v4-about-section-header">
             <div>
-              <p className="v4-about-section-label">Toolkit</p>
+              <p className="v4-about-section-label">03 / Toolkit</p>
               <h2 className="v4-about-section-heading" id="toolkit-title">
-                Tools I use to make things real
+                Tools I work with
               </h2>
             </div>
             <p className="v4-about-section-intro">
-              A practical stack shaped by projects, with a clear distinction
-              between tools I already use and areas I am developing more
-              deeply.
+              Tools I use in projects, alongside the ones I&apos;m still learning.
             </p>
           </header>
 
@@ -197,7 +196,7 @@ function About() {
       >
         <Reveal className="v4-about-split-inner">
           <header>
-            <p className="v4-about-section-label">Current focus</p>
+            <p className="v4-about-section-label">04 / Current focus</p>
             <h2 className="v4-about-section-heading" id="now-title">
               Now
             </h2>
@@ -205,8 +204,8 @@ function About() {
 
           <div>
             <p className="v4-about-now-copy">
-              I&apos;m strengthening the parts of engineering that turn a good
-              interface into a complete, maintainable system.
+              Right now, I&apos;m working on the parts behind the interface:
+              APIs, data models, and keeping the whole thing maintainable.
             </p>
             <dl className="v4-about-now-list">
               {CURRENT_FOCUS.map((item) => (
@@ -227,7 +226,7 @@ function About() {
       >
         <Reveal className="v4-about-split-inner v4-about-contact-inner">
           <header>
-            <p className="v4-about-section-label">Contact</p>
+            <p className="v4-about-section-label">05 / Contact</p>
             <h2 className="v4-about-section-heading" id="contact-title">
               Start a conversation
             </h2>
@@ -235,9 +234,9 @@ function About() {
 
           <div>
             <p className="v4-about-contact-copy">
-              I&apos;m open to internships, thoughtful collaborations, and
+              I&apos;m open to internships, collaborations, and
               conversations about developer tools, full-stack work, and
-              learning-focused software.
+              software that helps people learn.
             </p>
             <div className="v4-about-contact-links">
               <a href="mailto:hello.farhaankhan@gmail.com">

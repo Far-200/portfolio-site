@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { DURATION, EASE, revealViewport } from "../../lib/motion";
 import {
   FaGithub,
@@ -10,8 +10,9 @@ import {
 import { SiVite } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { getProjectBySlug } from "../../data/projects";
 
-function FolderStructurePage() {
+function FolderStructurePage({ embedded = false }) {
   const features = [
     "Paste or type folder structures manually with indentation support",
     "Generate clean project trees for different stack templates",
@@ -39,7 +40,8 @@ function FolderStructurePage() {
 
   return (
     <section className="section project-detail-page v4-project">
-      <motion.div
+      {!embedded && (
+      <Motion.div
         className="project-detail-hero"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -78,9 +80,9 @@ function FolderStructurePage() {
             Back to Work
           </Link>
         </div>
-      </motion.div>
+      </Motion.div>)}
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card project-gallery-block"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -93,18 +95,19 @@ function FolderStructurePage() {
         <div className="project-video-wrap">
           <video
             src="/videos/fsv-demo.mp4"
-            autoPlay
+            poster={getProjectBySlug("folder-structure-visualizer").media.src}
+            aria-label="Folder Structure Visualizer demonstration"
             muted
-            loop
             playsInline
+            preload="none"
             controls
             className="project-demo-video"
           />
         </div>
-      </motion.div>
+      </Motion.div>
 
       <div className="project-detail-grid">
-        <motion.div
+        <Motion.div
           className="project-detail-main glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -125,9 +128,9 @@ function FolderStructurePage() {
             tool helps users sketch a project structure fast and export it in a
             way that is actually useful.
           </p>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           className="project-detail-side glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -144,10 +147,10 @@ function FolderStructurePage() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Motion.div>
       </div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -162,9 +165,9 @@ function FolderStructurePage() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -177,9 +180,9 @@ function FolderStructurePage() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -192,7 +195,7 @@ function FolderStructurePage() {
           templates, drag-and-drop node management, custom starter kits, and a
           downloadable config system for different frameworks and languages.
         </p>
-      </motion.div>
+      </Motion.div>
     </section>
   );
 }

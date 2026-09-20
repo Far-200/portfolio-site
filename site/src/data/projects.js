@@ -41,7 +41,7 @@ export const PROJECTS = [
     github: "https://github.com/Far-200/think-before-code",
     live: null,
     media: null,
-    internalRoute: null,
+    internalRoute: "/projects/think-before-code",
   },
   {
     id: "flowtrace",
@@ -63,7 +63,7 @@ export const PROJECTS = [
     github: "https://github.com/Far-200/FlowTrace",
     live: null,
     media: null,
-    internalRoute: null,
+    internalRoute: "/projects/flowtrace",
   },
   {
     id: "folder-structure-visualizer",

@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { DURATION, EASE, revealViewport } from "../../lib/motion";
 import { FaGithub, FaReact, FaShieldAlt, FaCopy } from "react-icons/fa";
 import { SiVite, SiTailwindcss, SiJavascript } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
-function PasswordCrackEsti() {
+function PasswordCrackEsti({ embedded = false }) {
   const features = [
     "Password strength analysis",
     "Brute-force crack time estimation",
@@ -31,7 +31,8 @@ function PasswordCrackEsti() {
 
   return (
     <section className="section project-detail-page v4-project">
-      <motion.div
+      {!embedded && (
+      <Motion.div
         className="project-detail-hero"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -70,10 +71,10 @@ function PasswordCrackEsti() {
             Back to Work
           </Link>
         </div>
-      </motion.div>
+      </Motion.div>)}
 
       <div className="project-detail-grid">
-        <motion.div
+        <Motion.div
           className="project-detail-main glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -93,9 +94,9 @@ function PasswordCrackEsti() {
             strong focus on clean UI, practical utility, and beginner-friendly
             security feedback.
           </p>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           className="project-detail-side glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,10 +113,10 @@ function PasswordCrackEsti() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Motion.div>
       </div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -130,9 +131,9 @@ function PasswordCrackEsti() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -150,9 +151,9 @@ function PasswordCrackEsti() {
             Quick usability with generator + copy flow
           </div>
         </div>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -165,9 +166,9 @@ function PasswordCrackEsti() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -181,7 +182,7 @@ function PasswordCrackEsti() {
           password detection, and live visual comparisons between weak and
           stronger password patterns.
         </p>
-      </motion.div>
+      </Motion.div>
     </section>
   );
 }

@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { DURATION, EASE, revealViewport } from "../../lib/motion";
 import { FaGithub, FaReact, FaCode, FaExchangeAlt } from "react-icons/fa";
 import { SiVite, SiJavascript, SiJson } from "react-icons/si";
 import { Link } from "react-router-dom";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
-function DevJTool() {
+function DevJTool({ embedded = false }) {
   const features = [
     "JSON formatter for readable structured output",
     "JSON minifier for compact payloads",
@@ -33,7 +33,8 @@ function DevJTool() {
 
   return (
     <section className="section project-detail-page v4-project">
-      <motion.div
+      {!embedded && (
+      <Motion.div
         className="project-detail-hero"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -71,10 +72,10 @@ function DevJTool() {
             Back to Work
           </Link>
         </div>
-      </motion.div>
+      </Motion.div>)}
 
       <div className="project-detail-grid">
-        <motion.div
+        <Motion.div
           className="project-detail-main glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -93,9 +94,9 @@ function DevJTool() {
             The goal of the project is simple: make common developer tasks feel
             faster, cleaner, and less annoying during debugging or testing.
           </p>
-        </motion.div>
+        </Motion.div>
 
-        <motion.div
+        <Motion.div
           className="project-detail-side glass-card"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,10 +113,10 @@ function DevJTool() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </Motion.div>
       </div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -130,9 +131,9 @@ function DevJTool() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -150,9 +151,9 @@ function DevJTool() {
             Faster API inspection and response testing
           </div>
         </div>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -165,9 +166,9 @@ function DevJTool() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-      </motion.div>
+      </Motion.div>
 
-      <motion.div
+      <Motion.div
         className="project-section-block glass-card"
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -181,7 +182,7 @@ function DevJTool() {
           history, and side-by-side request/response comparison for smoother
           debugging.
         </p>
-      </motion.div>
+      </Motion.div>
     </section>
   );
 }
