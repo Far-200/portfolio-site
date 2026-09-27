@@ -58,3 +58,13 @@
   .desk-vignette { background: radial-gradient(ellipse 120% 95% at 45% 40%, rgb(8 7 5 / 0) 40%, rgb(8 7 5 / .5) 78%, rgb(6 5 4 / .86) 100%); }
   .desk-shadow-ambient { filter: blur(18px); transform: translate(8px, 14px); }
 }
+
+/* Reduced motion: the card still turns, but nothing on the desk animates. The scene and its shadows
+   appear and settle instantly, and the flip's lift-and-land shadow reaction is dropped, so the only
+   change is the card turning. The still life itself is static, so nothing else needs guarding. */
+@media (prefers-reduced-motion: reduce) {
+  .desk-scene,
+  .card-stage.desk-active .desk-shadow { transition: none; }
+  .card-stage.desk-active .desk-shadows[data-turning] .desk-shadow-contact,
+  .card-stage.desk-active .desk-shadows[data-turning] .desk-shadow-ambient { animation: none; }
+}
