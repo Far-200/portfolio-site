@@ -24,14 +24,16 @@
 }
 .desk-notebook > * { position: absolute; inset: 0; border-radius: calc(4 * var(--mm)); }
 .notebook-back { background: #121210; transform: translate(calc(1.6 * var(--mm)), calc(2.8 * var(--mm)));
-  box-shadow: calc(1.5 * var(--mm)) calc(3 * var(--mm)) calc(4 * var(--mm)) rgb(0 0 0 / .5), calc(6 * var(--mm)) calc(10 * var(--mm)) calc(24 * var(--mm)) rgb(0 0 0 / .32); }
+  box-shadow: 0 calc(.6 * var(--mm)) calc(1.2 * var(--mm)) rgb(0 0 0 / .55), calc(1.5 * var(--mm)) calc(3 * var(--mm)) calc(4 * var(--mm)) rgb(0 0 0 / .5), calc(6 * var(--mm)) calc(10 * var(--mm)) calc(24 * var(--mm)) rgb(0 0 0 / .34); }
 .notebook-pages { inset: calc(.6 * var(--mm)) calc(.4 * var(--mm)) calc(.2 * var(--mm)) calc(.6 * var(--mm)); border-radius: calc(3 * var(--mm));
   transform: translate(calc(1 * var(--mm)), calc(1.7 * var(--mm)));
   background: repeating-linear-gradient(to bottom, #4d483f 0 1px, #3b3731 1px 3px); }
 .notebook-cover {
   background-color: #252421;
-  background-image: var(--grain), linear-gradient(152deg, #302e2a, #242320 42%, #1b1a18);
-  box-shadow: inset 1px 1px 0 rgb(255 225 185 / .07), inset -1px -1px 0 rgb(0 0 0 / .45);
+  background-image: var(--grain),
+    radial-gradient(ellipse 82% 60% at 28% 20%, rgb(255 226 188 / .06), rgb(255 226 188 / 0) 70%),
+    linear-gradient(152deg, #33302b, #242320 44%, #191816);
+  box-shadow: inset calc(1 * var(--mm)) calc(1 * var(--mm)) 0 rgb(255 226 188 / .1), inset calc(-1 * var(--mm)) calc(-1 * var(--mm)) calc(1 * var(--mm)) rgb(0 0 0 / .55), 0 0 0 1px rgb(0 0 0 / .28);
 }
 .notebook-band { left: auto; right: calc(15 * var(--mm)); top: calc(-.6 * var(--mm)); bottom: calc(-3.2 * var(--mm)); width: calc(3.4 * var(--mm)); border-radius: 1px;
   background: linear-gradient(90deg, #0c0c0b, #1e1d1b 45%, #0a0a09);
@@ -107,9 +109,10 @@
 .mug-rim {
   width: calc(74 * var(--mm)); height: calc(74 * var(--mm)); left: calc(-37 * var(--mm)); top: calc(-37 * var(--mm));
   background:
-    radial-gradient(ellipse 20% 11% at 40% 36%, rgb(255 222 176 / .1), rgb(255 222 176 / 0)),
-    radial-gradient(circle closest-side, #1b120c 0%, #120c08 70%, #0c0806 85%, #0a0908 87%, #34322e 91%, #2d2b28 96%, #211f1d 100%);
-  box-shadow: inset calc(.8 * var(--mm)) calc(.8 * var(--mm)) calc(1 * var(--mm)) rgb(255 225 185 / .07), inset calc(-.8 * var(--mm)) calc(-.8 * var(--mm)) calc(1.4 * var(--mm)) rgb(0 0 0 / .35);
+    radial-gradient(ellipse 24% 13% at 37% 33%, rgb(255 216 168 / .22), rgb(255 216 168 / 0) 72%),
+    radial-gradient(ellipse 62% 48% at 41% 39%, rgb(122 94 62 / .2), rgb(122 94 62 / 0) 74%),
+    radial-gradient(circle closest-side, #22160d 0%, #160f09 62%, #0c0806 84%, #0a0908 87%, #3a352f 91%, #2d2b28 96%, #211f1d 100%);
+  box-shadow: inset calc(1 * var(--mm)) calc(1 * var(--mm)) calc(1.2 * var(--mm)) rgb(255 226 188 / .12), inset calc(-.8 * var(--mm)) calc(-.8 * var(--mm)) calc(1.4 * var(--mm)) rgb(0 0 0 / .4);
 }
 
 /* Narrow desktops and tablets: the mug and pen would crowd the card, so only the notebook and keyboard remain. */
