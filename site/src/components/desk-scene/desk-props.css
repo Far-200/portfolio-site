@@ -1,0 +1,130 @@
+/* Desk props: notebook, pen, keyboard corner, mug on a cork coaster.
+   All sizes come from --mm (one desk millimetre in pixels), so the objects keep their proportions to each other and grow a
+   little with the card's own scale. They are drawn larger than the card's true scale and cropped by the viewport, as in a
+   close photograph. Everything is dark and low-contrast; the lamp and vignette layers above add the warm light and falloff.
+   Positions are measured from the card's edges (--cx/--cy centre, --hw/--hh half size), never from the card itself. */
+.desk-props {
+  overflow: hidden;
+  --mm: calc(4px * var(--s));
+  --cx: 50%;
+  --cy: calc(50% - 3.5svh); /* The compact card sits 3.5svh above true centre (see .card-stage in business-card.css). */
+  --hw: calc(295 * var(--u));
+  --hh: calc(191 * var(--u));
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23fff' opacity='.06' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E");
+}
+.desk-props > * { position: absolute; }
+
+/* Notebook: A5, dark leather-grain cover over a page block and back cover, closed with an elastic band.
+   It enters from the left, its right edge a fixed gap from the card. */
+.desk-notebook {
+  width: calc(148 * var(--mm)); height: calc(210 * var(--mm));
+  left: calc(var(--cx) - var(--hw) - 56px - 148 * var(--mm));
+  top: calc(var(--cy) - 128 * var(--mm));
+  transform: rotate(2.5deg);
+}
+.desk-notebook > * { position: absolute; inset: 0; border-radius: calc(4 * var(--mm)); }
+.notebook-back { background: #121210; transform: translate(calc(1.6 * var(--mm)), calc(2.8 * var(--mm)));
+  box-shadow: calc(1.5 * var(--mm)) calc(3 * var(--mm)) calc(4 * var(--mm)) rgb(0 0 0 / .5), calc(6 * var(--mm)) calc(10 * var(--mm)) calc(24 * var(--mm)) rgb(0 0 0 / .32); }
+.notebook-pages { inset: calc(.6 * var(--mm)) calc(.4 * var(--mm)) calc(.2 * var(--mm)) calc(.6 * var(--mm)); border-radius: calc(3 * var(--mm));
+  transform: translate(calc(1 * var(--mm)), calc(1.7 * var(--mm)));
+  background: repeating-linear-gradient(to bottom, #4d483f 0 1px, #3b3731 1px 3px); }
+.notebook-cover {
+  background-color: #252421;
+  background-image: var(--grain), linear-gradient(152deg, #302e2a, #242320 42%, #1b1a18);
+  box-shadow: inset 1px 1px 0 rgb(255 225 185 / .07), inset -1px -1px 0 rgb(0 0 0 / .45);
+}
+.notebook-band { left: auto; right: calc(15 * var(--mm)); top: calc(-.6 * var(--mm)); bottom: calc(-3.2 * var(--mm)); width: calc(3.4 * var(--mm)); border-radius: 1px;
+  background: linear-gradient(90deg, #0c0c0b, #1e1d1b 45%, #0a0a09);
+  box-shadow: calc(.9 * var(--mm)) calc(.5 * var(--mm)) calc(1.2 * var(--mm)) rgb(0 0 0 / .5); }
+
+/* Pen: a dark lacquered barrel, lit along its upper side. Its cap end rests just below the card's lower-left corner and it
+   runs down-left, out of the bottom of the desk, in the open space between the notebook and the keyboard. */
+.desk-pen {
+  width: calc(140 * var(--mm)); height: calc(10 * var(--mm));
+  left: calc(var(--cx) - var(--hw) + 70 * var(--mm) - 140 * var(--mm));
+  top: calc(var(--cy) + var(--hh) + 22 * var(--mm) - 5 * var(--mm));
+  transform: rotate(-28deg); transform-origin: 100% 50%;
+  filter: blur(.3px);
+}
+.pen-shadow, .pen-body { position: absolute; inset: 0; border-radius: calc(5 * var(--mm)) calc(4.6 * var(--mm)) calc(4.6 * var(--mm)) calc(5 * var(--mm)); }
+.pen-shadow { background: rgb(0 0 0 / .6); filter: blur(calc(2.2 * var(--mm))); transform: translate(calc(2.6 * var(--mm)), calc(4.2 * var(--mm))); }
+.pen-body { background: linear-gradient(to bottom, #25231f 0%, #45413a 20%, #2b2925 42%, #151412 74%, #0b0b0a 100%); }
+.pen-body > * { position: absolute; }
+.pen-tip { right: 100%; top: 0; height: 100%; width: calc(16 * var(--mm)); clip-path: polygon(0 44%, 100% 4%, 100% 96%, 0 56%);
+  background: linear-gradient(to bottom, #3a3328 0%, #6a5c45 26%, #3a3226 52%, #16130f 100%); }
+.pen-ring { left: 58%; top: 0; height: 100%; width: calc(1.8 * var(--mm)); background: linear-gradient(to bottom, #352d20, #6c5c41 24%, #332b1e 60%, #15120d); }
+.pen-clip { left: 63%; top: 36%; height: 28%; width: calc(36 * var(--mm)); border-radius: 1px 3px 3px 1px;
+  background: linear-gradient(to bottom, #58534a, #34312c 60%, #1e1c19); box-shadow: calc(.4 * var(--mm)) calc(.9 * var(--mm)) calc(.8 * var(--mm)) rgb(0 0 0 / .5); }
+
+/* Keyboard corner: graphite case and a few keys, running off the bottom-right. */
+.desk-keyboard {
+  left: calc(var(--cx) + var(--hw) - 22 * var(--mm));
+  top: calc(var(--cy) + var(--hh) + 18 * var(--mm));
+  width: calc(300 * var(--mm)); height: calc(160 * var(--mm));
+  padding: calc(5 * var(--mm)) 0 0 calc(5 * var(--mm));
+  border-radius: calc(6 * var(--mm)) 0 0 0;
+  background-color: #22211f;
+  background-image: var(--grain), linear-gradient(160deg, #2a2927, #1d1c1a 55%);
+  box-shadow: inset 1px 1px 0 rgb(255 225 185 / .07), calc(1.5 * var(--mm)) calc(2.5 * var(--mm)) calc(3 * var(--mm)) rgb(0 0 0 / .45), calc(6 * var(--mm)) calc(10 * var(--mm)) calc(24 * var(--mm)) rgb(0 0 0 / .45);
+  transform: rotate(-3deg); transform-origin: top left;
+  filter: blur(.4px);
+}
+.key-row { display: flex; gap: calc(2 * var(--mm)); margin-bottom: calc(2 * var(--mm)); }
+.key {
+  flex: none; width: calc(var(--w) * 19 * var(--mm) - 2 * var(--mm)); height: calc(17 * var(--mm));
+  display: flex; align-items: center; justify-content: center; border-radius: calc(1.6 * var(--mm));
+  font: 500 calc(3.1 * var(--mm)) / 1 "IBM Plex Sans", sans-serif; color: rgb(214 204 184 / .3);
+  background: linear-gradient(155deg, #2d2c2a, #1f1e1c 70%);
+  box-shadow: inset calc(.3 * var(--mm)) calc(.3 * var(--mm)) 0 rgb(255 228 190 / .07), 0 calc(.9 * var(--mm)) 0 #0e0e0d, calc(.6 * var(--mm)) calc(1.6 * var(--mm)) calc(1.6 * var(--mm)) rgb(0 0 0 / .45);
+}
+.is-fn .key { height: calc(10 * var(--mm)); font-size: calc(2.4 * var(--mm)); }
+.key.is-word { justify-content: flex-start; align-items: flex-end; padding: 0 0 calc(2.2 * var(--mm)) calc(2.4 * var(--mm)); font-size: calc(2.6 * var(--mm)); }
+.is-fn .key.is-word { padding-bottom: calc(1.6 * var(--mm)); }
+
+/* Mug on a cork coaster, upper right, seen from above: rim, coffee, a crescent of the stoneware body, the handle.
+   The mug stands taller than anything else on the desk, so it is the softest object in the scene (the pen and keyboard
+   carry a lighter blur, the notebook none). */
+.desk-mug { width: 0; height: 0; left: calc(var(--cx) + var(--hw) + 70 * var(--mm)); top: calc(var(--cy) - var(--hh) - 20 * var(--mm)); filter: blur(.7px); }
+.desk-mug > * { position: absolute; border-radius: 50%; }
+.coaster {
+  width: calc(92 * var(--mm)); height: calc(92 * var(--mm)); left: calc(-46 * var(--mm)); top: calc(-46 * var(--mm));
+  background-color: #4a3826;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .06 0 0 0 0 .03 3.2 0 0 0 -1.7'/%3E%3C/filter%3E%3Cpath filter='url(%23c)' d='M0 0h120v120H0z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.45' numOctaves='2' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .78 0 0 0 0 .6 0 0 0 0 .4 2.6 0 0 0 -1.55'/%3E%3C/filter%3E%3Cpath opacity='.35' filter='url(%23l)' d='M0 0h120v120H0z'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 34% 30%, #57432d, #3a2c1e 100%);
+  background-size: 120px 120px, 120px 120px, 100% 100%;
+  box-shadow: 0 calc(1.2 * var(--mm)) 0 #251b12, calc(2 * var(--mm)) calc(4 * var(--mm)) calc(8 * var(--mm)) rgb(0 0 0 / .5), inset 0 0 calc(1.5 * var(--mm)) rgb(0 0 0 / .35);
+}
+.mug-shadow { width: calc(74 * var(--mm)); height: calc(74 * var(--mm)); left: calc(-37 * var(--mm)); top: calc(-37 * var(--mm));
+  background: rgb(0 0 0 / .6); filter: blur(calc(5 * var(--mm))); transform: translate(calc(9 * var(--mm)), calc(13 * var(--mm))); }
+.mug-handle { width: calc(31 * var(--mm)); height: calc(24 * var(--mm)); left: calc(25 * var(--mm)); top: calc(-3 * var(--mm));
+  border: calc(6 * var(--mm)) solid #22211f; transform: rotate(22deg);
+  box-shadow: inset calc(.6 * var(--mm)) calc(.6 * var(--mm)) calc(.8 * var(--mm)) rgb(255 225 185 / .06), calc(2 * var(--mm)) calc(3 * var(--mm)) calc(4 * var(--mm)) rgb(0 0 0 / .45); }
+.mug-body { width: calc(74 * var(--mm)); height: calc(74 * var(--mm)); left: calc(-37 * var(--mm)); top: calc(-37 * var(--mm));
+  transform: translateY(calc(6 * var(--mm)));
+  background: linear-gradient(to right, #181715, #2c2a27 28%, #242220 55%, #11100f); }
+.mug-rim {
+  width: calc(74 * var(--mm)); height: calc(74 * var(--mm)); left: calc(-37 * var(--mm)); top: calc(-37 * var(--mm));
+  background:
+    radial-gradient(ellipse 20% 11% at 40% 36%, rgb(255 222 176 / .1), rgb(255 222 176 / 0)),
+    radial-gradient(circle closest-side, #1b120c 0%, #120c08 70%, #0c0806 85%, #0a0908 87%, #34322e 91%, #2d2b28 96%, #211f1d 100%);
+  box-shadow: inset calc(.8 * var(--mm)) calc(.8 * var(--mm)) calc(1 * var(--mm)) rgb(255 225 185 / .07), inset calc(-.8 * var(--mm)) calc(-.8 * var(--mm)) calc(1.4 * var(--mm)) rgb(0 0 0 / .35);
+}
+
+/* Narrow desktops and tablets: the mug and pen would crowd the card, so only the notebook and keyboard remain. */
+@media (max-width: 900px) {
+  .desk-pen, .desk-mug { display: none; }
+}
+/* Short landscape windows: the card is re-centred and fills the height, leaving no desk below it. */
+@media (min-width: 701px) and (max-height: 520px) {
+  .desk-props { --cy: 50%; }
+  .desk-pen, .desk-keyboard { display: none; }
+}
+/* Phones: the card is upright and nearly full width. The desk keeps its texture and one object, the keyboard corner,
+   tucked under the card's lower right. */
+@media (max-width: 700px) {
+  .desk-props { --mm: 3px; --cy: calc(50% - 2svh); --hw: calc(var(--pw) / 2); --hh: calc(var(--pw) * .71); }
+  .desk-notebook, .desk-pen, .desk-mug { display: none; }
+  .desk-keyboard { left: calc(var(--cx) - 12 * var(--mm)); top: calc(var(--cy) + var(--hh) + 12 * var(--mm)); }
+}

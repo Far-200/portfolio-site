@@ -1,0 +1,60 @@
+/* Desk mode. BusinessCardShell sets .desk-active on the stage only while the card is compact ("/" and "/work").
+   Opened folios drop the modifier, and everything below falls back to the stage's original look.
+   This file loads before business-card.css, so every override here must win on specificity, not order. */
+
+/* While the desk is active, the lamp is the only light and the new shadows are the only ground shadow. */
+.card-stage.desk-active::before, .card-stage.desk-active::after { opacity: 0; }
+.card-stage.desk-active .business-card::before { content: none; }
+
+/* The scene: surface, lamp, vignette. Static layers, drawn once; it crossfades with the stage fields on the same clock. */
+.desk-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 560ms var(--ease); }
+.card-stage.desk-active .desk-scene { opacity: 1; }
+.desk-scene > * { position: absolute; inset: 0; }
+/* Dark, slightly warm desk: fine grain over broad mottling, both tiled procedural noise. */
+.desk-surface {
+  background-color: #1e1c18;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23fff' opacity='.07' filter='url(%23g)' d='M0 0h180v180H0z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 560 560' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .02 0 0 0 0 .015 0 0 0 0 .01 2.4 0 0 0 -1'/%3E%3C/filter%3E%3Cpath opacity='.75' filter='url(%23m)' d='M0 0h560v560H0z'/%3E%3C/svg%3E");
+  background-size: 180px 180px, 560px 560px;
+}
+/* One amber lamp, off screen to the upper left: a broad pool with a slightly brighter core just up-left of the card. */
+.desk-light {
+  background:
+    radial-gradient(ellipse 30% 28% at 42% 36%, rgb(255 205 150 / .1), rgb(255 205 150 / 0) 100%),
+    radial-gradient(ellipse 72% 70% at 38% 32%, rgb(255 190 128 / .22), rgb(255 182 120 / .08) 45%, rgb(255 175 115 / 0) 78%);
+}
+.desk-vignette { background: radial-gradient(ellipse 95% 92% at 42% 38%, rgb(8 7 5 / 0) 38%, rgb(8 7 5 / .5) 76%, rgb(6 5 4 / .86) 100%); }
+
+/* Placement. The wrapper adds no angle of its own: CardTilt alone owns the resting rotation and the straight hover/focus pose.
+   It only carries the shadows and stands in for the stage as the card's perspective parent. It flattens its children,
+   so the shadows are never depth-sorted through a tilted card. */
+.desk-placement { position: relative; z-index: 1; max-width: 100%; perspective: 1600px; }
+/* The card's edge box-shadow belongs to a box that never turns, so mid-flip it outlines an empty rectangle.
+   The contact shadow replaces it on the desk; folios keep it. */
+.card-stage.desk-active .business-card { box-shadow: none; }
+/* Shadows are filled, blurred shapes tucked inside the card's footprint rather than box-shadows around it: a box-shadow
+   is hollow, and when the card turns edge-on that hollow reads as a second card. Both fall down-right, away from the lamp.
+   They switch off at once when a folio opens and fade back in once the card has mostly settled. */
+.desk-shadows { position: absolute; inset: 0; pointer-events: none; }
+.desk-shadow { position: absolute; opacity: 0; }
+.card-stage.desk-active .desk-shadow { opacity: 1; transition: opacity 360ms var(--ease) 260ms; }
+.desk-shadow-contact { inset: 3px; border-radius: 6px; background: rgb(10 8 6 / .6); filter: blur(2.5px); transform: translate(1.5px, 2.5px); }
+.desk-shadow-ambient { inset: 7% 5%; border-radius: 24px; background: rgb(8 6 4 / .4); filter: blur(26px); transform: translate(18px, 26px); }
+/* During a turn (the same 560ms as .card-turn) the card leaves the desk: the contact shadow is gone before the card
+   is edge-on and returns as it lands; the ambient shadow only thins out. */
+.card-stage.desk-active .desk-shadows[data-turning] .desk-shadow-contact { animation: desk-contact-turn 560ms linear; }
+.card-stage.desk-active .desk-shadows[data-turning] .desk-shadow-ambient { animation: desk-ambient-turn 560ms linear; }
+@keyframes desk-contact-turn { 0%, 100% { opacity: 1; } 16%, 80% { opacity: 0; } }
+@keyframes desk-ambient-turn { 0%, 100% { opacity: 1; } 28%, 70% { opacity: .25; } }
+
+@media (max-width: 700px) {
+  /* Phones: the pool centres over the upright card; the ambient shadow stays closer to it. */
+  .desk-light {
+    background:
+      radial-gradient(ellipse 60% 34% at 44% 36%, rgb(255 205 150 / .1), rgb(255 205 150 / 0) 100%),
+      radial-gradient(ellipse 110% 70% at 40% 32%, rgb(255 190 128 / .22), rgb(255 182 120 / .08) 45%, rgb(255 175 115 / 0) 78%);
+  }
+  .desk-vignette { background: radial-gradient(ellipse 120% 95% at 45% 40%, rgb(8 7 5 / 0) 40%, rgb(8 7 5 / .5) 78%, rgb(6 5 4 / .86) 100%); }
+  .desk-shadow-ambient { filter: blur(18px); transform: translate(8px, 14px); }
+}
