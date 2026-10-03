@@ -5,6 +5,7 @@ import App from "./App";
 import "@fontsource/instrument-serif/latin-400.css";
 import "@fontsource/ibm-plex-sans/latin-400.css";
 import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/kalam/latin-400.css";
 import "./styles/business-card.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

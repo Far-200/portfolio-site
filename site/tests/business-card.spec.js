@@ -22,6 +22,31 @@ async function noOverflow(page) {
   if (await scroller.count()) expect(await scroller.evaluate((node) => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
 }
 
+test("portrait loads and stays clear of identity and controls", async ({ page }, info) => {
+  await page.goto("/");
+  await settled(page);
+  const portrait = page.getByRole("img", { name: "Farhaan Khan", exact: true });
+  await expect(portrait).toBeVisible();
+  expect(await portrait.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
+  async function clearPrint() {
+    const photo = await page.locator(".front-photo").boundingBox();
+    for (const selector of [".front-identity", ".front-line", ".front-bottom"]) {
+      const print = await page.locator(selector).boundingBox();
+      const overlaps = photo.x < print.x + print.width && photo.x + photo.width > print.x
+        && photo.y < print.y + print.height && photo.y + photo.height > print.y;
+      expect(overlaps, `${selector} must remain clear of the print`).toBe(false);
+    }
+    await noOverflow(page);
+  }
+  await clearPrint();
+  if (info.project.name === "mobile") {
+    await page.setViewportSize({ width: 667, height: 375 });
+    await settled(page);
+    await clearPrint();
+    await page.screenshot({ path: info.outputPath("landscape-front.png") });
+  }
+});
+
 test("keyboard flip, one accessible face, and route-owned history", async ({ page }, info) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
