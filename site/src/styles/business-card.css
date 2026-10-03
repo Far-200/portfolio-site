@@ -68,7 +68,9 @@ button:active { transform: translateY(1px); }
   .card-stage.is-back:not(.is-expanded):has(.card-tilt:hover) { --field-o: .68; }
 }
 .card-tilt { position: relative; z-index: 1; max-width: 100%; }
-.business-card { width: calc(590 * var(--u)); height: calc(382 * var(--u)); position: relative; isolation: isolate; border-radius: 5px; box-shadow: 0 1px 1px #0003, 0 3px 6px -3px #0004; }
+/* Keep the one morphing card composited: Motion's layout scale otherwise rerasterizes
+   its paper and descendants at successive sizes during expansion/collapse. */
+.business-card { width: calc(590 * var(--u)); height: calc(382 * var(--u)); position: relative; isolation: isolate; border-radius: 5px; box-shadow: 0 1px 1px #0003, 0 3px 6px -3px #0004; will-change: transform; }
 /* Shadow pool on the surface beneath the card. It stays put while the card turns, and only translates and scales with the tilt values set by CardTilt. */
 .business-card::before { content: ""; position: absolute; left: 1%; right: 1%; top: 66%; height: 52%; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgb(0 0 0 / .46), rgb(0 0 0 / .28) 42%, rgb(0 0 0 / .1) 74%, rgb(0 0 0 / 0) 100%); opacity: calc(1 - var(--tilt-m, 0) * .05); transform: translate3d(var(--shx, 0px), var(--shy, 0px), 0) scale(var(--shs, 1)); }
 .card-turn { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 560ms cubic-bezier(.45, .05, .2, 1); }
@@ -139,7 +141,9 @@ button:active { transform: translateY(1px); }
 .collapse-control { display: inline-flex; gap: 14px; align-items: center; margin-left: auto; min-height: 44px; font-size: 14px; }
 .collapse-control .arrow { font-size: 23px; color: var(--accent); }
 .collapse-control:hover .arrow { transform: translate(-2px, 2px); }
-.surface-scroll { overflow-y: auto; overflow-x: hidden; min-height: 0; flex: 1; overscroll-behavior: contain; scrollbar-gutter: stable; scrollbar-color: #b4bbab transparent; scrollbar-width: thin; }
+/* This layer exists only while a folio is open. Keep native scrolling separate
+   from the stationary paper/3D shell instead of rerasterizing them together. */
+.surface-scroll { overflow-y: auto; overflow-x: hidden; min-height: 0; flex: 1; overscroll-behavior: contain; scrollbar-gutter: stable; scrollbar-color: #b4bbab transparent; scrollbar-width: thin; will-change: transform; }
 .surface-scroll:hover, .surface-scroll:focus-within { scrollbar-color: #76866e transparent; }
 /* A native, draggable card-edge mark. Firefox retains its thin native rail. */
 @supports selector(::-webkit-scrollbar) {

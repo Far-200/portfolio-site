@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion as Motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
 // Motion values write transforms directly; pointer movement never renders React.
@@ -23,21 +24,28 @@ export default function CardTilt({ expanded, children }) {
   const reset = () => { x.set(0); y.set(0); z.set(-1.2); };
   // Expanded and reduced-motion cards stay flat: no transform and no light variables (the CSS defaults apply).
   const flat = expanded || reduced;
+  useEffect(() => {
+    if (!flat) return;
+    // Stop any compact spring still settling when the folio opens. Reset both
+    // sources and springs so collapse cannot resume a stale pointer position.
+    x.jump(0); y.jump(0); z.jump(-1.2);
+    rotateX.jump(0); rotateY.jump(0); rotateZ.jump(-1.2);
+  }, [flat, x, y, z, rotateX, rotateY, rotateZ]);
   const style = flat
     ? { rotateX: 0, rotateY: 0, rotateZ: 0 }
     : { rotateX, rotateY, rotateZ, "--shx": shadowX, "--shy": shadowY, "--shs": shadowScale, "--tilt-m": tiltMagnitude, "--lx": sheenX, "--ly": sheenY };
   return (
     <Motion.div className="card-tilt" style={style}
-      onPointerMove={(event) => {
-        if (expanded || reduced || event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+      onPointerMove={flat ? undefined : (event) => {
+        if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
         const rect = event.currentTarget.getBoundingClientRect();
         x.set((0.5 - (event.clientY - rect.top) / rect.height) * 3);
         y.set(((event.clientX - rect.left) / rect.width - 0.5) * 3);
         z.set(0);
       }}
-      onPointerLeave={reset} onPointerCancel={reset}
-      onFocusCapture={() => { x.set(0); y.set(0); z.set(0); }}
-      onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) reset(); }}
+      onPointerLeave={flat ? undefined : reset} onPointerCancel={flat ? undefined : reset}
+      onFocusCapture={flat ? undefined : () => { x.set(0); y.set(0); z.set(0); }}
+      onBlurCapture={flat ? undefined : (event) => { if (!event.currentTarget.contains(event.relatedTarget)) reset(); }}
     >{children}</Motion.div>
   );
 }

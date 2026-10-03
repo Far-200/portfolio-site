@@ -193,6 +193,43 @@ test("tilt is restrained and disabled for touch and reduced motion", async ({ pa
   const transform = await page.locator(".card-tilt").evaluate((node) => getComputedStyle(node).transform);
   if (["mobile", "narrow", "tablet", "reduced-motion"].includes(info.project.name)) expect(transform).toBe("none");
   else expect(transform).toMatch(/^matrix3d/);
+
+  await page.getByRole("button", { name: "Flip card to selected work" }).click();
+  await settled(page);
+  await page.getByRole("link", { name: "About", exact: true }).click();
+  await settled(page);
+  const tilt = page.locator(".card-tilt");
+  await tilt.evaluate((node) => {
+    window.tiltStyleWrites = 0;
+    window.tiltObserver = new MutationObserver((records) => { window.tiltStyleWrites += records.length; });
+    window.tiltObserver.observe(node, { attributes: true, attributeFilter: ["style"] });
+  });
+  const scroller = page.getByRole("region", { name: "About content" });
+  const bounds = await scroller.boundingBox();
+  await page.mouse.move(bounds.x + 20, bounds.y + 20);
+  await page.mouse.move(bounds.x + bounds.width - 20, bounds.y + bounds.height - 20, { steps: 8 });
+  await page.mouse.move(0, 0);
+  await page.getByRole("button", { name: "Collapse" }).focus();
+  await scroller.focus();
+  await page.keyboard.press("PageDown");
+  await expect.poll(() => scroller.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  await settled(page);
+  expect(await tilt.evaluate((node) => getComputedStyle(node).transform)).toBe("none");
+  expect(await scroller.boundingBox()).toEqual(bounds);
+  expect(await page.evaluate(() => {
+    window.tiltObserver.disconnect();
+    return window.tiltStyleWrites;
+  })).toBe(0);
+
+  // Pointer interaction must resume after collapsing the same mounted card.
+  await page.getByRole("button", { name: "Collapse" }).click();
+  await settled(page);
+  const compact = await card.boundingBox();
+  await page.mouse.move(compact.x + compact.width - 30, compact.y + 30);
+  await settled(page);
+  const restored = await tilt.evaluate((node) => getComputedStyle(node).transform);
+  if (["mobile", "narrow", "tablet", "reduced-motion"].includes(info.project.name)) expect(restored).toBe("none");
+  else expect(restored).toMatch(/^matrix3d/);
 });
 
 test("folio content, native scrolling and media remain usable", async ({ page }, info) => {
