@@ -1,5 +1,5 @@
 /* Desk mode. BusinessCardShell sets .desk-active on the stage only while the card is compact ("/" and "/work").
-   Opened folios drop the modifier, and everything below falls back to the stage's original look.
+   Opened folios keep the still life at a softer contrast, with their own sheet shadow.
    This file loads before business-card.css, so every override here must win on specificity, not order. */
 
 /* While the desk is active, the lamp is the only light and the new shadows are the only ground shadow. */
@@ -9,6 +9,8 @@
 /* The scene: surface, lamp, vignette. Static layers, drawn once; it crossfades with the stage fields on the same clock. */
 .desk-scene { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 560ms var(--ease); }
 .card-stage.desk-active .desk-scene { opacity: 1; }
+.card-stage.is-expanded .desk-scene { opacity: .8; }
+.card-stage.is-expanded .business-card { box-shadow: 1px 3px 2px #0004, 8px 18px 45px #0005; }
 .desk-scene > * { position: absolute; inset: 0; }
 /* Dark, slightly warm desk: fine grain over broad mottling, both tiled procedural noise. */
 .desk-surface {

@@ -1,0 +1,157 @@
+/* Expanded paper artifacts. Content, routes and scroll ownership stay in the existing components. */
+.card-about { position: relative; }
+.v4-about-intro-inner { display: grid; grid-template-columns: 170px minmax(0, 1fr); column-gap: 42px; }
+.about-statement, .v4-about-intro-copy { grid-column: 2; }
+.about-portrait { position: relative; grid-column: 1; grid-row: 1 / 3; align-self: start; margin-top: 42px; padding: 7px 7px 12px; background: #faf7ef; box-shadow: 1px 3px 5px #40362128, 3px 10px 18px -10px #40362155; transform: rotate(-2deg); }
+.about-portrait img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 22%; filter: grayscale(1) contrast(1.04); background: #dcdad0; box-shadow: 0 0 0 1px #2527201a, 0 12px 20px -16px #25272055; }
+.about-portrait figcaption { display: grid; gap: 4px; margin-top: 12px; padding-top: 9px; border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; color: var(--muted); }
+.about-portrait figcaption .micro { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--ink); }
+.about-portrait figcaption .micro span:last-child { color: var(--muted); }
+.v4-about-eyebrow, .v4-about-section-label, .v4-about-toolkit-level { font-size: 13px; color: var(--accent); font-weight: 700; letter-spacing: .02em; text-transform: none; }
+.v4-about-title { font-family: var(--display); font-size: clamp(32px, 3.4vw, 46px); line-height: 1.3; letter-spacing: -.025em; margin: 14px 0 24px; max-width: 21ch; text-wrap: balance; }
+.v4-about-intro-copy p, .v4-about-section-intro, .v4-about-now-copy, .v4-about-contact-copy { font-size: var(--body-size); line-height: var(--body-leading); max-width: 59ch; margin-bottom: 12px; }
+.v4-about-section { padding-bottom: 40px; }
+.v4-about-section + .v4-about-section { border-top: 1px solid var(--rule); padding-top: 34px; }
+.v4-about-section-heading { font-family: var(--display); font-size: 28px; margin: 8px 0 18px; }
+.v4-about-practice-inner { display: grid; grid-template-columns: 1.6fr 1fr; gap: 64px; }
+.v4-about-toolkit-inner { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 42px; }
+.v4-about-toolkit-levels { margin-top: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+.v4-about-section-header .v4-about-section-intro { font-size: 17px; color: var(--muted); }
+.v4-about-build-list { margin: 0; }
+.v4-about-build-row + .v4-about-build-row { margin-top: 20px; }
+.v4-about-build-row dt { font-size: 17px; font-weight: 700; }
+.v4-about-build-row dd { font-size: 17px; line-height: 1.7; color: var(--muted); margin: 6px 0 0; }
+.v4-about-process-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 17px; }
+.v4-about-process-index { color: var(--accent); font-size: 13px; }
+.v4-about-toolkit-row, .v4-about-now-row { display: grid; grid-template-columns: 95px 1fr; gap: 14px; font-size: 17px; line-height: 1.7; padding: 9px 0; }
+.v4-about-toolkit-row { grid-template-columns: 1fr; gap: 3px; }
+.v4-about-toolkit-row dt, .v4-about-now-row dt { color: var(--muted); }
+.v4-about-toolkit-row dd, .v4-about-now-row dd { margin: 0; }
+.v4-about-split-inner { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 42px; }
+.v4-about-contact-links { display: grid; }
+.v4-about-contact-links > * { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 48px; border-bottom: 1px solid var(--rule); font-size: 17px; }
+.v4-about-contact-links > * > span:last-child { display: inline-flex; align-items: center; gap: 8px; overflow-wrap: anywhere; }
+.v4-about-contact-links > *:hover { color: var(--accent); }
+.card-log > h1, .card-lab > h1, .empty-card h1 { font-family: var(--display); font-size: clamp(34px, 4vw, 50px); letter-spacing: -.025em; margin: 14px 0; line-height: 1.25; }
+.surface-intro { color: var(--muted); font-size: 16px; line-height: 1.7; margin-bottom: 32px; }
+.log-year > h2 { font-size: 27px; color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.log-year ol { list-style: none; }
+.log-year li { display: grid; border-top: 1px solid var(--rule); }
+.log-date { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+.log-date > span { font-size: 13px; color: var(--accent); letter-spacing: .02em; }
+.log-year h3 { font-family: var(--display); font-size: 25px; line-height: 1.4; margin-bottom: 10px; }
+.log-year h3 .ink-link { min-height: 44px; }
+.log-year p { font-size: var(--body-size); line-height: var(--body-leading); color: #555a50; }
+.lab-section { margin-top: 40px; }
+.lab-section-label { color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+.lab-section > h2 { font-family: var(--display); font-size: 28px; margin-bottom: 4px; }
+.lab-entry .micro { color: var(--accent); font-size: 13px; }
+.lab-entry p { font-size: var(--body-size); line-height: var(--body-leading); margin-bottom: 10px; }
+.lab-entry .tech-copy { font-size: 13px; }
+.plain-list { padding-left: 18px; font-size: var(--body-size); line-height: var(--body-leading); margin-top: 12px; }
+.empty-card { padding: 40px 0; }
+.empty-card > p { margin: 20px 0; }
+
+@media (max-width: 700px) {
+  .v4-about-intro-inner { grid-template-columns: 1fr; }
+  .about-statement, .v4-about-intro-copy { grid-column: 1; }
+  .about-portrait { grid-row: auto; grid-column: 1; display: flex; align-items: flex-end; gap: 18px; padding: 8px; margin: 4px 0 30px; }
+  .about-portrait img { width: 96px; height: 120px; flex-shrink: 0; }
+  .about-portrait figcaption { flex: 1; margin: 0; }
+  .about-portrait figcaption .micro { flex-wrap: wrap; }
+  .v4-about-practice-inner, .v4-about-toolkit-inner, .v4-about-split-inner { grid-template-columns: 1fr; gap: 24px; }
+  .v4-about-toolkit-levels { grid-template-columns: 1fr; gap: 26px; }
+  .v4-about-toolkit-row { grid-template-columns: 95px 1fr; gap: 14px; }
+  .v4-about-contact-links > * { font-size: 13px; }
+  .v4-about-contact-links > * > span:last-child { text-align: right; }
+  .log-year h3 { font-size: 23px; }
+  .log-date { font-size: 13px; }
+}
+
+.paper-note {
+  padding: 20px;
+  border: 1px solid #82796266;
+  border-radius: 2px 8px 3px 5px;
+  background: #e9e5d4;
+  box-shadow: 1px 3px 0 #82796216;
+  align-self: start;
+}
+.paper-note h2 { font-size: 20px; line-height: 1.4; color: var(--accent); margin-bottom: 10px; }
+.paper-note p { font-size: 16px; line-height: 1.75; }
+.paper-note .ink-link { font-size: 15px; margin-top: 8px; }
+
+/* A fold down the gutter, with the photograph attached to the narrower panel. */
+.surface-scroll:has(.card-about) {
+  background: linear-gradient(90deg, transparent calc(var(--folio-inset) + 187px), #8279620d calc(var(--folio-inset) + 191px), #fff8 calc(var(--folio-inset) + 192px), transparent calc(var(--folio-inset) + 197px));
+}
+.about-portrait::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 75px;
+  height: 24px;
+  top: -11px;
+  left: 25%;
+  background: color-mix(in srgb, var(--tape) 80%, transparent);
+  border-inline: 1px dashed #82796255;
+  transform: rotate(7deg);
+  pointer-events: none;
+}
+.v4-about-process-list li { display: flex; gap: 9px; align-items: baseline; }
+.v4-about-process-index { display: inline-grid; place-items: center; min-width: 27px; height: 27px; margin-right: 0; border: 1px solid #82796270; border-radius: 48% 55% 45% 52%; transform: rotate(-5deg); }
+.v4-about-toolkit-levels > section { padding: 0 0 0 18px; border-left: 1px solid var(--rule); }
+
+/* Journal: dates in the margin, an ink timeline, observations tucked alongside. */
+.card-log { display: grid; grid-template-columns: minmax(0, 1fr) 210px; column-gap: 36px; }
+.card-log > .micro, .card-log > h1, .card-log > .surface-intro { grid-column: 1 / -1; }
+.card-log > h1 { max-width: 20ch; }
+.journal-note { grid-column: 2; grid-row: 4 / span 2; transform: rotate(1deg); }
+.card-log .log-year { display: grid; grid-column: 1; grid-template-columns: 65px minmax(0, 1fr); gap: 20px; margin-top: 12px; }
+.log-year ol { border-left: 1px solid #37634b44; padding-left: 20px; }
+.card-log .log-year li { position: relative; grid-template-columns: 82px minmax(0, 1fr); gap: 16px; padding: 20px 0 26px; }
+.log-year li::before { content: ""; position: absolute; left: -25px; top: 31px; width: 8px; height: 8px; border: 1px solid var(--accent); border-radius: 50%; background: var(--paper); }
+.log-year li:first-child::before { background: var(--accent); }
+.log-year .ink-link { align-items: baseline; }
+.log-date > span { border-bottom: 1px solid var(--rule); align-self: start; }
+.card-log > .ink-link { grid-column: 1 / -1; justify-self: start; margin-top: 24px; }
+
+/* Lab: a faint working grid and numbered experiment boxes, on the same stock. */
+.surface-scroll:has(.card-lab) { background-image: linear-gradient(#82796209 1px, transparent 1px), linear-gradient(90deg, #82796209 1px, transparent 1px); background-size: 24px 24px; }
+.card-lab { display: grid; grid-template-columns: minmax(0, 1fr) 230px; column-gap: 32px; }
+.card-lab > .micro, .card-lab > .surface-intro, .card-lab > .lab-section { grid-column: 1 / -1; }
+.card-lab > h1 { grid-column: 1; max-width: 18ch; }
+.lab-note { grid-column: 2; grid-row: 2; margin-top: 20px; transform: rotate(-1deg); }
+.lab-section { counter-reset: experiment; }
+.lab-section:first-of-type, .lab-collection { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.lab-section > .lab-section-label, .lab-section > h2 { grid-column: 1 / -1; }
+.card-lab .lab-entry { position: relative; display: block; padding: 22px 22px 14px; border: 1px solid #82796255; border-radius: 3px 5px 2px 4px; background: #f7f2e7b3; }
+.lab-entry::before { counter-increment: experiment; content: "[ " counter(experiment, decimal-leading-zero) " ]"; display: block; color: var(--accent); font-size: 14px; margin-bottom: 12px; }
+.card-lab .lab-entry h3 { font-size: 24px; margin: 4px 0 14px; line-height: 1.35; }
+.card-lab .lab-entry .micro { text-decoration: underline; text-underline-offset: 3px; }
+.card-lab .lab-entry .study-links { gap: 0 20px; }
+.card-lab .study-columns { border-block: 1px solid var(--rule); padding: 24px 0; }
+
+@media (max-width: 850px) {
+  .card-log, .card-lab { grid-template-columns: minmax(0, 1fr); }
+  .journal-note, .lab-note { grid-column: 1; grid-row: auto; margin: 0 0 24px; transform: none; }
+  .paper-note { padding: 16px 20px; }
+  .card-log .log-year { grid-template-columns: 1fr; gap: 12px; }
+  .lab-section:first-of-type, .lab-collection { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .surface-scroll:has(.card-about) { background: none; }
+  .card-log .log-year li { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .log-date { flex-direction: row; align-items: baseline; gap: 14px; }
+  .card-lab .lab-entry { padding: 20px 18px 12px; }
+  .journal-note, .lab-note { order: 2; margin-top: 24px; }
+  .card-log > .ink-link { order: 3; }
+  .v4-about-process-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .v4-about-process-list li { gap: 6px; font-size: 16px; }
+  .v4-about-contact-links > * { flex-wrap: wrap; }
+}
+@media (max-width: 360px) {
+  .v4-about-process-list { grid-template-columns: 1fr; }
+  .about-portrait { gap: 14px; }
+  .about-portrait img { width: 84px; height: 105px; }
+  .about-portrait figcaption .micro { gap: 8px; }
+}

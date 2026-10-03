@@ -18,11 +18,16 @@ export function CardAbout() {
 export function CardLog() {
   const years = [...new Set(BUILD_LOG.map((entry) => entry.year))];
   return (
-    <article className="card-log"><p className="micro">A record of making things</p><h1 tabIndex={-1} data-route-heading>Build log<span className="ink-dot">.</span></h1><p className="surface-intro">Things changed, shipped, broken and learned.</p>
+    <article className="card-log"><p className="micro">02 / Build log</p><h1 tabIndex={-1} data-route-heading>Things I’ve been building<span className="ink-dot">.</span></h1><p className="surface-intro">Things changed, shipped, broken and learned.</p>
       {years.map((year) => <section className="log-year" key={year}><h2>{year}</h2><ol>{BUILD_LOG.filter((entry) => entry.year === year).map((entry) => {
         const project = getProjectBySlug(entry.projectId);
         return <li key={entry.id}><div className="log-date micro">{entry.date}<span>{entry.type}</span></div><div><h3>{project ? <Link className="ink-link" to={project.internalRoute}>{entry.title}<span className="arrow" aria-hidden="true">↗</span></Link> : entry.title}</h3><p>{entry.description}</p></div></li>;
       })}</ol></section>)}
+      <aside className="paper-note journal-note" aria-label="Currently exploring">
+        <h2>Currently exploring</h2>
+        <p>{LEARNING_FOCUS[0].items.slice(0, 3).join(" · ")}</p>
+        <Link className="ink-link" to="/lab">Open the notebook <span aria-hidden="true">↗</span></Link>
+      </aside>
       <Link className="ink-link" to="/lab">More from the workbench <span className="arrow" aria-hidden="true">↗</span></Link>
     </article>
   );
@@ -30,7 +35,8 @@ export function CardLog() {
 
 export function CardLab() {
   return (
-    <article className="card-lab"><p className="micro">In progress / in practice</p><h1 tabIndex={-1} data-route-heading>On the workbench<span className="ink-dot">.</span></h1><p className="surface-intro">Builds in progress, things I’m learning, and smaller tools.</p>
+    <article className="card-lab"><p className="micro">03 / Lab</p><h1 tabIndex={-1} data-route-heading>Small experiments, useful tools<span className="ink-dot">.</span></h1><p className="surface-intro">Builds in progress, things I’m learning, and smaller tools.</p>
+      <aside className="paper-note lab-note" aria-label="Notebook rule"><h2>Note to self</h2><p>Start small. Make it work. Write down what breaks.</p></aside>
       <section className="lab-section"><p className="micro lab-section-label">01 / Now</p><h2>Currently building</h2>{ACTIVE_BUILDS.map((build) => {
         const project = getProjectBySlug(build.id);
         return <article className="lab-entry" key={build.id}><div><span className="micro">{build.stage}</span><h3>{build.name}</h3></div><div><p>{build.summary}</p>{build.focus && <p className="muted">{build.focus}</p>}{build.tech.length > 0 && <p className="tech-copy">{build.tech.join(" / ")}</p>}<div className="study-links">{project && <Link className="ink-link" to={project.internalRoute}>Project notes <span className="arrow" aria-hidden="true">↗</span></Link>}{build.github && <ExternalLink href={build.github}>Source</ExternalLink>}</div></div></article>;

@@ -3,7 +3,7 @@ import "./desk-scene.css";
 
 // Decorative still life behind the compact card: the desk and its props, one warm lamp from the upper left, and a vignette.
 // The props sit under the lamp and vignette layers so they share the same light.
-// It is visible only while the stage carries .desk-active (front and back); opened folios fade it out.
+// Compact cards show the full still life; opened folios soften it to keep the paper in focus.
 export default function DeskScene() {
   return (
     <div className="desk-scene" aria-hidden="true">

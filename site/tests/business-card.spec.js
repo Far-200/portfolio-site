@@ -65,6 +65,15 @@ test("keyboard flip, one accessible face, and route-owned history", async ({ pag
   await expect(page).toHaveURL(/\/work$/);
   await settled(page);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Selected work");
+  const clippedControls = await page.locator(".back-content").evaluate((face) => {
+    const bounds = face.getBoundingClientRect();
+    return Array.from(face.querySelectorAll("a, button")).filter((control) => {
+      const rect = control.getBoundingClientRect();
+      return rect.bottom > bounds.bottom + 1 || rect.right > bounds.right + 1
+        || rect.top < bounds.top - 1 || rect.left < bounds.left - 1;
+    }).map((control) => control.textContent);
+  });
+  expect(clippedControls, "Every reverse-side control stays on the paper").toEqual([]);
   await expect(page.getByRole("button", { name: "Flip card to selected work" })).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("02-back.png") });
   await expect(page.locator(".currently-building")).toContainText("Attendance Analytics");
@@ -125,8 +134,8 @@ test("all deep links, content surfaces, aliases and not found", async ({ page },
     ["/projects/devtool", "Developer JSON Formatter Tool"],
     ["/projects/prompt-router", "PromptRouter"],
     ["/about", "I build useful software, then learn from what breaks."],
-    ["/log", "Build log."],
-    ["/lab", "On the workbench."],
+    ["/log", "Things I’ve been building."],
+    ["/lab", "Small experiments, useful tools."],
     ["/missing", "This side is blank."],
   ];
   for (const [route, title] of routes) {
@@ -187,6 +196,8 @@ test("tilt is restrained and disabled for touch and reduced motion", async ({ pa
 });
 
 test("folio content, native scrolling and media remain usable", async ({ page }, info) => {
+  // Compact tablet checks stay at 1024px; expanded sheets also need the portrait tablet breakpoint.
+  if (info.project.name === "tablet") await page.setViewportSize({ width: 768, height: 1024 });
   const surfaces = [
     ["/about", ["#toolkit", "#contact"]],
     ["/log", [".log-year li:last-child"]],
