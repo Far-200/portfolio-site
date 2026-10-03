@@ -75,6 +75,13 @@ export const LEARNING_FOCUS = [
 // that aren't Selected Work flagships or in active development.
 export const LAB_UTILITIES = [
   {
+    id: "chaos",
+    title: getProjectBySlug("chaos").title,
+    stage: getProjectBySlug("chaos").status,
+    summary:
+      "Five coding-assistant characters turn a tiny supported task into a group-chat incident.",
+  },
+  {
     id: "aptivision",
     title: "AptiVision",
     summary:

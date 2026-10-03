@@ -92,8 +92,44 @@ export const PROJECTS = [
     internalRoute: "/projects/folder-structure-visualizer",
   },
 
-  // ── Existing shipped projects (not flagship, still routed) ────
+  // Lab experiment with a project sheet; Selected Work stays at three.
   {
+    id: "chaos",
+    slug: "chaos",
+    title: "Chaos",
+    shortTitle: "Chaos",
+    category: "Frontend Simulation · Interaction Experiment",
+    status: "Experiment",
+    flagship: false,
+    summary:
+      "A browser-only simulation of Claude, Codex, Copilot, ChatGPT, and Gemini overreacting to small coding tasks in a shared group chat, followed by an incident-style postmortem.",
+    sections: [
+      {
+        heading: "What it is",
+        body: "A browser-only simulation where five AI coding-assistant characters react to a small set of supported coding tasks inside a shared group chat.",
+      },
+      {
+        heading: "How it works",
+        body: "Supported inputs are classified locally, then locally defined simulation logic selects and sequences character-specific dialogue, reactions, interventions, and escalation before producing a postmortem.",
+      },
+      {
+        heading: "What it is not",
+        body: "No live Claude, Codex, Copilot, ChatGPT, or Gemini calls. No autonomous agents. No backend. No arbitrary prompting.",
+      },
+    ],
+    incidentLoop: {
+      characters: ["Claude", "Codex", "Copilot", "ChatGPT", "Gemini"],
+      steps: ["Choose a supported task", "Classify the task", "Run the simulation", "Watch the chat escalate", "Read the postmortem"],
+      postmortem: "Outcome, root causes, closing note.",
+    },
+    tech: ["React", "Vite", "Local task classification", "Scripted dialogue"],
+    github: "https://github.com/Far-200/chaos-team",
+    live: "https://chaos.farhaankhan.dev/",
+    media: null,
+    internalRoute: "/projects/chaos",
+  },
+  {
+    // Existing shipped projects (not flagship, still routed).
     id: "password-estimator",
     slug: "password-estimator",
     title: "Password Strength & Crack Time Estimator",

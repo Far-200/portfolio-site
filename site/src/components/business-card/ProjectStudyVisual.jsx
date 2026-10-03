@@ -4,6 +4,14 @@ const STEPS = ["Decode the problem", "Explain your reasoning", "Receive a hint",
 
 export default function ProjectStudyVisual({ project }) {
   const [step, setStep] = useState(0);
+  if (project.incidentLoop) return (
+    <figure className="socratic-figure incident-figure">
+      <figcaption className="micro">The incident loop</figcaption>
+      <p className="incident-characters">Characters / {project.incidentLoop.characters.join(" · ")}</p>
+      <ol>{project.incidentLoop.steps.map((label, i) => <li key={label}><span className="micro">0{i + 1}</span><span>{label}</span></li>)}</ol>
+      <p><span className="micro">Postmortem / </span>{project.incidentLoop.postmortem}<span className="incident-note" aria-hidden="true">this escalated.</span></p>
+    </figure>
+  );
   if (project.media) return <figure className="study-media"><img src={project.media.src} alt={project.media.alt} width="1600" height="1000" decoding="async" /><figcaption>ASCII tree → project scaffold</figcaption></figure>;
   if (project.id === "flowtrace") return (
     <figure className="pipeline-figure">

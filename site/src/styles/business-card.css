@@ -197,6 +197,18 @@ button:active { transform: translateY(1px); }
 .socratic-figure li:first-child { padding-left: 0; border: 0; }
 .socratic-figure li .micro { color: var(--accent); }
 .socratic-figure > p { border-top: 1px solid #cbd1c2; padding-top: 13px; color: var(--muted); font-size: 14px; }
+/* A static notebook diagram: no timers, filters, or animated chat layers. */
+.incident-figure > .incident-characters { border: 0; color: var(--accent); line-height: 1.7; }
+.incident-figure ol { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+.incident-figure li { position: relative; padding: 0; border: 0; font-size: 22px; line-height: 1.35; }
+.incident-figure li:not(:last-child)::after { content: "→"; position: absolute; top: 0; right: 0; color: var(--accent); transform: rotate(-7deg); }
+.incident-note { display: inline-block; margin-left: 18px; color: var(--accent); transform: rotate(-3deg); }
+@media (max-width: 700px) {
+  .socratic-figure.incident-figure ol { grid-template-columns: 1fr; gap: 18px; }
+  .socratic-figure.incident-figure li { grid-template-columns: 28px 1fr; gap: 10px; font-size: 22px; }
+  .incident-figure li:not(:last-child)::after { content: none; }
+  .incident-note { display: block; margin: 12px 0 0; }
+}
 .study-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; }
 .study-notes h2 { font-family: var(--display); font-size: 29px; margin: 8px 0 12px; }
 .study-notes p { font-size: 17px; line-height: 1.7; }

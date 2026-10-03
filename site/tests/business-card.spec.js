@@ -288,6 +288,66 @@ test("folio content, native scrolling and media remain usable", async ({ page },
   }
 });
 
+test("Chaos opens from Lab as a simulation sheet and preserves card navigation", async ({ page }, info) => {
+  await page.goto("/lab");
+  await settled(page);
+  const entry = page.locator(".lab-entry").filter({ has: page.getByRole("heading", { name: "Chaos", exact: true }) });
+  await expect(entry).toContainText("Experiment");
+  await entry.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath("chaos-lab.png") });
+  await page.locator(".business-card").evaluate((node) => { node.dataset.continuity = "lab-card"; });
+  await entry.getByRole("link", { name: "Project notes" }).click();
+  await expect(page).toHaveURL(/\/projects\/chaos$/);
+  await settled(page);
+  await expect(page.getByRole("heading", { name: "Chaos", exact: true })).toBeFocused();
+  await expect(page.locator(".business-card")).toHaveAttribute("data-continuity", "lab-card");
+  await expect(page.locator(".study-kicker")).toContainText("04 / Frontend Simulation");
+  await expect(page.getByRole("link", { name: "Open live project" })).toHaveAttribute("href", "https://chaos.farhaankhan.dev/");
+  await expect(page.getByRole("link", { name: "View source" })).toHaveAttribute("href", "https://github.com/Far-200/chaos-team");
+  await expect(page.locator(".incident-figure li")).toHaveCount(5);
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath("chaos-top.png") });
+
+  const scroller = page.getByRole("region", { name: "Work content" });
+  const bounds = await scroller.boundingBox();
+  await page.mouse.move(bounds.x + 20, bounds.y + 20);
+  await page.mouse.move(bounds.x + bounds.width - 20, bounds.y + bounds.height - 20, { steps: 8 });
+  await scroller.focus();
+  await page.keyboard.press("PageDown");
+  await expect.poll(() => scroller.evaluate((node) => node.scrollTop)).toBeGreaterThan(0);
+  await settled(page);
+  expect(await scroller.boundingBox()).toEqual(bounds);
+  await expect(page.locator(".card-tilt")).toHaveCSS("transform", "none");
+  const limitations = page.getByRole("heading", { name: "What it is not", exact: true }).locator("..");
+  await limitations.scrollIntoViewIfNeeded();
+  await expect(limitations).toContainText("No live Claude, Codex, Copilot, ChatGPT, or Gemini calls. No autonomous agents. No backend. No arbitrary prompting.");
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath("chaos-notes.png") });
+  await page.goBack();
+  await expect(page).toHaveURL(/\/lab$/);
+  await page.goForward();
+  await expect(page).toHaveURL(/\/projects\/chaos$/);
+  await page.reload();
+  await expect(page).toHaveTitle("Chaos | Farhaan Khan");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://farhaankhan.dev/projects/chaos");
+  await page.getByRole("button", { name: "Collapse" }).click();
+  await settled(page);
+  await expect(page).toHaveURL(/\/work$/);
+  await expect(page.getByRole("heading", { name: "Selected work" })).toBeFocused();
+  await expect(page.locator(".project-row-title")).toHaveText(["Think Before Code", "FlowTrace", "Folder Structure Visualizer"]);
+  // Browser Back reopens Chaos from the compact card through the same layout animation.
+  await page.goBack();
+  await settled(page);
+  await expect(page.getByRole("heading", { name: "Chaos", exact: true })).toBeFocused();
+  await expect(scroller).toBeVisible();
+  await noOverflow(page);
+  await page.getByRole("button", { name: "Collapse" }).click();
+  await settled(page);
+  await page.getByRole("button", { name: "Flip card to identity" }).click();
+  await settled(page);
+  await expect(page.getByRole("heading", { name: "Farhaan Khan" })).toBeVisible();
+});
+
 test("trace explains the assignment and resets without losing focus", async ({ page }) => {
   await page.goto("/projects/flowtrace");
   const step = page.getByRole("button", { name: "Step through" });

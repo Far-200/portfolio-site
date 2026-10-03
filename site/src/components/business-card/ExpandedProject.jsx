@@ -25,8 +25,9 @@ export default function ExpandedProject({ project }) {
       <div className="study-kicker micro"><span>{String(index + 1).padStart(2, "0")} / {project.category}</span><span>{project.status}</span></div>
       <h1 className="study-title" tabIndex={-1} data-route-heading>{project.title}</h1>
       <p className="study-summary">{project.summary}</p>
-      <div className="study-links"><ExternalLink href={project.github}>View source</ExternalLink>{project.live && <ExternalLink href={project.live}>Open live project</ExternalLink>}</div>
+      <div className="study-links">{project.github && <ExternalLink href={project.github}>View source</ExternalLink>}{project.live && <ExternalLink href={project.live}>Open live project</ExternalLink>}</div>
       <ProjectStudyVisual project={project} />
+      {project.sections && <div className="study-columns">{project.sections.map((section) => <section key={section.heading}><h2 className="micro">{section.heading}</h2><p>{section.body}</p></section>)}</div>}
       {project.problem && <div className="study-columns"><section><h2 className="micro">The problem</h2><p>{project.problem}</p></section><section><h2 className="micro">What I built</h2><p>{project.built}</p></section>{project.technicalNote && <section><h2 className="micro">Under the surface</h2><p>{project.technicalNote}</p></section>}</div>}
       <div className="tech-line"><span className="micro">Built with</span><p>{project.tech.join(" / ")}</p></div>
       {Detail ? <Suspense fallback={<p role="status">Opening project notes…</p>}><Detail embedded /></Suspense> : (
