@@ -6,6 +6,7 @@ import "@fontsource/kalam/latin-400.css";
 import "@fontsource/kalam/latin-700.css";
 import "./styles/business-card.css";
 import "./styles/paper-surfaces.css";
+import "./styles/command-tray.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

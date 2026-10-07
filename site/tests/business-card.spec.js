@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { runCommand } from "../src/components/business-card/commands.js";
 
 const browserErrors = new WeakMap();
 
@@ -360,4 +361,247 @@ test("trace explains the assignment and resets without losing focus", async ({ p
   await page.keyboard.press("Enter");
   await expect(page.locator(".trace-value")).toHaveText("x = 2");
   await expect(step).toBeFocused();
+});
+
+test.describe("hidden command interface", () => {
+  const trigger = (page) => page.getByRole("button", { name: /command interface$/ });
+  const input = (page) => page.getByRole("textbox", { name: /^Command/ });
+  const reply = (page) => page.locator(".command-reply");
+  async function run(page, command) {
+    await input(page).fill(command);
+    await input(page).press("Enter");
+  }
+
+  test("is absent from the compact card on both faces", async ({ page }) => {
+    for (const route of ["/", "/work"]) {
+      await page.goto(route);
+      await settled(page);
+      await expect(trigger(page)).toHaveCount(0);
+      await expect(page.locator("#command-tray")).toHaveCount(0);
+      // The shortcut belongs to the open folio only; the physical card ignores it.
+      await page.keyboard.press("Control+k");
+      await page.keyboard.press("Meta+k");
+      await expect(page.locator("#command-tray")).toHaveCount(0);
+      await expect(page.locator(".command-lift")).toHaveCSS("transform", "none");
+    }
+  });
+
+  test("opens from the folio, answers quietly and closes with Escape", async ({ page }, info) => {
+    await page.goto("/about");
+    await settled(page);
+    const card = page.locator(".business-card");
+    const resting = await card.boundingBox();
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(input(page)).toHaveCount(0); // inert while closed: not focusable or exposed
+    await expect(trigger(page)).toHaveAttribute("aria-expanded", "false");
+    await trigger(page).click();
+    await expect(input(page)).toBeFocused();
+    await expect(trigger(page)).toHaveAttribute("aria-expanded", "true");
+    await expect(trigger(page)).toHaveAccessibleName("Close command interface");
+    await settled(page);
+    expect((await card.boundingBox()).y).toBeLessThan(resting.y);
+    await noOverflow(page);
+    await page.screenshot({ path: info.outputPath("command-open.png") });
+
+    await run(page, "help");
+    await expect(reply(page)).toContainText("index");
+    await expect(reply(page)).toContainText("collapse");
+    await page.screenshot({ path: info.outputPath("command-help.png") });
+    await run(page, "  STATUS ");
+    await expect(reply(page)).toHaveText("still building.");
+    await run(page, "xyzzy now");
+    await expect(reply(page)).toHaveText("command not found: xyzzy · try help");
+    await run(page, "farhaan");
+    await expect(reply(page)).toHaveText("hireable.");
+    await run(page, "  What   Doing ");
+    await expect(reply(page)).toHaveText("doing my best.");
+    await run(page, "stack");
+    await expect(reply(page)).toHaveText("LIFO.");
+    await run(page, "hire");
+    await expect(reply(page)).toHaveText("excellent command.");
+    await run(page, "sudo collapse");
+    await expect(reply(page)).toHaveText("nice try.");
+    await run(page, "rm -rf portfolio");
+    await expect(reply(page)).toHaveText("permission denied. for your own protection.");
+    await run(page, "about");
+    await expect(reply(page)).toHaveText("already here.");
+    await run(page, "cls");
+    await expect(reply(page)).toHaveText("");
+    await input(page).press("ArrowUp");
+    await expect(input(page)).toHaveValue("cls");
+    await input(page).press("ArrowUp");
+    await expect(input(page)).toHaveValue("about");
+    await input(page).press("ArrowDown");
+    await input(page).press("ArrowDown");
+    await expect(input(page)).toHaveValue("");
+    await expect(page).toHaveURL(/\/about$/);
+
+    // Escape puts the tray away first; only the next Escape collapses the folio, as before.
+    await page.keyboard.press("Escape");
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(trigger(page)).toBeFocused();
+    await expect(page).toHaveURL(/\/about$/);
+    await settled(page);
+    expect(await card.boundingBox()).toEqual(resting);
+    await expect(page.locator(".command-lift")).toHaveCSS("transform", "none");
+    await page.keyboard.press("Escape");
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.getByRole("link", { name: "About", exact: true })).toBeFocused();
+  });
+
+  test("Ctrl/Cmd+K reaches the tray without taking over other fields", async ({ page }) => {
+    await page.goto("/log");
+    await settled(page);
+    const scroller = page.getByRole("region", { name: "Build log content" });
+    await scroller.focus();
+    await page.keyboard.press("Control+k");
+    await expect(input(page)).toBeFocused();
+    await page.keyboard.press("Control+k");
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(scroller).toBeFocused();
+    await page.keyboard.press("Meta+k");
+    await expect(input(page)).toBeFocused();
+    await scroller.focus();
+    await page.keyboard.press("Control+k");
+    await expect(input(page)).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(scroller).toBeFocused();
+
+    await page.locator(".surface-body").evaluate((node) => {
+      const field = document.createElement("input");
+      field.id = "other-field";
+      node.prepend(field);
+    });
+    await page.locator("#other-field").focus();
+    await page.keyboard.press("Control+k");
+    await expect(page.locator("#other-field")).toBeFocused();
+    await expect(page.locator("#command-tray")).toBeHidden();
+  });
+
+  test("navigation commands use the card's own routes and history", async ({ page }) => {
+    await page.goto("/about");
+    await settled(page);
+    await page.keyboard.press("Control+k");
+    await run(page, "lab");
+    await expect(page).toHaveURL(/\/lab$/);
+    await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Small experiments, useful tools.");
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(page).toHaveTitle("Workbench | Farhaan Khan");
+    await expect(page.locator('.surface-footer [aria-current="page"]')).toHaveText("Lab");
+    // Browser history puts an open tray away and never reopens it.
+    await page.keyboard.press("Control+k");
+    await expect(input(page)).toBeFocused();
+    await page.goBack();
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await page.goForward();
+    await expect(page).toHaveURL(/\/lab$/);
+    await expect(page.locator("#command-tray")).toBeHidden();
+
+    // A normal link still navigates with the tray out (on phones the tray covers the footer, so use the header mark).
+    await page.keyboard.press("Control+k");
+    await expect(input(page)).toBeFocused();
+    await page.getByRole("link", { name: "Return to card index" }).click();
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.locator("#command-tray")).toHaveCount(0);
+    await page.goBack();
+    await settled(page);
+    await expect(page).toHaveURL(/\/lab$/);
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(trigger(page)).toHaveAttribute("aria-expanded", "false");
+
+    await page.goto("/log");
+    await settled(page);
+    await page.keyboard.press("Control+k");
+    await run(page, "index");
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.getByRole("link", { name: "Build log" })).toBeFocused();
+    await expect(page.locator("#command-tray")).toHaveCount(0);
+  });
+
+  test("flip and collapse reuse the card's own controls", async ({ page }) => {
+    await page.goto("/work");
+    await settled(page);
+    await page.locator(".project-row").filter({ hasText: "FlowTrace" }).click();
+    await settled(page);
+    await page.keyboard.press("Control+k");
+    await run(page, "collapse");
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.locator(".project-row").filter({ hasText: "FlowTrace" })).toBeFocused();
+    await settled(page);
+    await expect(page.locator(".card-turn")).toHaveClass(/is-turned/);
+
+    await page.goto("/projects/flowtrace");
+    await settled(page);
+    await page.keyboard.press("Control+k");
+    await run(page, "flip");
+    await expect(page).toHaveURL(/\/$/);
+    await settled(page);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Farhaan Khan");
+    await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+    await expect(page.locator(".card-turn")).not.toHaveClass(/is-turned/);
+    await noOverflow(page);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/projects\/flowtrace$/);
+  });
+
+  test("home returns an open folio to the front of the card", async ({ page }) => {
+    for (const route of ["/about", "/projects/flowtrace"]) {
+      await page.goto(route);
+      await settled(page);
+      await page.keyboard.press("Control+k");
+      await expect(input(page)).toBeFocused();
+      await run(page, "home");
+      await expect(page).toHaveURL(/\/$/);
+      await settled(page);
+      await expect(page.locator("#command-tray")).toHaveCount(0);
+      await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
+      await expect(page.locator(".card-turn")).not.toHaveClass(/is-turned/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("Farhaan Khan");
+      await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+      await expect(page).toHaveTitle("Farhaan Khan | Portfolio | Software Developer");
+      await noOverflow(page);
+      await page.goBack();
+      await expect(page).toHaveURL(new RegExp(`${route}$`));
+    }
+  });
+
+  test("registry: hidden replies are exact and stay out of help", async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "Pure registry mapping; one project is enough.");
+    await page.goto("about:blank");
+    const card = { go: () => {}, flip: () => {}, collapse: () => {}, resume: () => {}, clear: () => "" };
+    const asides = {
+      hire: "excellent command.", sudo: "nice try.", "rm -rf portfolio": "permission denied. for your own protection.",
+      farhaan: "hireable.", "what doing": "doing my best.", why: "god knows.", coffee: "yes.", stack: "LIFO.",
+      fuck: "understandable.", whoami: "farhaan, probably.", sleep: "not found.", bug: "feature pending review.",
+      ai: "coworker. occasionally supervisor.", deploy: "brave.", css: "depends who hurt you.", javascript: "unfortunately.",
+      python: "indentation detected.", money: "404.", life: "still building.", test: "works on my machine.",
+    };
+    expect(Object.keys(asides)).toHaveLength(20);
+    for (const [command, answer] of Object.entries(asides)) expect(runCommand(command, card), command).toBe(answer);
+    const help = runCommand("help", card).replace(/\u00a0/g, " ");
+    expect(help).toBe("available: home · index · about · log · lab · resume · status · flip · collapse · clear");
+    for (const command of Object.keys(asides)) expect(help.split(/[: ·]+/)).not.toContain(command.split(" ")[0]);
+    let went = null;
+    expect(runCommand(" HOME ", { ...card, go: (path) => { went = path; } })).toBeUndefined();
+    expect(went).toBe("/");
+    expect(runCommand("index", { ...card, go: (path) => { went = path; } })).toBeUndefined();
+    expect(went).toBe("/work");
+    expect(runCommand("what", card)).toBe("command not found: what · try help");
+    expect(runCommand("homework", card)).toBe("command not found: homework · try help");
+  });
+
+  test("resume opens the existing dialog and returns focus to the trigger", async ({ page }) => {
+    await page.goto("/lab");
+    await settled(page);
+    await trigger(page).click();
+    await run(page, "resume");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.locator("#command-tray")).toBeHidden();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).not.toBeVisible();
+    await expect(trigger(page)).toBeFocused();
+    await expect(page).toHaveURL(/\/lab$/);
+  });
 });
