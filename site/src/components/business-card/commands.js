@@ -4,6 +4,7 @@
 // A string reply keeps the tray open; no reply means the action has taken over.
 const COMMANDS = [
   { names: ["help"], listed: false, run: () => `available: ${LISTED}` },
+  { names: ["home"], run: (card) => card.go("/") },
   { names: ["index", "work", "projects"], run: (card) => card.go("/work") },
   { names: ["about"], run: (card) => card.go("/about") },
   { names: ["log"], run: (card) => card.go("/log") },
@@ -13,16 +14,44 @@ const COMMANDS = [
   { names: ["flip"], run: (card) => card.flip() },
   { names: ["collapse"], run: (card) => card.collapse() },
   { names: ["clear", "cls"], run: (card) => card.clear() },
-  { names: ["hire"], listed: false, run: () => "excellent command." },
-  { names: ["sudo"], listed: false, run: () => "nice try." },
-  { names: ["rm"], listed: false, run: () => "permission denied. for your own protection." },
 ];
 
-const LISTED = COMMANDS.filter((command) => command.listed !== false).map((command) => command.names[0]).join(" · ");
+// Meant to be found, so never listed in help.
+const ASIDES = {
+  hire: "excellent command.",
+  sudo: "nice try.",
+  rm: "permission denied. for your own protection.",
+  farhaan: "hireable.",
+  "what doing": "doing my best.",
+  why: "god knows.",
+  coffee: "yes.",
+  stack: "LIFO.",
+  fuck: "understandable.",
+  whoami: "farhaan, probably.",
+  sleep: "not found.",
+  bug: "feature pending review.",
+  ai: "coworker. occasionally supervisor.",
+  deploy: "brave.",
+  css: "depends who hurt you.",
+  javascript: "unfortunately.",
+  python: "indentation detected.",
+  money: "404.",
+  life: "still building.",
+  test: "works on my machine.",
+};
+for (const [name, reply] of Object.entries(ASIDES)) COMMANDS.push({ names: [name], listed: false, run: () => reply });
 
+const LISTED = COMMANDS.filter((command) => command.listed !== false).map((command) => command.names[0]).join("\u00a0· ");
+
+// Exported so the tray can give the one failure reply its own quiet tone.
+export const NOT_FOUND = "command not found";
+
+// No shell parsing: the line is matched against registry names, a name followed by anything
+// still counts (so `sudo collapse` and `rm -rf portfolio` land on sudo and rm).
 export function runCommand(input, card) {
-  const [name, ...args] = input.trim().split(/\s+/);
-  if (!name) return "";
-  const command = COMMANDS.find((entry) => entry.names.includes(name.toLowerCase()));
-  return command ? command.run(card, args.join(" ")) : `command not found: ${name} · try help`;
+  const line = input.trim().replace(/\s+/g, " ");
+  if (!line) return "";
+  const lower = line.toLowerCase();
+  const command = COMMANDS.find((entry) => entry.names.some((name) => lower === name || lower.startsWith(`${name} `)));
+  return command ? command.run(card) : `${NOT_FOUND}: ${line.split(" ")[0]} · try help`;
 }

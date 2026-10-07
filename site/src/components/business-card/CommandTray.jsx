@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { runCommand } from "./commands";
+import { NOT_FOUND, runCommand } from "./commands";
 
 // A narrow machine tucked under the open folio. It owns only what is typed and the last reply,
 // so typing never re-renders the card above it; the shell owns whether it is out.
@@ -39,14 +39,17 @@ export default function CommandTray({ open, inputRef, actions, onClose }) {
   };
 
   return (
-    <div id="command-tray" className={`command-tray${open ? " is-open" : ""}`} aria-hidden={!open} inert={!open}>
+    <div id="command-tray" className={`command-tray${open ? " is-open" : ""}${reply ? " has-reply" : ""}`} aria-hidden={!open} inert={!open}>
       <form className="command-slot" onSubmit={submit} onClick={() => inputRef.current?.focus()}>
-        <p className="command-reply" role="status" title={reply || undefined}>{reply}</p>
+        <div className="command-reply-row">
+          <p className="command-reply" role="status" title={reply || undefined} data-tone={reply.startsWith(NOT_FOUND) ? "error" : undefined}>{reply}</p>
+        </div>
         <label className="command-line">
           <span className="command-prompt" aria-hidden="true">&gt;</span>
           <input ref={inputRef} value={value} onChange={(event) => setValue(event.target.value)} onKeyDown={onKeyDown}
             aria-label="Command. Type help for available commands" placeholder="help"
             autoComplete="off" autoCapitalize="none" autoCorrect="off" spellCheck={false} enterKeyHint="go" />
+          <span className="command-mark" aria-hidden="true">fk://local</span>
         </label>
       </form>
     </div>

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { runCommand } from "../src/components/business-card/commands.js";
 
 const browserErrors = new WeakMap();
 
@@ -377,7 +378,9 @@ test.describe("hidden command interface", () => {
       await settled(page);
       await expect(trigger(page)).toHaveCount(0);
       await expect(page.locator("#command-tray")).toHaveCount(0);
+      // The shortcut belongs to the open folio only; the physical card ignores it.
       await page.keyboard.press("Control+k");
+      await page.keyboard.press("Meta+k");
       await expect(page.locator("#command-tray")).toHaveCount(0);
       await expect(page.locator(".command-lift")).toHaveCSS("transform", "none");
     }
@@ -408,6 +411,12 @@ test.describe("hidden command interface", () => {
     await expect(reply(page)).toHaveText("still building.");
     await run(page, "xyzzy now");
     await expect(reply(page)).toHaveText("command not found: xyzzy · try help");
+    await run(page, "farhaan");
+    await expect(reply(page)).toHaveText("hireable.");
+    await run(page, "  What   Doing ");
+    await expect(reply(page)).toHaveText("doing my best.");
+    await run(page, "stack");
+    await expect(reply(page)).toHaveText("LIFO.");
     await run(page, "hire");
     await expect(reply(page)).toHaveText("excellent command.");
     await run(page, "sudo collapse");
@@ -535,6 +544,52 @@ test.describe("hidden command interface", () => {
     await noOverflow(page);
     await page.goBack();
     await expect(page).toHaveURL(/\/projects\/flowtrace$/);
+  });
+
+  test("home returns an open folio to the front of the card", async ({ page }) => {
+    for (const route of ["/about", "/projects/flowtrace"]) {
+      await page.goto(route);
+      await settled(page);
+      await page.keyboard.press("Control+k");
+      await expect(input(page)).toBeFocused();
+      await run(page, "home");
+      await expect(page).toHaveURL(/\/$/);
+      await settled(page);
+      await expect(page.locator("#command-tray")).toHaveCount(0);
+      await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
+      await expect(page.locator(".card-turn")).not.toHaveClass(/is-turned/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText("Farhaan Khan");
+      await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+      await expect(page).toHaveTitle("Farhaan Khan | Portfolio | Software Developer");
+      await noOverflow(page);
+      await page.goBack();
+      await expect(page).toHaveURL(new RegExp(`${route}$`));
+    }
+  });
+
+  test("registry: hidden replies are exact and stay out of help", async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "Pure registry mapping; one project is enough.");
+    await page.goto("about:blank");
+    const card = { go: () => {}, flip: () => {}, collapse: () => {}, resume: () => {}, clear: () => "" };
+    const asides = {
+      hire: "excellent command.", sudo: "nice try.", "rm -rf portfolio": "permission denied. for your own protection.",
+      farhaan: "hireable.", "what doing": "doing my best.", why: "god knows.", coffee: "yes.", stack: "LIFO.",
+      fuck: "understandable.", whoami: "farhaan, probably.", sleep: "not found.", bug: "feature pending review.",
+      ai: "coworker. occasionally supervisor.", deploy: "brave.", css: "depends who hurt you.", javascript: "unfortunately.",
+      python: "indentation detected.", money: "404.", life: "still building.", test: "works on my machine.",
+    };
+    expect(Object.keys(asides)).toHaveLength(20);
+    for (const [command, answer] of Object.entries(asides)) expect(runCommand(command, card), command).toBe(answer);
+    const help = runCommand("help", card).replace(/\u00a0/g, " ");
+    expect(help).toBe("available: home · index · about · log · lab · resume · status · flip · collapse · clear");
+    for (const command of Object.keys(asides)) expect(help.split(/[: ·]+/)).not.toContain(command.split(" ")[0]);
+    let went = null;
+    expect(runCommand(" HOME ", { ...card, go: (path) => { went = path; } })).toBeUndefined();
+    expect(went).toBe("/");
+    expect(runCommand("index", { ...card, go: (path) => { went = path; } })).toBeUndefined();
+    expect(went).toBe("/work");
+    expect(runCommand("what", card)).toBe("command not found: what · try help");
+    expect(runCommand("homework", card)).toBe("command not found: homework · try help");
   });
 
   test("resume opens the existing dialog and returns focus to the trigger", async ({ page }) => {
