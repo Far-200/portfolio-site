@@ -1,80 +1,68 @@
-/* The hidden command tray: a narrow graphite machine tucked under the open folio.
-   Closed, nothing here renders; the lift layer carries no transform and the tray is hidden behind the paper.
-   Open, the paper rises a little on its own layer and the tray slides out from beneath it. */
+/* The terminal: a small graphite command palette, out of sight until Ctrl/Cmd+K, on every route.
+   It is laid over the card as a compact overlay and never moves, resizes or reserves room on the paper.
+   The stage is exactly the viewport and never scrolls, so its fixed children line up with the screen even though its perspective contains them. */
 :root {
   --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
-  /* Warm graphite with a little of the folio green in it, ivory print, and two small inks: saffron caret, dusty coral for misses. */
+  /* Warm graphite with a little of the folio green in it, ivory print, and small inks: saffron caret, dusty coral for misses. */
   --tray: #21231e;
   --tray-ivory: #ebe3cd;
   --tray-sage: #a3ad94;
+  --tray-green: #7fa68a;
   --tray-coral: #c58b7a;
   --tray-saffron: #d49a48;
-  /* Desktop folios always leave at least 32px of desk above and below, so lift + drop stay inside it.
-     The tray is cut for a reply; with none it rests --command-grow further under the paper. */
-  --command-lift: 24px;
-  --command-drop: 27px;
-  --command-grow: 13px;
-  --command-tuck: 10px;
 }
-@media (min-width: 701px) and (min-height: 900px) { :root { --command-lift: 28px; --command-drop: 34px; --command-grow: 15px; } }
 
-/* Folio header: the trigger sits just before Collapse and takes over its push to the right. */
-.command-trigger { margin-left: auto; margin-right: -10px; min-width: 44px; min-height: 44px; display: inline-grid; place-items: center; font: 600 13px/1 var(--mono); letter-spacing: -.04em; color: var(--muted); opacity: .75; transition: color 180ms var(--ease), opacity 180ms var(--ease); }
-.command-trigger:hover, .command-trigger:focus-visible, .command-trigger[aria-expanded="true"] { color: var(--accent); opacity: 1; }
-.command-trigger + .collapse-control { margin-left: 0; }
-
-.command-lift { position: relative; z-index: 1; perspective: inherit; transition: transform 380ms var(--ease); }
-.command-lift.is-lifted { transform: translateY(calc(-1 * var(--command-lift))); }
-
-.command-tray {
-  position: absolute; z-index: 0; left: 22px; right: 22px; bottom: calc(-1 * var(--command-drop));
-  height: calc(var(--command-lift) + var(--command-drop) + var(--command-tuck));
-  display: flex; flex-direction: column; justify-content: flex-end;
-  border-radius: 0 0 5px 5px;
-  background: var(--tray);
-  /* The paper's overhang shades the top; a warm hairline catches the lamp along the front lip and sides. */
-  box-shadow: inset 0 14px 12px -12px rgb(0 0 0 / .75), inset 0 -1px 0 rgb(255 226 184 / .07), inset 1px 0 0 rgb(255 226 184 / .025), inset -1px 0 0 rgb(255 226 184 / .025), 0 8px 16px -8px rgb(0 0 0 / .6);
-  visibility: hidden; transform: translateY(calc(-1 * (var(--command-drop) + 14px)));
-  transition: transform 380ms var(--ease), visibility 0s linear 380ms;
+/* Centred over the card, a little above true centre, and short enough to stay clear of an open folio's footer. */
+.command-panel {
+  position: fixed; z-index: 4; inset: 0 0 6svh; margin: auto;
+  width: min(560px, calc(100vw - 48px)); height: min(380px, calc(100svh - 160px));
+  display: flex; flex-direction: column; border-radius: 8px; background: var(--tray); color: var(--tray-ivory); font-family: var(--mono);
+  box-shadow: inset 0 1px 0 rgb(255 226 184 / .07), 0 0 0 1px rgb(0 0 0 / .3), 0 28px 60px -16px rgb(0 0 0 / .7), 0 4px 12px rgb(0 0 0 / .3);
+  visibility: hidden; opacity: 0; transform: translateY(6px) scale(.985);
+  transition: opacity 160ms var(--ease), transform 220ms var(--ease), visibility 0s linear 220ms;
 }
-.command-tray.is-open { visibility: visible; transform: translateY(calc(-1 * var(--command-grow))); transition: transform 380ms var(--ease); }
-/* A reply draws the tray a little further out, downwards; the paper stays where it is. */
-.command-tray.is-open.has-reply { transform: none; transition-duration: 260ms; }
-.command-slot { display: grid; grid-template-columns: minmax(0, 1fr); padding: 0 18px 6px; font-family: var(--mono); cursor: text; }
-.command-reply-row { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms var(--ease); }
-.has-reply .command-reply-row { grid-template-rows: 1fr; }
-.command-reply { min-height: 0; overflow: hidden; font-size: 11.5px; line-height: 16px; color: var(--tray-sage); white-space: nowrap; text-overflow: ellipsis; }
-.has-reply .command-reply { padding-top: 2px; }
+.command-panel.is-open { visibility: visible; opacity: 1; transform: none; transition: opacity 160ms var(--ease), transform 220ms var(--ease); }
+.command-panel :focus-visible:not(input) { outline: 2px solid var(--tray-sage); outline-offset: 3px; }
+.command-bar { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; padding: 4px 4px 0 16px; }
+/* Maker's mark: there if you look. */
+.command-mark { font-size: 10px; letter-spacing: .12em; color: rgb(235 227 205 / .34); user-select: none; }
+.command-close { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 4px; font-size: 20px; line-height: 1; color: rgb(235 227 205 / .6); }
+.command-close:hover { color: var(--tray-ivory); }
+button.command-close:active { transform: none; }
+
+/* Scrolls on its own and keeps the wheel to itself; nothing else on the page scrolls behind it. */
+.command-output { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; padding: 6px 16px 4px; font-size: 12.5px; line-height: 1.6; scrollbar-width: thin; scrollbar-color: rgb(235 227 205 / .2) transparent; }
+.command-output > li + li { margin-top: 6px; }
+.command-output p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.command-reply > span { display: block; }
+.command-reply > .command-row { padding-left: 14ch; text-indent: -14ch; }
+.command-echo { color: var(--tray-ivory); }
+.command-echo > span { color: var(--tray-green); }
+.command-reply { color: var(--tray-sage); }
 .command-reply[data-tone="error"] { color: var(--tray-coral); }
-.command-line { display: flex; align-items: center; gap: 9px; height: 26px; }
-.command-prompt { color: var(--accent); font-size: 13px; font-weight: 700; }
-.command-line input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; font: 13px/1 var(--mono); color: var(--tray-ivory); caret-color: var(--tray-saffron); outline: none; }
-.command-line input::placeholder { color: rgb(235 227 205 / .26); }
-/* Maker's mark at the far edge: there if you look. */
-.command-mark { flex-shrink: 0; font-size: 9px; letter-spacing: .12em; color: rgb(235 227 205 / .14); user-select: none; }
+.command-hint, .command-options { color: rgb(235 227 205 / .58); }
+.command-hint b { font-weight: 400; color: var(--tray-ivory); }
 
-/* Phones: the folio already fills the screen, so there is no desk below it to reveal.
-   The paper only nudges up and the tray rises from the bottom edge over the folio footer, with room for a wrapped reply. */
+.command-slot { flex-shrink: 0; padding: 0 16px 8px; cursor: text; }
+.command-line { display: flex; align-items: center; gap: 9px; height: 40px; border-top: 1px solid rgb(235 227 205 / .08); }
+.command-prompt { color: var(--tray-green); font-size: 13px; font-weight: 700; }
+.command-line input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; font: 13px/1 var(--mono); color: var(--tray-ivory); caret-color: var(--tray-saffron); outline: none; }
+.command-line input::placeholder { color: rgb(235 227 205 / .3); }
+/* The field is the panel's focus target; mark it on the line rather than around the bare input. */
+.command-line:focus-within { border-top-color: rgb(163 173 148 / .55); }
+.command-line:focus-within .command-prompt { color: var(--tray-sage); }
+
+@media (pointer: coarse) {
+  .command-close { width: 44px; height: 44px; }
+}
+/* Phones (with a keyboard attached): the folio's width, minus a margin, and the field large enough not to zoom. */
 @media (max-width: 700px) {
-  :root { --command-lift: 8px; }
-  .surface-header .command-trigger { margin-right: -12px; }
-  .command-tray {
-    z-index: 2; left: 4px; right: 4px; bottom: 0; height: auto; border-radius: 6px;
-    box-shadow: inset 0 1px 0 rgb(255 226 184 / .08), inset 0 -1px 0 rgb(0 0 0 / .25), 0 -6px 18px -6px rgb(0 0 0 / .45);
-    transform: translateY(calc(100% + 24px));
-  }
-  /* Bottom-anchored over the footer: a reply opens its row and the tray grows up over the folio by that much. */
-  .command-tray.is-open, .command-tray.is-open.has-reply { transform: none; }
-  .command-slot { padding: 6px 14px 6px; }
-  .command-reply { white-space: normal; font-size: 12px; line-height: 17px; }
-  .has-reply .command-reply { padding-top: 6px; }
-  .command-line { height: 42px; }
-  /* 16px keeps mobile browsers from zooming into the field. */
+  .command-panel { width: calc(100vw - 32px); height: min(380px, calc(100svh - 200px)); }
+  .command-output { font-size: 13px; }
+  .command-line { height: 48px; }
   .command-line input, .command-prompt { font-size: 16px; }
 }
-/* The narrowest folio header is already full ("Workbench" cannot wrap); a slimmer trigger keeps Collapse on its edge. */
-@media (max-width: 360px) {
-  .surface-header .command-trigger { min-width: 36px; margin-right: -10px; }
-  .command-mark { display: none; }
+@media (forced-colors: active) {
+  .command-panel { border: 1px solid CanvasText; }
+  .command-line:focus-within { border-top-color: Highlight; }
 }
-@media (forced-colors: active) { .command-tray { border: 1px solid CanvasText; } }

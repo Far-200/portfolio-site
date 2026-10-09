@@ -12,7 +12,9 @@
 // Aptivision, Astra, and God of Code remain local to labData.js —
 // see the note in that file for why.
 
-import fsvPreview from "../assets/folder-visualiser-preview.png";
+// Vite bundles this exactly like an image import; unlike one, Node can also evaluate it,
+// so the command registry (which reads titles and routes from here) stays unit-testable.
+const fsvPreview = new URL("../assets/folder-visualiser-preview.png", import.meta.url).href;
 
 export const PROJECTS = [
   // ── Flagships (homepage Selected Work, in display order) ──────

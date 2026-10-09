@@ -26,14 +26,14 @@ export default function BusinessCardShell() {
   const section = project ? "Work" : { "/about": "About", "/log": "Build log", "/lab": "Workbench" }[location.pathname];
   useCardMetadata(project, section);
   const { open: openResume } = useResumeChooser();
-  // The command tray belongs to one open folio. Any navigation (a command, a link, Back) puts it away.
+  // The terminal is one palette for every route, compact card included. Any navigation (a command, a link, Back) puts it away.
   const [commandOpen, setCommandOpen] = useState(false);
   const [commandKey, setCommandKey] = useState(location.key);
   if (commandKey !== location.key) {
     setCommandKey(location.key);
     setCommandOpen(false);
   }
-  const commandTrigger = useRef(null);
+  const commandPanel = useRef(null);
   const commandInput = useRef(null);
   const commandReturn = useRef(null);
 
@@ -64,50 +64,76 @@ export default function BusinessCardShell() {
 
   const collapse = () => navigate("/work", { state: { returnTo: location.pathname } });
   const flip = () => navigate(front ? "/work" : "/");
-  // Opening commits synchronously so the input can take focus inside the same gesture (and raise a phone keyboard).
+  // Opening commits synchronously so the input can take focus inside the same keystroke.
   const openCommand = () => {
     commandReturn.current = shell.current.contains(document.activeElement) ? document.activeElement : null;
     flushSync(() => setCommandOpen(true));
     commandInput.current?.focus({ preventScroll: true });
   };
+  // Closing hands focus back to where it was. Opened from nowhere on the card, an open folio takes it in its scroll region;
+  // the compact card is left as it was, so closing never straightens a resting card by focusing into it.
   const closeCommand = () => {
-    const target = commandReturn.current?.isConnected ? commandReturn.current : commandTrigger.current;
-    target?.focus({ preventScroll: true });
+    const target = commandReturn.current?.isConnected ? commandReturn.current : shell.current.querySelector(".surface-scroll");
+    if (target) target.focus({ preventScroll: true });
+    else document.activeElement?.blur();
     setCommandOpen(false);
   };
-  // Commands press the card's own controls. Route changes close the tray and hand focus to the route effect above.
+  // Commands press the card's own controls. Route changes close the terminal and hand focus to the route effect above.
+  // Profiles open in a new tab like the card's own links; mail hands off to the mail client and the terminal stays put.
   const commandActions = {
     go: (path) => {
       if (path === location.pathname) return "already here.";
       navigate(path);
     },
+    open: (href, name) => {
+      window.open(href, "_blank", "noopener,noreferrer");
+      return `opening ${name} ↗`;
+    },
+    mail: (address) => {
+      window.open(`mailto:${address}`, "_self");
+      return `writing to ${address}`;
+    },
     flip,
-    collapse,
+    collapse: () => (expanded ? collapse() : "nothing to collapse."),
     resume: () => { closeCommand(); openResume(); },
   };
-  // Ctrl/Cmd+K reaches for the tray while a folio is open, but never from another field or over the résumé dialog.
+  // Ctrl/Cmd+K is the only way in: it toggles the terminal on any route, but never from another field or over the résumé dialog.
+  // Escape also reaches it here, for when a press inside the palette (its output, say) has left focus on the page.
   const onCommandShortcut = useEffectEvent((event) => {
-    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "k") return;
     if (document.querySelector("dialog[open]")) return;
+    if (event.key === "Escape" && commandOpen) {
+      event.preventDefault();
+      closeCommand();
+      return;
+    }
+    if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "k") return;
     const field = event.target.closest?.("input, textarea, select, [contenteditable]:not([contenteditable='false'])");
     if (field && field !== commandInput.current) return;
     event.preventDefault();
     if (!commandOpen) openCommand();
-    else if (field) closeCommand();
+    else if (commandPanel.current?.contains(document.activeElement)) closeCommand();
     else commandInput.current?.focus({ preventScroll: true });
   });
   useEffect(() => {
-    if (!expanded) return;
     const listener = (event) => onCommandShortcut(event);
     document.addEventListener("keydown", listener);
     return () => document.removeEventListener("keydown", listener);
-  }, [expanded]);
+  }, []);
+  // Like any palette, it steps aside when you press or tab somewhere else; focus stays wherever that was.
+  useEffect(() => {
+    if (!commandOpen) return;
+    const away = (event) => { if (!commandPanel.current?.contains(event.target)) setCommandOpen(false); };
+    document.addEventListener("pointerdown", away);
+    document.addEventListener("focusin", away);
+    return () => {
+      document.removeEventListener("pointerdown", away);
+      document.removeEventListener("focusin", away);
+    };
+  }, [commandOpen]);
   return (
     <main className={`card-stage${expanded ? " is-expanded" : front ? "" : " is-back"}${expanded ? "" : " desk-active"}`}>
       <DeskScene />
       <DeskPlacement turned={!front}>
-      {/* Its own layer, so lifting the paper never competes with tilt, flip or layout transforms. */}
-      <div className={`command-lift${commandOpen ? " is-lifted" : ""}`}>
       <CardTilt expanded={expanded}>
         <Motion.div ref={shell} className={`business-card${expanded ? " expanded-card" : ""}`}
           layout={!reduced} transition={{ layout: { duration: 0.56, ease: [0.22, 1, 0.36, 1] } }}
@@ -127,9 +153,6 @@ export default function BusinessCardShell() {
                   <header className="surface-header">
                     <Link to="/work" className="monogram" aria-label="Return to card index">fk.</Link>
                     <span className="micro folio-context">Personal interface <span>{section || "Not found"}</span></span>
-                    <button ref={commandTrigger} type="button" className="command-trigger" onClick={commandOpen ? closeCommand : openCommand}
-                      aria-label={`${commandOpen ? "Close" : "Open"} command interface`} aria-expanded={commandOpen} aria-controls="command-tray"
-                      aria-keyshortcuts="Control+K Meta+K"><span aria-hidden="true">&gt;_</span></button>
                     <button className="collapse-control" onClick={collapse}>Collapse <span className="arrow" aria-hidden="true">↙</span></button>
                   </header>
                   <div className="surface-scroll" role="region" tabIndex={0} aria-label={`${section || "Page"} content`}>
@@ -148,9 +171,9 @@ export default function BusinessCardShell() {
           </div>
         </Motion.div>
       </CardTilt>
-      </div>
-      {expanded && <CommandTray open={commandOpen} inputRef={commandInput} actions={commandActions} onClose={closeCommand} />}
       </DeskPlacement>
+      {/* Laid over the card, outside every card transform, so opening it never moves, turns or resizes the paper. */}
+      <CommandTray open={commandOpen} panelRef={commandPanel} inputRef={commandInput} actions={commandActions} onClose={closeCommand} />
     </main>
   );
 }
