@@ -19,15 +19,15 @@ export function CardLog() {
   const years = [...new Set(BUILD_LOG.map((entry) => entry.year))];
   return (
     <article className="card-log"><p className="micro">02 / Build log</p><h1 tabIndex={-1} data-route-heading>Things I’ve been building<span className="ink-dot">.</span></h1><p className="surface-intro">Things changed, shipped, broken and learned.</p>
-      {years.map((year) => <section className="log-year" key={year}><h2>{year}</h2><ol>{BUILD_LOG.filter((entry) => entry.year === year).map((entry) => {
-        const project = getProjectBySlug(entry.projectId);
-        return <li key={entry.id}><div className="log-date micro">{entry.date}<span>{entry.type}</span></div><div><h3>{project ? <Link className="ink-link" to={project.internalRoute}>{entry.title}<span className="arrow" aria-hidden="true">↗</span></Link> : entry.title}</h3><p>{entry.description}</p></div></li>;
-      })}</ol></section>)}
       <aside className="paper-note journal-note" aria-label="Currently exploring">
         <h2>Currently exploring</h2>
         <p>{LEARNING_FOCUS[0].items.slice(0, 3).join(" · ")}</p>
         <Link className="ink-link" to="/lab">Open the notebook <span aria-hidden="true">↗</span></Link>
       </aside>
+      {years.map((year) => <section className="log-year" key={year}><h2>{year}</h2><ol>{BUILD_LOG.filter((entry) => entry.year === year).map((entry) => {
+        const project = getProjectBySlug(entry.projectId);
+        return <li key={entry.id}><div className="log-date micro">{entry.date}<span>{entry.type}</span></div><div><h3>{project ? <Link className="ink-link" to={project.internalRoute}>{entry.title}<span className="arrow" aria-hidden="true">↗</span></Link> : entry.title}</h3><p>{entry.description}</p></div></li>;
+      })}</ol></section>)}
       <Link className="ink-link" to="/lab">More from the workbench <span className="arrow" aria-hidden="true">↗</span></Link>
     </article>
   );

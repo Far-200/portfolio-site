@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { runCommand } from "../src/components/business-card/commands.js";
+import { completeCommand, runCommand } from "../src/components/business-card/commands.js";
 
 const browserErrors = new WeakMap();
 
@@ -363,93 +363,309 @@ test("trace explains the assignment and resets without losing focus", async ({ p
   await expect(step).toBeFocused();
 });
 
-test.describe("hidden command interface", () => {
-  const trigger = (page) => page.getByRole("button", { name: /command interface$/ });
+test("build log: the reading note sits under the introduction and the timeline spans the sheet", async ({ page }, info) => {
+  if (info.project.name === "tablet") await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto("/log");
+  await settled(page);
+  const box = (selector) => page.locator(selector).first().boundingBox();
+  const [intro, note, timeline, article] = await Promise.all([box(".card-log > .surface-intro"), box(".journal-note"), box(".log-year"), box(".card-log")]);
+  expect(note.y).toBeGreaterThanOrEqual(intro.y + intro.height);
+  expect(timeline.y).toBeGreaterThanOrEqual(note.y + note.height);
+  // No sidebar: the note and the timeline both take the full width of the sheet.
+  expect(timeline.width).toBeGreaterThan(article.width - 2);
+  expect(note.width).toBeGreaterThan(article.width * 0.97);
+  await expect(page.getByRole("complementary", { name: "Currently exploring" }).getByRole("link", { name: /Open the notebook/ })).toHaveAttribute("href", "/lab");
+  // Same chronology, same links, same reading size.
+  await expect(page.locator(".log-year h3")).toHaveText(["Think Before Code↗", "FlowTrace↗", "Attendance Analytics", "Folder Structure Visualizer↗"]);
+  expect(await page.locator(".log-year h3 a").evaluateAll((links) => links.map((link) => link.getAttribute("href"))))
+    .toEqual(["/projects/think-before-code", "/projects/flowtrace", "/projects/folder-structure-visualizer"]);
+  await expect(page.locator(".log-year li p").first()).toHaveCSS("font-size", "17px");
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath("log-top.png") });
+  // The end of the log scrolls clear of the folio footer.
+  const scroller = page.getByRole("region", { name: "Build log content" });
+  await scroller.evaluate((node) => { node.scrollTop = node.scrollHeight; });
+  const footer = await box(".surface-footer");
+  const last = await box(".card-log > .ink-link");
+  expect(last.y + last.height).toBeLessThanOrEqual(footer.y);
+  await noOverflow(page);
+  await page.screenshot({ path: info.outputPath("log-end.png") });
+});
+
+test.describe("command palette", () => {
+  const panel = (page) => page.locator("#command-tray");
   const input = (page) => page.getByRole("textbox", { name: /^Command/ });
-  const reply = (page) => page.locator(".command-reply");
+  const entries = (page) => page.locator(".command-output > li");
+  const reply = (page) => entries(page).last().locator(".command-reply");
+  async function summon(page) {
+    await page.keyboard.press("Control+k");
+    await expect(input(page)).toBeFocused();
+  }
   async function run(page, command) {
     await input(page).fill(command);
     await input(page).press("Enter");
   }
 
-  test("is absent from the compact card on both faces", async ({ page }) => {
-    for (const route of ["/", "/work"]) {
+  test("summons over both faces of the compact card without turning or opening it", async ({ page }, info) => {
+    const viewport = page.viewportSize();
+    for (const [route, title] of [["/", "Farhaan Khan"], ["/work", "Selected work"]]) {
       await page.goto(route);
       await settled(page);
-      await expect(trigger(page)).toHaveCount(0);
-      await expect(page.locator("#command-tray")).toHaveCount(0);
-      // The shortcut belongs to the open folio only; the physical card ignores it.
-      await page.keyboard.press("Control+k");
-      await page.keyboard.press("Meta+k");
-      await expect(page.locator("#command-tray")).toHaveCount(0);
-      await expect(page.locator(".command-lift")).toHaveCSS("transform", "none");
+      // Hidden until summoned: nothing on screen, no launcher.
+      await expect(panel(page)).toBeHidden();
+      await expect(input(page)).toHaveCount(0);
+      await expect(page.getByRole("button", { name: /terminal/i })).toHaveCount(0);
+      const turn = await page.locator(".card-turn").getAttribute("class");
+      const card = await page.locator(".business-card").boundingBox();
+      for (const [open, close] of [["Control+k", "Control+k"], ["Meta+k", "Escape"]]) {
+        await page.keyboard.press(open);
+        await expect(input(page)).toBeFocused();
+        await settled(page);
+        const box = await panel(page).boundingBox();
+        // Centred and whole: inside the screen, and on top at its edges, so no stage or card transform clips or covers it.
+        expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThanOrEqual(1);
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.y).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width + 0.5);
+        expect(box.y + box.height).toBeLessThanOrEqual(viewport.height + 0.5);
+        for (const point of [[box.x + 4, box.y + 4], [box.x + box.width - 4, box.y + box.height - 4], [box.x + box.width / 2, box.y + box.height / 2]]) {
+          expect(await page.evaluate(([x, y]) => document.getElementById("command-tray").contains(document.elementFromPoint(x, y)), point), `${route} ${point}`).toBe(true);
+        }
+        // The card stays exactly as it was: same face, same size, not opened.
+        expect(await page.locator(".business-card").boundingBox()).toEqual(card);
+        await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
+        if (open === "Control+k") await page.screenshot({ path: info.outputPath(`palette-compact${route === "/" ? "-front" : "-back"}.png`) });
+        await page.keyboard.press(close);
+        await expect(panel(page)).toBeHidden();
+        expect(new URL(page.url()).pathname).toBe(route);
+        await expect(page.locator(".card-turn")).toHaveAttribute("class", turn);
+        await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+        // Opened from nowhere, it leaves focus nowhere rather than reaching into (and straightening) the resting card.
+        expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+        await settled(page);
+        expect(await page.locator(".business-card").boundingBox()).toEqual(card);
+      }
+      await noOverflow(page);
     }
   });
 
-  test("opens from the folio, answers quietly and closes with Escape", async ({ page }, info) => {
+  test("navigates from both faces of the compact card with the card's own animations and history", async ({ page }) => {
+    const heading = page.getByRole("heading", { level: 1 });
+    const turned = page.locator(".card-turn");
+    await page.goto("/");
+    await settled(page);
+    // Front: a folio opens exactly as its link does, and Back returns to the front.
+    await summon(page);
+    await run(page, "about");
+    await expect(page).toHaveURL(/\/about$/);
+    await expect(heading).toHaveText("I build useful software, then learn from what breaks.");
+    await expect(heading).toBeFocused();
+    await expect(page.locator(".business-card")).toHaveClass(/expanded-card/);
+    await expect(panel(page)).toBeHidden();
+    await page.goBack();
+    await settled(page);
+    expect(new URL(page.url()).pathname).toBe("/");
+    await expect(heading).toHaveText("Farhaan Khan");
+    await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
+    await expect(turned).not.toHaveClass(/is-turned/);
+
+    await summon(page);
+    await run(page, "fsv");
+    await expect(page).toHaveURL(/\/projects\/folder-structure-visualizer$/);
+    await expect(heading).toHaveText("Folder Structure Visualizer");
+    await page.goBack();
+    await settled(page);
+    expect(new URL(page.url()).pathname).toBe("/");
+
+    // Back of the card: a project opens, and Back returns focus to its row, as a click on the row would.
+    await page.goto("/work");
+    await settled(page);
+    await summon(page);
+    await run(page, "tbc");
+    await expect(page).toHaveURL(/\/projects\/think-before-code$/);
+    await expect(heading).toHaveText("Think Before Code");
+    await expect(heading).toBeFocused();
+    await page.goBack();
+    await settled(page);
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.locator(".project-row").filter({ hasText: "Think Before Code" })).toBeFocused();
+    await expect(turned).toHaveClass(/is-turned/);
+
+    await summon(page);
+    await run(page, "go to lab");
+    await expect(page).toHaveURL(/\/lab$/);
+    await expect(heading).toHaveText("Small experiments, useful tools.");
+    await page.goBack();
+    await settled(page);
+    await expect(page).toHaveURL(/\/work$/);
+
+    // The card's own turn, both ways.
+    await summon(page);
+    await run(page, "flip");
+    await settled(page);
+    expect(new URL(page.url()).pathname).toBe("/");
+    await expect(turned).not.toHaveClass(/is-turned/);
+    await expect(heading).toBeFocused();
+    await summon(page);
+    await run(page, "flip");
+    await settled(page);
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(turned).toHaveClass(/is-turned/);
+
+    // Commands with nothing to do here say so and leave the card alone.
+    await summon(page);
+    await run(page, "index");
+    await expect(reply(page)).toHaveText("already here.");
+    await run(page, "collapse");
+    await expect(reply(page)).toHaveText("nothing to collapse.");
+    await run(page, "status");
+    await expect(reply(page)).toHaveText("still building.");
+    await run(page, "sudo");
+    await expect(reply(page)).toHaveText("nice try.");
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toBeHidden();
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(turned).toHaveClass(/is-turned/);
+    await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
+  });
+
+  test("on the compact card, focus returns where it was and the résumé dialog keeps its rules", async ({ page }) => {
+    await page.goto("/work");
+    await settled(page);
+    const row = page.locator(".project-row").filter({ hasText: "FlowTrace" });
+    await row.focus();
+    await summon(page);
+    await page.keyboard.press("Escape");
+    await expect(panel(page)).toBeHidden();
+    await expect(row).toBeFocused();
+    await summon(page);
+    await page.keyboard.press("Control+k");
+    await expect(panel(page)).toBeHidden();
+    await expect(row).toBeFocused();
+
+    // The card's own Résumé button: the shortcut stays out of its dialog.
+    const resume = page.getByRole("button", { name: "Résumé" });
+    await resume.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.getByRole("dialog", { name: "Which version would you like?" });
+    await expect(dialog).toBeVisible();
+    await page.keyboard.press("Control+k");
+    await expect(panel(page)).toBeHidden();
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(resume).toBeFocused();
+    // The `resume` command opens the same dialog, and focus comes back to where the palette was summoned.
+    await summon(page);
+    await run(page, "resume");
+    await expect(dialog).toBeVisible();
+    await expect(panel(page)).toBeHidden();
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(resume).toBeFocused();
+    await expect(page).toHaveURL(/\/work$/);
+  });
+
+  test("hidden until Ctrl/Cmd+K, then centred over the folio without moving it", async ({ page }, info) => {
+    const viewport = page.viewportSize();
+    const phone = viewport.width <= 700;
+    for (const route of ["/about", "/projects/flowtrace", "/log"]) {
+      await page.goto(route);
+      await settled(page);
+      // Nothing on screen for the terminal, and the folio keeps its own size: no reserved strip, no launcher.
+      await expect(panel(page)).toBeHidden();
+      await expect(page.getByRole("button", { name: /terminal/i })).toHaveCount(0);
+      const card = await page.locator(".business-card").boundingBox();
+      expect(Math.round(card.width)).toBe(phone ? Math.min(590, viewport.width - 32) : Math.min(1060, viewport.width - 64));
+      expect(Math.round(card.height)).toBe(phone ? viewport.height - 32 : Math.min(800, viewport.height - 64));
+      await noOverflow(page);
+    }
+    await page.screenshot({ path: info.outputPath("palette-closed.png") });
+
+    const card = await page.locator(".business-card").boundingBox();
+    const scroller = page.getByRole("region", { name: "Build log content" });
+    const scrollerBox = await scroller.boundingBox();
+    await summon(page);
+    await settled(page);
+    const box = await panel(page).boundingBox();
+    const footer = await page.locator(".surface-footer").boundingBox();
+    // Laid over the paper, centred, inside the screen and the folio, above its footer.
+    expect(Math.abs(box.x + box.width / 2 - viewport.width / 2)).toBeLessThanOrEqual(1);
+    expect(box.x).toBeGreaterThanOrEqual(card.x - 0.5);
+    expect(box.x + box.width).toBeLessThanOrEqual(card.x + card.width + 0.5);
+    expect(box.y).toBeGreaterThanOrEqual(card.y);
+    expect(box.y + box.height).toBeLessThanOrEqual(footer.y);
+    expect(box.width).toBeLessThanOrEqual(560);
+    expect(box.height).toBeLessThanOrEqual(380);
+    // Opening it shifts and resizes nothing.
+    expect(await page.locator(".business-card").boundingBox()).toEqual(card);
+    expect(await scroller.boundingBox()).toEqual(scrollerBox);
+    if (info.project.name === "reduced-motion") await expect(panel(page)).toHaveCSS("transition-duration", /^0s/);
+    await noOverflow(page);
+    await run(page, "help");
+    // The newest entry starts in view, even when it is taller than the panel.
+    await expect(entries(page).last().locator(".command-echo")).toBeInViewport();
+    await page.screenshot({ path: info.outputPath("palette-help.png") });
+    const close = page.getByRole("button", { name: "Close", exact: true });
+    if (info.project.use.hasTouch) await close.tap(); else await close.click();
+    await expect(panel(page)).toBeHidden();
+    // Opened from nowhere on the card, it hands focus to the folio's scroll region.
+    await expect(scroller).toBeFocused();
+    expect(await page.locator(".business-card").boundingBox()).toEqual(card);
+  });
+
+  test("keeps a history, answers quietly and gives focus back on Escape", async ({ page }, info) => {
     await page.goto("/about");
     await settled(page);
-    const card = page.locator(".business-card");
-    const resting = await card.boundingBox();
-    await expect(page.locator("#command-tray")).toBeHidden();
     await expect(input(page)).toHaveCount(0); // inert while closed: not focusable or exposed
-    await expect(trigger(page)).toHaveAttribute("aria-expanded", "false");
-    await trigger(page).click();
-    await expect(input(page)).toBeFocused();
-    await expect(trigger(page)).toHaveAttribute("aria-expanded", "true");
-    await expect(trigger(page)).toHaveAccessibleName("Close command interface");
-    await settled(page);
-    expect((await card.boundingBox()).y).toBeLessThan(resting.y);
-    await noOverflow(page);
-    await page.screenshot({ path: info.outputPath("command-open.png") });
+    const heading = page.getByRole("heading", { level: 1 });
+    await heading.focus();
+    await summon(page);
+    await expect(page.getByRole("dialog", { name: "Terminal" })).toBeVisible();
+    await expect(page.locator(".command-hint")).toHaveText("type help for commands · tab completes · esc closes");
 
-    await run(page, "help");
-    await expect(reply(page)).toContainText("index");
-    await expect(reply(page)).toContainText("collapse");
-    await page.screenshot({ path: info.outputPath("command-help.png") });
     await run(page, "  STATUS ");
     await expect(reply(page)).toHaveText("still building.");
+    await expect(entries(page).last().locator(".command-echo")).toHaveText("> STATUS");
     await run(page, "xyzzy now");
     await expect(reply(page)).toHaveText("command not found: xyzzy · try help");
+    await expect(reply(page)).toHaveAttribute("data-tone", "error");
     await run(page, "farhaan");
     await expect(reply(page)).toHaveText("hireable.");
     await run(page, "  What   Doing ");
     await expect(reply(page)).toHaveText("doing my best.");
-    await run(page, "stack");
-    await expect(reply(page)).toHaveText("LIFO.");
-    await run(page, "hire");
-    await expect(reply(page)).toHaveText("excellent command.");
     await run(page, "sudo collapse");
     await expect(reply(page)).toHaveText("nice try.");
     await run(page, "rm -rf portfolio");
     await expect(reply(page)).toHaveText("permission denied. for your own protection.");
-    await run(page, "about");
+    await run(page, "go to about");
     await expect(reply(page)).toHaveText("already here.");
+    // Earlier output stays on screen as history.
+    await expect(entries(page)).toHaveCount(7);
+    await expect(entries(page).first()).toContainText("still building.");
+    await page.screenshot({ path: info.outputPath("palette-history.png") });
     await run(page, "cls");
-    await expect(reply(page)).toHaveText("");
+    await expect(entries(page)).toHaveCount(1);
+    await expect(page.locator(".command-hint")).toBeVisible();
     await input(page).press("ArrowUp");
     await expect(input(page)).toHaveValue("cls");
     await input(page).press("ArrowUp");
-    await expect(input(page)).toHaveValue("about");
+    await expect(input(page)).toHaveValue("go to about");
     await input(page).press("ArrowDown");
     await input(page).press("ArrowDown");
     await expect(input(page)).toHaveValue("");
     await expect(page).toHaveURL(/\/about$/);
 
-    // Escape puts the tray away first; only the next Escape collapses the folio, as before.
+    // Escape puts the palette away and returns focus to where it was; only the next Escape collapses the folio, as before.
     await page.keyboard.press("Escape");
-    await expect(page.locator("#command-tray")).toBeHidden();
-    await expect(trigger(page)).toBeFocused();
+    await expect(panel(page)).toBeHidden();
+    await expect(heading).toBeFocused();
     await expect(page).toHaveURL(/\/about$/);
-    await settled(page);
-    expect(await card.boundingBox()).toEqual(resting);
-    await expect(page.locator(".command-lift")).toHaveCSS("transform", "none");
     await page.keyboard.press("Escape");
     await expect(page).toHaveURL(/\/work$/);
     await expect(page.getByRole("link", { name: "About", exact: true })).toBeFocused();
   });
 
-  test("Ctrl/Cmd+K reaches the tray without taking over other fields", async ({ page }) => {
+  test("Ctrl/Cmd+K toggles without taking over other fields, and pressing elsewhere puts it away", async ({ page }) => {
     await page.goto("/log");
     await settled(page);
     const scroller = page.getByRole("region", { name: "Build log content" });
@@ -457,14 +673,34 @@ test.describe("hidden command interface", () => {
     await page.keyboard.press("Control+k");
     await expect(input(page)).toBeFocused();
     await page.keyboard.press("Control+k");
-    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(panel(page)).toBeHidden();
     await expect(scroller).toBeFocused();
     await page.keyboard.press("Meta+k");
     await expect(input(page)).toBeFocused();
+    await page.keyboard.press("Meta+k");
+    await expect(panel(page)).toBeHidden();
+    await expect(scroller).toBeFocused();
+
+    // Focus or a press anywhere else closes it and leaves focus where it went.
+    await summon(page);
     await scroller.focus();
-    await page.keyboard.press("Control+k");
-    await expect(input(page)).toBeFocused();
+    await expect(panel(page)).toBeHidden();
+    await expect(scroller).toBeFocused();
+    await summon(page);
+    await page.locator(".surface-footer").click({ position: { x: 4, y: 4 } });
+    await expect(panel(page)).toBeHidden();
+    await expect(page).toHaveURL(/\/log$/);
+    // A press inside the palette keeps it open.
+    await summon(page);
+    await page.locator(".command-output").click();
+    await expect(panel(page)).toBeVisible();
     await page.keyboard.press("Escape");
+    await expect(panel(page)).toBeHidden();
+
+    // Ordinary keys on the page never reach the closed palette.
+    await scroller.focus();
+    await page.keyboard.type("help");
+    await expect(panel(page)).toBeHidden();
     await expect(scroller).toBeFocused();
 
     await page.locator(".surface-body").evaluate((node) => {
@@ -475,49 +711,164 @@ test.describe("hidden command interface", () => {
     await page.locator("#other-field").focus();
     await page.keyboard.press("Control+k");
     await expect(page.locator("#other-field")).toBeFocused();
-    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(panel(page)).toBeHidden();
+
+    // Never over the résumé dialog.
+    await page.locator("#other-field").evaluate((node) => node.remove());
+    await scroller.focus();
+    await summon(page);
+    await run(page, "resume");
+    await expect(page.getByRole("dialog", { name: "Which version would you like?" })).toBeVisible();
+    await page.keyboard.press("Control+k");
+    await expect(panel(page)).toBeHidden();
+    await page.keyboard.press("Escape");
+    await expect(scroller).toBeFocused();
+  });
+
+  test("tab completes, help lists every command, and Tab otherwise leaves the field", async ({ page }) => {
+    await page.goto("/lab");
+    await settled(page);
+    await summon(page);
+    for (const [typed, completed] of [["gi", "github"], ["go to ab", "go to about"], ["sh", "show "], ["show fs", "show fsv"], ["att", "attendance"]]) {
+      await input(page).fill(typed);
+      await input(page).press("Tab");
+      await expect(input(page), typed).toHaveValue(completed);
+    }
+    await input(page).fill("op");
+    await input(page).press("Tab");
+    await expect(input(page)).toHaveValue("open ");
+    await input(page).press("End");
+    await input(page).pressSequentially("li");
+    await input(page).press("Tab");
+    await expect(input(page)).toHaveValue("open linkedin");
+    // Ambiguous: nothing is guessed; the candidates are offered instead.
+    await input(page).fill("f");
+    await input(page).press("Tab");
+    await expect(input(page)).toHaveValue("f");
+    await expect(entries(page).last()).toHaveText("fsv flowtrace flip");
+    await expect(input(page)).toBeFocused();
+    // Nothing to finish: Tab is focus navigation again.
+    await input(page).fill("");
+    await input(page).press("Tab");
+    await expect(input(page)).not.toBeFocused();
+
+    await summon(page);
+    await run(page, "help");
+    const help = entries(page).last().locator(".command-reply");
+    for (const line of ["projects", "tbc Think Before Code", "fsv Folder Structure Visualizer", "flowtrace FlowTrace", "attendance Attendance Analytics · in the lab, no page yet",
+      "github github profile ↗ · gh", "x x profile ↗ · twitter", "resume choose a résumé · cv", "mail hello.farhaankhan@gmail.com · email"]) {
+      await expect(help).toContainText(line);
+    }
+    await expect(help).not.toContainText("sudo");
+    await expect(help).not.toContainText("English");
+    await run(page, "open nowhere");
+    await expect(reply(page)).toHaveText("can't open nowhere · try help");
+    await expect(reply(page)).toHaveAttribute("data-tone", "error");
+    await run(page, "show");
+    await expect(reply(page)).toHaveText("show what? tbc · fsv · flowtrace · attendance");
+  });
+
+  test("project shortcuts open the existing project pages", async ({ page }) => {
+    await page.goto("/about");
+    await settled(page);
+    for (const [command, route, title] of [
+      ["tbc", "/projects/think-before-code", "Think Before Code"],
+      ["show folder structure visualizer", "/projects/folder-structure-visualizer", "Folder Structure Visualizer"],
+      ["go to flowtrace", "/projects/flowtrace", "FlowTrace"],
+      ["  Open   Think Before Code ", "/projects/think-before-code", "Think Before Code"],
+      ["show fsv", "/projects/folder-structure-visualizer", "Folder Structure Visualizer"],
+      ["open tbc", "/projects/think-before-code", "Think Before Code"],
+    ]) {
+      await summon(page);
+      await run(page, command);
+      await expect(page, command).toHaveURL(new RegExp(`${route}$`));
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+      await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
+      await expect(panel(page)).toBeHidden();
+      await expect(page).toHaveTitle(`${title} | Farhaan Khan`);
+    }
+    await summon(page);
+    await run(page, "go to tbc");
+    await expect(reply(page)).toHaveText("already here.");
+    // Attendance Analytics is only on the workbench: it says so and stays put.
+    await run(page, "attendance");
+    await expect(reply(page)).toHaveText("attendance analytics has no project page yet · it's in the lab: go to lab");
+    await run(page, "show attendance analytics");
+    await expect(reply(page)).toHaveText("attendance analytics has no project page yet · it's in the lab: go to lab");
+    await expect(page).toHaveURL(/\/projects\/think-before-code$/);
+    // Each shortcut is an ordinary history entry.
+    await page.keyboard.press("Escape");
+    await page.goBack();
+    await expect(page).toHaveURL(/\/projects\/folder-structure-visualizer$/);
+    await page.goBack();
+    await expect(page).toHaveURL(/\/projects\/think-before-code$/);
+  });
+
+  test("profiles and mail open from the card's own links, safely", async ({ page }) => {
+    await page.goto("/about");
+    await settled(page);
+    await page.evaluate(() => {
+      window.opened = [];
+      window.open = (...args) => { window.opened.push(args); return null; };
+    });
+    await summon(page);
+    for (const command of ["github", "gh", "open linkedin", "OPEN X", "twitter", "open mail", "email"]) await run(page, command);
+    const github = ["https://github.com/Far-200", "_blank", "noopener,noreferrer"];
+    const linkedin = ["https://www.linkedin.com/in/farhaan-khan-dev/", "_blank", "noopener,noreferrer"];
+    const x = ["https://x.com/FarKh_Nhi", "_blank", "noopener,noreferrer"];
+    const mail = ["mailto:hello.farhaankhan@gmail.com", "_self"];
+    expect(await page.evaluate(() => window.opened)).toEqual([github, github, linkedin, x, x, mail, mail]);
+    await expect(entries(page).nth(0).locator(".command-reply")).toHaveText("opening github ↗");
+    await expect(entries(page).nth(3).locator(".command-reply")).toHaveText("opening x ↗");
+    await expect(reply(page)).toHaveText("writing to hello.farhaankhan@gmail.com");
+    // The palette stays out and the folio stays put.
+    await expect(input(page)).toBeFocused();
+    await expect(page).toHaveURL(/\/about$/);
+    // The same destinations the page itself links to.
+    const links = await page.locator("#contact a").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href")));
+    for (const href of [github[0], linkedin[0], mail[0]]) expect(links).toContain(href);
   });
 
   test("navigation commands use the card's own routes and history", async ({ page }) => {
     await page.goto("/about");
     await settled(page);
-    await page.keyboard.press("Control+k");
-    await run(page, "lab");
+    await summon(page);
+    await run(page, "go to lab");
     await expect(page).toHaveURL(/\/lab$/);
     await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Small experiments, useful tools.");
-    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(panel(page)).toBeHidden();
     await expect(page).toHaveTitle("Workbench | Farhaan Khan");
     await expect(page.locator('.surface-footer [aria-current="page"]')).toHaveText("Lab");
-    // Browser history puts an open tray away and never reopens it.
-    await page.keyboard.press("Control+k");
-    await expect(input(page)).toBeFocused();
+    // The output survives moving between folios.
+    await summon(page);
+    await expect(entries(page).last().locator(".command-echo")).toHaveText("> go to lab");
+    await run(page, "log");
+    await expect(page).toHaveURL(/\/log$/);
+    // Browser history puts an open palette away and never reopens it.
+    await summon(page);
     await page.goBack();
-    await expect(page).toHaveURL(/\/about$/);
-    await expect(page.locator("#command-tray")).toBeHidden();
-    await page.goForward();
     await expect(page).toHaveURL(/\/lab$/);
-    await expect(page.locator("#command-tray")).toBeHidden();
+    await expect(panel(page)).toBeHidden();
+    await page.goForward();
+    await expect(page).toHaveURL(/\/log$/);
+    await expect(panel(page)).toBeHidden();
 
-    // A normal link still navigates with the tray out (on phones the tray covers the footer, so use the header mark).
-    await page.keyboard.press("Control+k");
-    await expect(input(page)).toBeFocused();
+    // A normal link still works with the palette out: the press puts it away and the link navigates.
+    await summon(page);
     await page.getByRole("link", { name: "Return to card index" }).click();
     await expect(page).toHaveURL(/\/work$/);
-    await expect(page.locator("#command-tray")).toHaveCount(0);
+    await expect(panel(page)).toBeHidden();
     await page.goBack();
     await settled(page);
-    await expect(page).toHaveURL(/\/lab$/);
-    await expect(page.locator("#command-tray")).toBeHidden();
-    await expect(trigger(page)).toHaveAttribute("aria-expanded", "false");
+    await expect(page).toHaveURL(/\/log$/);
+    await expect(panel(page)).toBeHidden();
 
-    await page.goto("/log");
-    await settled(page);
-    await page.keyboard.press("Control+k");
+    await summon(page);
     await run(page, "index");
     await expect(page).toHaveURL(/\/work$/);
     await expect(page.getByRole("link", { name: "Build log" })).toBeFocused();
-    await expect(page.locator("#command-tray")).toHaveCount(0);
+    await expect(panel(page)).toBeHidden();
   });
 
   test("flip and collapse reuse the card's own controls", async ({ page }) => {
@@ -525,7 +876,7 @@ test.describe("hidden command interface", () => {
     await settled(page);
     await page.locator(".project-row").filter({ hasText: "FlowTrace" }).click();
     await settled(page);
-    await page.keyboard.press("Control+k");
+    await summon(page);
     await run(page, "collapse");
     await expect(page).toHaveURL(/\/work$/);
     await expect(page.locator(".project-row").filter({ hasText: "FlowTrace" })).toBeFocused();
@@ -534,7 +885,7 @@ test.describe("hidden command interface", () => {
 
     await page.goto("/projects/flowtrace");
     await settled(page);
-    await page.keyboard.press("Control+k");
+    await summon(page);
     await run(page, "flip");
     await expect(page).toHaveURL(/\/$/);
     await settled(page);
@@ -547,15 +898,14 @@ test.describe("hidden command interface", () => {
   });
 
   test("home returns an open folio to the front of the card", async ({ page }) => {
-    for (const route of ["/about", "/projects/flowtrace"]) {
+    for (const [route, command] of [["/about", "home"], ["/projects/flowtrace", "go home"]]) {
       await page.goto(route);
       await settled(page);
-      await page.keyboard.press("Control+k");
-      await expect(input(page)).toBeFocused();
-      await run(page, "home");
+      await summon(page);
+      await run(page, command);
       await expect(page).toHaveURL(/\/$/);
       await settled(page);
-      await expect(page.locator("#command-tray")).toHaveCount(0);
+      await expect(panel(page)).toBeHidden();
       await expect(page.locator(".business-card")).not.toHaveClass(/expanded-card/);
       await expect(page.locator(".card-turn")).not.toHaveClass(/is-turned/);
       await expect(page.getByRole("heading", { level: 1 })).toHaveText("Farhaan Khan");
@@ -567,10 +917,16 @@ test.describe("hidden command interface", () => {
     }
   });
 
-  test("registry: hidden replies are exact and stay out of help", async ({ page }, info) => {
+  test("registry: commands, aliases, verb forms and completion are deterministic", async ({ page }, info) => {
     test.skip(info.project.name !== "desktop", "Pure registry mapping; one project is enough.");
     await page.goto("about:blank");
-    const card = { go: () => {}, flip: () => {}, collapse: () => {}, resume: () => {}, clear: () => "" };
+    const calls = [];
+    const card = {
+      go: (path) => { calls.push(["go", path]); }, flip: () => { calls.push(["flip"]); }, collapse: () => { calls.push(["collapse"]); },
+      resume: () => { calls.push(["resume"]); }, clear: () => { calls.push(["clear"]); },
+      open: (href, name) => { calls.push(["open", href]); return `opening ${name} ↗`; },
+      mail: (address) => { calls.push(["mail", address]); return `writing to ${address}`; },
+    };
     const asides = {
       hire: "excellent command.", sudo: "nice try.", "rm -rf portfolio": "permission denied. for your own protection.",
       farhaan: "hireable.", "what doing": "doing my best.", why: "god knows.", coffee: "yes.", stack: "LIFO.",
@@ -580,28 +936,85 @@ test.describe("hidden command interface", () => {
     };
     expect(Object.keys(asides)).toHaveLength(20);
     for (const [command, answer] of Object.entries(asides)) expect(runCommand(command, card), command).toBe(answer);
-    const help = runCommand("help", card).replace(/\u00a0/g, " ");
-    expect(help).toBe("available: home · index · about · log · lab · resume · status · flip · collapse · clear");
-    for (const command of Object.keys(asides)) expect(help.split(/[: ·]+/)).not.toContain(command.split(" ")[0]);
-    let went = null;
-    expect(runCommand(" HOME ", { ...card, go: (path) => { went = path; } })).toBeUndefined();
-    expect(went).toBe("/");
-    expect(runCommand("index", { ...card, go: (path) => { went = path; } })).toBeUndefined();
-    expect(went).toBe("/work");
-    expect(runCommand("what", card)).toBe("command not found: what · try help");
-    expect(runCommand("homework", card)).toBe("command not found: homework · try help");
+    expect(calls).toEqual([]);
+
+    const github = ["open", "https://github.com/Far-200"];
+    const linkedin = ["open", "https://www.linkedin.com/in/farhaan-khan-dev/"];
+    const x = ["open", "https://x.com/FarKh_Nhi"];
+    const mail = ["mail", "hello.farhaankhan@gmail.com"];
+    const tbc = ["go", "/projects/think-before-code"];
+    const fsv = ["go", "/projects/folder-structure-visualizer"];
+    const flowtrace = ["go", "/projects/flowtrace"];
+    const expected = {
+      " HOME ": ["go", "/"], "go home": ["go", "/"], index: ["go", "/work"], work: ["go", "/work"], projects: ["go", "/work"],
+      about: ["go", "/about"], "go to about": ["go", "/about"], "GO   TO  LAB": ["go", "/lab"], "go lab": ["go", "/lab"], log: ["go", "/log"], lab: ["go", "/lab"],
+      tbc, "open tbc": tbc, "show tbc": tbc, "go to tbc": tbc, "go tbc": tbc, "open think before code": tbc, "Think Before Code": tbc, "show think-before-code": tbc,
+      fsv, "show fsv": fsv, "show folder structure visualizer": fsv, "open folder-structure-visualizer": fsv, "go to fsv": fsv,
+      flowtrace, "show flowtrace": flowtrace, "go to flowtrace": flowtrace, "OPEN FLOWTRACE": flowtrace,
+      github, gh: github, "open github": github, "show gh": github, linkedin, "open linkedin": linkedin,
+      x, twitter: x, "open x": x, "open twitter": x, mail, email: mail, "open mail": mail, "Open Email": mail,
+      resume: ["resume"], cv: ["resume"], "open resume": ["resume"], "open cv": ["resume"],
+      flip: ["flip"], collapse: ["collapse"], clear: ["clear"], cls: ["clear"],
+    };
+    for (const [command, call] of Object.entries(expected)) {
+      runCommand(command, card);
+      expect(calls.splice(0), command).toEqual([call]);
+    }
+    expect(runCommand("open github", card)).toBe("opening github ↗");
+    expect(runCommand("email", card)).toBe("writing to hello.farhaankhan@gmail.com");
+    calls.length = 0;
+
+    const attendance = "attendance analytics has no project page yet · it's in the lab: go to lab";
+    for (const [command, answer] of [
+      ["attendance", attendance], ["show attendance", attendance], ["open attendance analytics", attendance], ["go to attendance-analytics", attendance],
+      ["what", "command not found: what · try help"], ["homework", "command not found: homework · try help"],
+      ["gopher", "command not found: gopher · try help"], ["opener", "command not found: opener · try help"], ["showcase", "command not found: showcase · try help"],
+      ["tbcx", "command not found: tbcx · try help"], ["english terminal", "command not found: english · try help"],
+      ["open nowhere", "can't open nowhere · try help"], ["show english terminal", "can't show english terminal · try help"],
+      ["go to sleep", "can't go to sleep · try help"], ["open status", "can't open status · try help"], ["show sudo", "can't show sudo · try help"],
+      ["open", "open what? github · linkedin · x · resume · mail"], ["show", "show what? tbc · fsv · flowtrace · attendance"],
+      ["go to", "go where? home · index · about · log · lab"], ["status", "still building."],
+    ]) expect(runCommand(command, card), command).toBe(answer);
+    expect(calls).toEqual([]);
+
+    const row = (name, description) => `  ${name.padEnd(12)}${description}`;
+    const help = runCommand("help", card);
+    expect(help.split("\n")).toEqual([
+      "pages", row("home", "front of the card"), row("index", "selected work · work, projects"), row("about", "about me"), row("log", "build log"), row("lab", "workbench"),
+      "projects", row("tbc", "Think Before Code"), row("fsv", "Folder Structure Visualizer"), row("flowtrace", "FlowTrace"), row("attendance", "Attendance Analytics · in the lab, no page yet"),
+      "links", row("github", "github profile ↗ · gh"), row("linkedin", "linkedin profile ↗"), row("x", "x profile ↗ · twitter"), row("resume", "choose a résumé · cv"),
+      row("mail", "hello.farhaankhan@gmail.com · email"),
+      "card", row("flip", "turn the card over"), row("collapse", "put this page away"), row("status", "what's happening"), row("clear", "clear the screen · cls"), row("help", "this list"),
+      "try: open github · show tbc · go to lab · tab completes · ↑↓ recalls",
+    ]);
+    for (const command of Object.keys(asides)) expect(help.split(/[\s·,:]+/)).not.toContain(command.split(" ")[0]);
+
+    for (const [partial, completion] of [
+      ["gi", { value: "github", options: [] }], ["GH", { value: "gh", options: [] }], ["tw", { value: "twitter", options: [] }],
+      ["op", { value: "open ", options: [] }], ["sh", { value: "show ", options: [] }], ["open li", { value: "open linkedin", options: [] }],
+      ["go to ab", { value: "go to about", options: [] }], ["go to a", { value: "go to a", options: ["about", "attendance"] }], ["show fs", { value: "show fsv", options: [] }], ["fs", { value: "fsv", options: [] }],
+      ["att", { value: "attendance", options: [] }], ["th", { value: "think before code", options: [] }],
+      ["go t", { value: "go t", options: ["tbc", "twitter", "to"] }], ["show f", { value: "show f", options: ["fsv", "flowtrace"] }],
+      ["l", { value: "l", options: ["log", "lab", "linkedin"] }], ["f", { value: "f", options: ["fsv", "flowtrace", "flip"] }],
+      ["s", { value: "s", options: ["status", "show"] }], ["c", { value: "c", options: ["cv", "collapse", "clear"] }],
+      ["co", { value: "collapse", options: [] }], ["he", { value: "help", options: [] }],
+    ]) expect(completeCommand(partial), partial).toEqual(completion);
+    for (const partial of ["", "   ", "zz", "status now", "su", "far", "open zz", "show zz"]) expect(completeCommand(partial), partial).toBeNull();
   });
 
-  test("resume opens the existing dialog and returns focus to the trigger", async ({ page }) => {
+  test("resume opens the existing dialog and returns focus to the folio", async ({ page }) => {
     await page.goto("/lab");
     await settled(page);
-    await trigger(page).click();
-    await run(page, "resume");
-    await expect(page.getByRole("dialog")).toBeVisible();
-    await expect(page.locator("#command-tray")).toBeHidden();
-    await page.keyboard.press("Escape");
-    await expect(page.getByRole("dialog")).not.toBeVisible();
-    await expect(trigger(page)).toBeFocused();
-    await expect(page).toHaveURL(/\/lab$/);
+    const scroller = page.getByRole("region", { name: "Workbench content" });
+    for (const command of ["resume", "open cv"]) {
+      await summon(page);
+      await run(page, command);
+      await expect(page.getByRole("dialog", { name: "Which version would you like?" })).toBeVisible();
+      await expect(panel(page)).toBeHidden();
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("dialog", { name: "Which version would you like?" })).not.toBeVisible();
+      await expect(scroller).toBeFocused();
+      await expect(page).toHaveURL(/\/lab$/);
+    }
   });
 });
