@@ -281,7 +281,7 @@ button:active { transform: translateY(1px); }
   .project-row .arrow { font-size: 20px; }
   .currently-building { gap: 10px; margin-top: calc(var(--pw) * .06); min-height: 44px; font-size: 14px; }
   .currently-building .micro { font-size: 12px; }
-  .card-actions { justify-content: space-between; gap: 0 10px; font-size: 14px; padding-top: 6px; }
+  .card-actions { justify-content: center; gap: 0 10px; font-size: 14px; padding-top: 6px; }
   .card-actions .arrow { display: none; }
   .card-actions .ink-link { gap: 4px; }
   .flip-control:focus-visible, .back-bottom .ink-link:focus-visible { outline-offset: 0; }
