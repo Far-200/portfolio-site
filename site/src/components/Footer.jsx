@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { FaGithub, FaEnvelope } from "react-icons/fa";
 import { motion as Motion } from "framer-motion";
 import SocialProfileLink from "./SocialProfileLink";
 import githubProfile from "../assets/github_pfp.jpg";
@@ -19,6 +19,24 @@ const XIcon = () => (
     aria-hidden="true"
   >
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
+  </svg>
+);
+
+const LinkedInIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    width="1em"
+    height="1em"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="6.4" cy="6.1" r="1.15" />
+    <path d="M6.4 10.1v7.9" />
+    <path d="M10.6 18v-7.9m0 3c0-2.4 1.9-3.6 3.7-3.6 1.9 0 3.5 1.2 3.5 3.7V18" />
   </svg>
 );
 
@@ -76,7 +94,7 @@ function Footer() {
               profileName="Farhaan Khan"
               ariaLabel="LinkedIn"
             >
-              <FaLinkedin />
+              <LinkedInIcon />
             </SocialProfileLink>
             <SocialProfileLink
               href="https://x.com/PotatoBuiltThis"
