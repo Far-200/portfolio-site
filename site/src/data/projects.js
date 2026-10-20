@@ -42,7 +42,11 @@ export const PROJECTS = [
     ],
     github: "https://github.com/Far-200/think-before-code",
     live: null,
-    media: null,
+    media: {
+      type: "gif",
+      src: "/videos/think-before-code.gif",
+      alt: "Demo of Think Before Code guiding a learner through a Socratic DSA session before revealing implementation",
+    },
     internalRoute: "/projects/think-before-code",
   },
   {

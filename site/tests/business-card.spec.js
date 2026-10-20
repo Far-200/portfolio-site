@@ -156,6 +156,13 @@ test("all deep links, content surfaces, aliases and not found", async ({ page },
       await expect(video).toHaveAttribute("playsinline", "");
       await expect(video).toHaveAttribute("preload", "metadata");
     }
+    if (route.includes("think-before-code")) {
+      const gif = page.locator(".study-media img");
+      await expect(gif).toHaveAttribute("src", "/videos/think-before-code.gif");
+      await expect(gif).toHaveAttribute("loading", "lazy");
+      await expect(gif).toHaveAttribute("alt", /./);
+      await expect(page.locator(".socratic-figure")).toContainText("The Socratic loop");
+    }
   }
   await page.goto("/projects/cortex-ai");
   await expect(page).toHaveURL(/\/projects\/folder-structure-visualizer$/);
@@ -247,7 +254,7 @@ test("folio content, native scrolling and media remain usable", async ({ page },
     ["/about", ["#toolkit", "#contact"]],
     ["/log", [".log-year li:last-child"]],
     ["/lab", [".lab-section:nth-of-type(2)", ".lab-collection"]],
-    ["/projects/think-before-code", [".study-notes"]],
+    ["/projects/think-before-code", [".study-media", ".study-notes"]],
     ["/projects/flowtrace", [".study-notes"]],
     ["/projects/english-terminal", [".project-pipeline", ".project-feature-grid"]],
     ["/projects/folder-structure-visualizer", [".project-video-wrap", ".project-learnings"]],
