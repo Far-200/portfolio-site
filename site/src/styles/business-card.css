@@ -178,7 +178,7 @@ button:active { transform: translateY(1px); }
 .tech-line .micro { flex-shrink: 0; }
 .study-media, .pipeline-figure, .socratic-figure { margin-top: 24px; }
 .study-media { background: #e5e5da; border: 1px solid var(--rule); padding: 12px; }
-.study-media img { width: 100%; height: auto; }
+.study-media img, .study-media video { width: 100%; height: auto; display: block; }
 .study-media figcaption { font-size: 12px; color: var(--muted); margin: 9px 0 0; }
 .pipeline-figure, .socratic-figure { background: #e6e8dc; border: 1px solid #d0d5c7; padding: 26px 28px 16px; }
 .pipeline-figure figcaption, .socratic-figure figcaption { color: var(--accent); font-size: 12px; }
@@ -213,6 +213,13 @@ button:active { transform: translateY(1px); }
 .study-notes h2 { font-family: var(--display); font-size: 29px; margin: 8px 0 12px; }
 .study-notes p { font-size: 17px; line-height: 1.7; }
 .study-notes .micro { font-size: 12px; color: var(--muted); }
+.field-notes { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.field-notes > h2.micro { color: var(--accent); margin: 0 0 20px; }
+.field-notes ol { display: flex; flex-direction: column; gap: 20px; }
+.field-notes li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; }
+.field-notes li .micro { color: var(--accent); }
+.field-notes h3 { font-family: var(--display); font-size: 17px; margin: 0 0 4px; }
+.field-notes p { font-size: var(--body-size); line-height: var(--body-leading); color: var(--muted); margin: 0; }
 .next-project { margin-top: 40px; padding: 20px 0 0; border-top: 1px solid var(--rule); display: grid; grid-template-columns: 1fr auto; gap: 8px; }
 .next-project > .micro { grid-column: 1 / -1; color: var(--muted); }
 .next-project > span:nth-child(2) { font-family: var(--display); font-size: 28px; }
@@ -232,6 +239,11 @@ button:active { transform: translateY(1px); }
 .project-learnings { padding-left: 20px; font-size: var(--body-size); line-height: var(--body-leading); }
 .project-learnings li + li { margin-top: 8px; }
 .project-demo-video { width: 100%; aspect-ratio: 16 / 9; background: #222521; }
+.project-pipeline { display: flex; flex-direction: column; gap: 16px; }
+.project-pipeline li { display: grid; grid-template-columns: 24px 1fr; gap: 12px; }
+.project-pipeline .micro { color: var(--accent); }
+.project-pipeline h3 { font-family: var(--display); font-size: 16px; margin: 0 0 2px; }
+.project-pipeline li p { font-size: 15px; line-height: 1.6; color: var(--muted); margin: 0; }
 /* Keep the native résumé dialog's focus management and existing PDF choices. */
 .v4-resume-dialog { border: 1px solid var(--rule); background: var(--paper); color: var(--ink); padding: 0; width: min(470px, calc(100vw - 40px)); border-radius: 5px; }
 .v4-resume-dialog::backdrop { background: #151914bb; }
@@ -316,6 +328,7 @@ button:active { transform: translateY(1px); }
   .socratic-figure li { padding: 0; border: 0; font-size: 26px; }
   .study-notes, .project-detail-grid, .project-feature-grid { grid-template-columns: 1fr; gap: 24px; }
   .study-media { padding: 6px; }
+  .field-notes li { grid-template-columns: 1fr; gap: 4px; }
 }
 @media (max-width: 360px) {
   :root { --folio-inset: 20px; }

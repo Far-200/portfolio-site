@@ -12,6 +12,7 @@ const DETAILS = {
   "password-estimator": lazy(() => import("../../pages/project-pages/PasswordCrackEsti")),
   devtool: lazy(() => import("../../pages/project-pages/DevJTool")),
   "prompt-router": lazy(() => import("../../pages/project-pages/PromptRouterPage")),
+  "english-terminal": lazy(() => import("../../pages/project-pages/EnglishTerminal")),
 };
 
 export default function ExpandedProject({ project }) {
@@ -30,6 +31,19 @@ export default function ExpandedProject({ project }) {
       {project.sections && <div className="study-columns">{project.sections.map((section) => <section key={section.heading}><h2 className="micro">{section.heading}</h2><p>{section.body}</p></section>)}</div>}
       {project.problem && <div className="study-columns"><section><h2 className="micro">The problem</h2><p>{project.problem}</p></section><section><h2 className="micro">What I built</h2><p>{project.built}</p></section>{project.technicalNote && <section><h2 className="micro">Under the surface</h2><p>{project.technicalNote}</p></section>}</div>}
       <div className="tech-line"><span className="micro">Built with</span><p>{project.tech.join(" / ")}</p></div>
+      {project.fieldNotes && (
+        <section className="field-notes">
+          <h2 className="micro">Behind the build</h2>
+          <ol>
+            {project.fieldNotes.map((note, i) => (
+              <li key={note.label}>
+                <span className="micro">{String(i + 1).padStart(2, "0")}</span>
+                <div><h3>{note.label}</h3><p>{note.body}</p></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
       {Detail ? <Suspense fallback={<p role="status">Opening project notes…</p>}><Detail embedded /></Suspense> : (
         <div className="study-notes">
           {current?.focus && <section><p className="micro">Current focus / {current.stage}</p><h2>On the workbench</h2><p>{current.focus}</p></section>}

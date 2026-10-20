@@ -31,6 +31,7 @@ const COMMANDS = [
 function projectShortcuts() {
   return [
     ["tbc", "think-before-code"],
+    ["et", "english-terminal"],
     ["fsv", "folder-structure-visualizer"],
     ["flowtrace", "flowtrace"],
     ["attendance", "attendance-analytics"],

@@ -1,6 +1,34 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const STEPS = ["Decode the problem", "Explain your reasoning", "Receive a hint", "Implement"];
+
+// Defaults playback to 1.2x; browsers that expose a speed control in their
+// native video UI still let the viewer change it from there.
+function VideoMedia({ media }) {
+  const videoRef = useRef(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    if (videoRef.current) videoRef.current.playbackRate = 1.2;
+  }, []);
+
+  // A missing/broken file degrades to nothing rather than a broken player.
+  if (failed) return null;
+
+  return (
+    <figure className="study-media study-media-video">
+      <video
+        ref={videoRef}
+        src={media.src}
+        controls
+        playsInline
+        preload="metadata"
+        aria-label={media.alt}
+        onError={() => setFailed(true)}
+      />
+    </figure>
+  );
+}
 
 export default function ProjectStudyVisual({ project }) {
   const [step, setStep] = useState(0);
@@ -12,6 +40,7 @@ export default function ProjectStudyVisual({ project }) {
       <p><span className="micro">Postmortem / </span>{project.incidentLoop.postmortem}<span className="incident-note" aria-hidden="true">this escalated.</span></p>
     </figure>
   );
+  if (project.media?.type === "video") return <VideoMedia media={project.media} />;
   if (project.media) return <figure className="study-media"><img src={project.media.src} alt={project.media.alt} width="1600" height="1000" decoding="async" /><figcaption>ASCII tree → project scaffold</figcaption></figure>;
   if (project.id === "flowtrace") return (
     <figure className="pipeline-figure">

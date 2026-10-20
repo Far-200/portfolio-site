@@ -77,26 +77,24 @@ test("keyboard flip, one accessible face, and route-owned history", async ({ pag
   expect(clippedControls, "Every reverse-side control stays on the paper").toEqual([]);
   await expect(page.getByRole("button", { name: "Flip card to selected work" })).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("02-back.png") });
-  await expect(page.locator(".currently-building")).toContainText("Attendance Analytics");
-  await expect(page.locator(".currently-building")).not.toContainText("FlowTrace");
+  await expect(page.locator(".currently-building")).toContainText("FlowTrace");
+  await expect(page.locator(".currently-building")).not.toContainText("Attendance Analytics");
   await noOverflow(page);
-  const project = page.locator(".project-row").filter({ hasText: "FlowTrace" });
+  const project = page.locator(".project-row").filter({ hasText: "English Terminal" });
   await project.click();
-  await expect(page).toHaveURL(/\/projects\/flowtrace$/);
+  await expect(page).toHaveURL(/\/projects\/english-terminal$/);
   await settled(page);
   await expect(page.getByRole("heading", { level: 1 })).toBeFocused();
   await noOverflow(page);
-  await page.screenshot({ path: info.outputPath("03-flowtrace.png") });
-  await page.getByRole("button", { name: "Step through" }).click();
-  await expect(page.locator(".trace-value")).toHaveText("x = 5");
+  await page.screenshot({ path: info.outputPath("03-english-terminal.png") });
   await page.goBack();
   await expect(project).toBeFocused();
   await page.goForward();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("FlowTrace");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("English Terminal");
   await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("FlowTrace");
-  await expect(page).toHaveTitle("FlowTrace | Farhaan Khan");
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://farhaankhan.dev/projects/flowtrace");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("English Terminal");
+  await expect(page).toHaveTitle("English Terminal | Farhaan Khan");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://farhaankhan.dev/projects/english-terminal");
   await page.getByRole("button", { name: "Collapse" }).click();
   await expect(project).toBeFocused();
   await page.getByRole("button", { name: "Flip card to identity" }).click();
@@ -134,6 +132,7 @@ test("all deep links, content surfaces, aliases and not found", async ({ page },
     ["/projects/password-estimator", "Password Strength & Crack Time Estimator"],
     ["/projects/devtool", "Developer JSON Formatter Tool"],
     ["/projects/prompt-router", "PromptRouter"],
+    ["/projects/english-terminal", "English Terminal"],
     ["/about", "I build useful software, then learn from what breaks."],
     ["/log", "Things I’ve been building."],
     ["/lab", "Small experiments, useful tools."],
@@ -148,6 +147,14 @@ test("all deep links, content surfaces, aliases and not found", async ({ page },
     if (route.includes("folder-structure")) {
       await expect(page.getByRole("heading", { name: "What I Learned" })).toBeAttached();
       await expect(page.locator("video")).not.toHaveAttribute("autoplay");
+    }
+    if (route.includes("english-terminal")) {
+      await expect(page.getByRole("heading", { name: "Engineering Decisions" })).toBeAttached();
+      const video = page.locator("video");
+      await expect(video).not.toHaveAttribute("autoplay");
+      await expect(video).toHaveAttribute("controls", "");
+      await expect(video).toHaveAttribute("playsinline", "");
+      await expect(video).toHaveAttribute("preload", "metadata");
     }
   }
   await page.goto("/projects/cortex-ai");
@@ -242,6 +249,7 @@ test("folio content, native scrolling and media remain usable", async ({ page },
     ["/lab", [".lab-section:nth-of-type(2)", ".lab-collection"]],
     ["/projects/think-before-code", [".study-notes"]],
     ["/projects/flowtrace", [".study-notes"]],
+    ["/projects/english-terminal", [".project-pipeline", ".project-feature-grid"]],
     ["/projects/folder-structure-visualizer", [".project-video-wrap", ".project-learnings"]],
   ];
   for (const [route, sections] of surfaces) {
@@ -286,6 +294,11 @@ test("folio content, native scrolling and media remain usable", async ({ page },
         await page.screenshot({ path: info.outputPath("demo-playback.png") });
       }
     }
+    if (route.includes("english-terminal") && ["desktop", "mobile"].includes(info.project.name)) {
+      const video = page.locator("video");
+      await video.scrollIntoViewIfNeeded();
+      await expect.poll(() => video.evaluate((node) => node.playbackRate)).toBe(1.2);
+    }
   }
 });
 
@@ -302,7 +315,7 @@ test("Chaos opens from Lab as a simulation sheet and preserves card navigation",
   await settled(page);
   await expect(page.getByRole("heading", { name: "Chaos", exact: true })).toBeFocused();
   await expect(page.locator(".business-card")).toHaveAttribute("data-continuity", "lab-card");
-  await expect(page.locator(".study-kicker")).toContainText("04 / Frontend Simulation");
+  await expect(page.locator(".study-kicker")).toContainText("05 / Frontend Simulation");
   await expect(page.getByRole("link", { name: "Open live project" })).toHaveAttribute("href", "https://chaos.farhaankhan.dev/");
   await expect(page.getByRole("link", { name: "View source" })).toHaveAttribute("href", "https://github.com/Far-200/chaos-team");
   await expect(page.locator(".incident-figure li")).toHaveCount(5);
@@ -335,7 +348,7 @@ test("Chaos opens from Lab as a simulation sheet and preserves card navigation",
   await settled(page);
   await expect(page).toHaveURL(/\/work$/);
   await expect(page.getByRole("heading", { name: "Selected work" })).toBeFocused();
-  await expect(page.locator(".project-row-title")).toHaveText(["Think Before Code", "FlowTrace", "Folder Structure Visualizer"]);
+  await expect(page.locator(".project-row-title")).toHaveText(["Think Before Code", "English Terminal", "Folder Structure Visualizer"]);
   // Browser Back reopens Chaos from the compact card through the same layout animation.
   await page.goBack();
   await settled(page);
@@ -532,7 +545,7 @@ test.describe("command palette", () => {
   test("on the compact card, focus returns where it was and the résumé dialog keeps its rules", async ({ page }) => {
     await page.goto("/work");
     await settled(page);
-    const row = page.locator(".project-row").filter({ hasText: "FlowTrace" });
+    const row = page.locator(".project-row").filter({ hasText: "English Terminal" });
     await row.focus();
     await summon(page);
     await page.keyboard.press("Escape");
@@ -755,17 +768,16 @@ test.describe("command palette", () => {
     await summon(page);
     await run(page, "help");
     const help = entries(page).last().locator(".command-reply");
-    for (const line of ["projects", "tbc Think Before Code", "fsv Folder Structure Visualizer", "flowtrace FlowTrace", "attendance Attendance Analytics · in the lab, no page yet",
+    for (const line of ["projects", "tbc Think Before Code", "et English Terminal", "fsv Folder Structure Visualizer", "flowtrace FlowTrace", "attendance Attendance Analytics · in the lab, no page yet",
       "github github profile ↗ · gh", "x x profile ↗ · twitter", "resume choose a résumé · cv", "mail hello.farhaankhan@gmail.com · email"]) {
       await expect(help).toContainText(line);
     }
     await expect(help).not.toContainText("sudo");
-    await expect(help).not.toContainText("English");
     await run(page, "open nowhere");
     await expect(reply(page)).toHaveText("can't open nowhere · try help");
     await expect(reply(page)).toHaveAttribute("data-tone", "error");
     await run(page, "show");
-    await expect(reply(page)).toHaveText("show what? tbc · fsv · flowtrace · attendance");
+    await expect(reply(page)).toHaveText("show what? tbc · et · fsv · flowtrace · attendance");
   });
 
   test("project shortcuts open the existing project pages", async ({ page }) => {
@@ -773,6 +785,7 @@ test.describe("command palette", () => {
     await settled(page);
     for (const [command, route, title] of [
       ["tbc", "/projects/think-before-code", "Think Before Code"],
+      ["et", "/projects/english-terminal", "English Terminal"],
       ["show folder structure visualizer", "/projects/folder-structure-visualizer", "Folder Structure Visualizer"],
       ["go to flowtrace", "/projects/flowtrace", "FlowTrace"],
       ["  Open   Think Before Code ", "/projects/think-before-code", "Think Before Code"],
@@ -874,12 +887,12 @@ test.describe("command palette", () => {
   test("flip and collapse reuse the card's own controls", async ({ page }) => {
     await page.goto("/work");
     await settled(page);
-    await page.locator(".project-row").filter({ hasText: "FlowTrace" }).click();
+    await page.locator(".project-row").filter({ hasText: "English Terminal" }).click();
     await settled(page);
     await summon(page);
     await run(page, "collapse");
     await expect(page).toHaveURL(/\/work$/);
-    await expect(page.locator(".project-row").filter({ hasText: "FlowTrace" })).toBeFocused();
+    await expect(page.locator(".project-row").filter({ hasText: "English Terminal" })).toBeFocused();
     await settled(page);
     await expect(page.locator(".card-turn")).toHaveClass(/is-turned/);
 
@@ -943,12 +956,14 @@ test.describe("command palette", () => {
     const x = ["open", "https://x.com/FarKh_Nhi"];
     const mail = ["mail", "hello.farhaankhan@gmail.com"];
     const tbc = ["go", "/projects/think-before-code"];
+    const et = ["go", "/projects/english-terminal"];
     const fsv = ["go", "/projects/folder-structure-visualizer"];
     const flowtrace = ["go", "/projects/flowtrace"];
     const expected = {
       " HOME ": ["go", "/"], "go home": ["go", "/"], index: ["go", "/work"], work: ["go", "/work"], projects: ["go", "/work"],
       about: ["go", "/about"], "go to about": ["go", "/about"], "GO   TO  LAB": ["go", "/lab"], "go lab": ["go", "/lab"], log: ["go", "/log"], lab: ["go", "/lab"],
       tbc, "open tbc": tbc, "show tbc": tbc, "go to tbc": tbc, "go tbc": tbc, "open think before code": tbc, "Think Before Code": tbc, "show think-before-code": tbc,
+      et, "open et": et, "show et": et, "go to et": et, "go et": et, "open english terminal": et, "English Terminal": et, "show english-terminal": et,
       fsv, "show fsv": fsv, "show folder structure visualizer": fsv, "open folder-structure-visualizer": fsv, "go to fsv": fsv,
       flowtrace, "show flowtrace": flowtrace, "go to flowtrace": flowtrace, "OPEN FLOWTRACE": flowtrace,
       github, gh: github, "open github": github, "show gh": github, linkedin, "open linkedin": linkedin,
@@ -969,10 +984,10 @@ test.describe("command palette", () => {
       ["attendance", attendance], ["show attendance", attendance], ["open attendance analytics", attendance], ["go to attendance-analytics", attendance],
       ["what", "command not found: what · try help"], ["homework", "command not found: homework · try help"],
       ["gopher", "command not found: gopher · try help"], ["opener", "command not found: opener · try help"], ["showcase", "command not found: showcase · try help"],
-      ["tbcx", "command not found: tbcx · try help"], ["english terminal", "command not found: english · try help"],
-      ["open nowhere", "can't open nowhere · try help"], ["show english terminal", "can't show english terminal · try help"],
+      ["tbcx", "command not found: tbcx · try help"],
+      ["open nowhere", "can't open nowhere · try help"],
       ["go to sleep", "can't go to sleep · try help"], ["open status", "can't open status · try help"], ["show sudo", "can't show sudo · try help"],
-      ["open", "open what? github · linkedin · x · resume · mail"], ["show", "show what? tbc · fsv · flowtrace · attendance"],
+      ["open", "open what? github · linkedin · x · resume · mail"], ["show", "show what? tbc · et · fsv · flowtrace · attendance"],
       ["go to", "go where? home · index · about · log · lab"], ["status", "still building."],
     ]) expect(runCommand(command, card), command).toBe(answer);
     expect(calls).toEqual([]);
@@ -981,7 +996,7 @@ test.describe("command palette", () => {
     const help = runCommand("help", card);
     expect(help.split("\n")).toEqual([
       "pages", row("home", "front of the card"), row("index", "selected work · work, projects"), row("about", "about me"), row("log", "build log"), row("lab", "workbench"),
-      "projects", row("tbc", "Think Before Code"), row("fsv", "Folder Structure Visualizer"), row("flowtrace", "FlowTrace"), row("attendance", "Attendance Analytics · in the lab, no page yet"),
+      "projects", row("tbc", "Think Before Code"), row("et", "English Terminal"), row("fsv", "Folder Structure Visualizer"), row("flowtrace", "FlowTrace"), row("attendance", "Attendance Analytics · in the lab, no page yet"),
       "links", row("github", "github profile ↗ · gh"), row("linkedin", "linkedin profile ↗"), row("x", "x profile ↗ · twitter"), row("resume", "choose a résumé · cv"),
       row("mail", "hello.farhaankhan@gmail.com · email"),
       "card", row("flip", "turn the card over"), row("collapse", "put this page away"), row("status", "what's happening"), row("clear", "clear the screen · cls"), row("help", "this list"),

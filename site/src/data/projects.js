@@ -46,13 +46,37 @@ export const PROJECTS = [
     internalRoute: "/projects/think-before-code",
   },
   {
+    id: "english-terminal",
+    slug: "english-terminal",
+    title: "English Terminal",
+    shortTitle: "English Terminal",
+    category: "Developer Tool · CLI · Automation",
+    status: "Shipped",
+    flagship: true,
+    summary:
+      "A Python CLI that translates supported plain-English requests into terminal operations, with safety checks and automated tests.",
+    technicalNote: null,
+    tech: ["Python", "GitHub API", "pytest"],
+    github: "https://github.com/Far-200/english-terminal",
+    live: null,
+    media: {
+      type: "video",
+      src: "/videos/english-terminal.mp4",
+      alt: "English Terminal demo recording",
+    },
+    internalRoute: "/projects/english-terminal",
+  },
+  {
+    // Moved off Selected Work (see english-terminal above); still routed
+    // as its own project page and still listed under ACTIVE_BUILDS in
+    // labData.js, so it now surfaces under "On the workbench" instead.
     id: "flowtrace",
     slug: "flowtrace",
     title: "FlowTrace",
     shortTitle: "FlowTrace",
     category: "Interpreter · Visualization · Developer Tool",
     status: "Experimental",
-    flagship: true,
+    flagship: false,
     summary:
       "A C-like execution visualizer that shows how program state changes while code runs.",
     problem:
